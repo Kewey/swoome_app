@@ -4,7 +4,6 @@ import { StyleSheet } from 'react-native'
 import EditScreenInfo from '@screens/EditScreenInfo'
 import { Text, View } from '@components/Themed'
 import { RootTabScreenProps } from '@types/RootTab'
-import Button from '@components/Button'
 
 export default function TabOneScreen({
 	navigation,
@@ -18,8 +17,6 @@ export default function TabOneScreen({
 				darkColor='rgba(255,255,255,0.1)'
 			/>
 			<EditScreenInfo path='/screens/TabOneScreen.tsx' />
-			<Button>S’inscrire avec Apple</Button>
-			<Button>Se connecter par mail</Button>
 		</View>
 	)
 }
