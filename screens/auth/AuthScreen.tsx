@@ -28,7 +28,7 @@ export default function AuthScreen({
 				</View>
 				<View style={{ flex: 1, justifyContent: 'flex-end' }}>
 					<Button variant='cyan' buttonStyle={{ marginBottom: 20 }}
-						onPress={() => navigation.navigate('Inscription')}
+						onPress={() => navigation.navigate('Inscription')} block
 						>
 						S'incrire à la meilleur app
 					</Button>
@@ -36,10 +36,11 @@ export default function AuthScreen({
 						onPress={() => navigation.navigate('Root')}
 						variant='black'
 						buttonStyle={{ marginBottom: 20 }}
+						block
 					>
 						S’inscrire avec Apple
 					</Button>
-					<Button>Se connecter par mail</Button>
+					<Button block>Se connecter par mail</Button>
 				</View>
 			</View>
 		</SafeAreaView>
