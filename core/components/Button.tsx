@@ -14,8 +14,19 @@ import {
 	StyleProp,
 	ViewStyle,
 	TextStyle,
+	TouchableOpacityComponent,
 } from 'react-native'
 import { FredokaText } from './StyledText'
+
+interface ButtonInterface {
+	variant?: 'blue' | 'black' | 'white' | 'cyan'
+	after?: ReactChild
+	before?: ReactChild
+	children?: ReactChild
+	buttonStyle?: StyleProp<ViewStyle>
+	textStyle?: StyleProp<TextStyle>
+	onPress?: () => void
+}
 
 export default function Button({
 	variant = 'blue',
@@ -24,19 +35,12 @@ export default function Button({
 	children,
 	buttonStyle,
 	textStyle,
-	onClick,
-}: {
-	variant?: 'blue' | 'black' | 'white' | 'cyan'
-	after?: ReactChild
-	before?: ReactChild
-	children?: ReactChild
-	buttonStyle?: StyleProp<ViewStyle>
-	textStyle?: StyleProp<TextStyle>
-	onClick?: CallableFunction
-}) {
+	onPress,
+	...props
+}: React.ComponentProps<typeof TouchableOpacity> & ButtonInterface) {
 	return (
-		<TouchableOpacity
-			onPress={() => onClick}
+		<TouchableOpacity {...props}
+			onPress={onPress}
 			style={[styles.buttonBase, variants[variant], buttonStyle]}
 		>
 			<View style={styles.groupBase}>

@@ -76,7 +76,7 @@ function RootNavigator() {
 			/>
 			<Stack.Screen
 				name='Inscription'
-				component={RegisterSteps}
+				component={NameScreen}
 				options={{ headerShown: false }}
 			/>
 			<Stack.Screen

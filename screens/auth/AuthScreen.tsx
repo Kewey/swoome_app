@@ -27,11 +27,13 @@ export default function AuthScreen({
 					</RegularText>
 				</View>
 				<View style={{ flex: 1, justifyContent: 'flex-end' }}>
-					<Button variant='cyan' buttonStyle={{ marginBottom: 20 }}>
+					<Button variant='cyan' buttonStyle={{ marginBottom: 20 }}
+						onPress={() => navigation.navigate('Inscription')}
+						>
 						S'incrire à la meilleur app
 					</Button>
 					<Button
-						onClick={() => navigation.navigate('Root')}
+						onPress={() => navigation.navigate('Root')}
 						variant='black'
 						buttonStyle={{ marginBottom: 20 }}
 					>
