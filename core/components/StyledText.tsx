@@ -17,17 +17,20 @@ export function FredokaText(props: TextProps) {
 	)
 }
 
-export function RegularText(props: TextProps) {
+export function RegularText({
+	bold,
+	...props
+}: TextProps & { bold?: boolean }) {
 	const color = useTheme()
 	return (
 		<Text
 			{...props}
 			style={[
-				{ color: color.colors.text },
-				props.style,
 				{
-					fontFamily: 'Montserrat-Regular',
+					color: color.colors.text,
+					fontFamily: bold ? 'Montserrat-Bold' : 'Montserrat-Regular',
 				},
+				props.style,
 			]}
 		/>
 	)
