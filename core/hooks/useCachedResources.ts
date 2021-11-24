@@ -14,7 +14,6 @@ export default function useCachedResources() {
 
 				// Load fonts
 				await Font.loadAsync({
-					...FontAwesome.font,
 					FredokaOne: require('@assets/fonts/FredokaOne-Regular.ttf'),
 					'Montserrat-Regular': require('@assets/fonts/Montserrat-Regular.ttf'),
 					'Montserrat-Light': require('@assets/fonts/Montserrat-Light.ttf'),
