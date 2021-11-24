@@ -16,7 +16,7 @@ import {
 	TextStyle,
 	Pressable,
 } from 'react-native'
-import { FredokaText } from './StyledText'
+import { FredokaText, RegularText } from './StyledText'
 
 interface ButtonInterface {
 	variant?: 'blue' | 'black' | 'white' | 'cyan'
@@ -25,7 +25,10 @@ interface ButtonInterface {
 	children?: ReactChild
 	buttonStyle?: StyleProp<ViewStyle>
 	textStyle?: StyleProp<TextStyle>
+	size?: 'small' | 'medium' | 'large'
 	block?: boolean
+	circle?: boolean
+	text?: boolean
 	onPress?: () => void
 }
 
@@ -36,19 +39,53 @@ export default function Button({
 	buttonStyle,
 	textStyle,
 	onPress,
+	size = 'medium',
 	variant = 'blue',
 	block = false,
+	circle = false,
+	text = false,
 	...props
 }: React.ComponentProps<typeof TouchableOpacity> & ButtonInterface) {
+	if (text) {
+		return (
+			<Pressable
+				{...props}
+				onPress={onPress}
+				style={block && { width: '100%' }}
+			>
+				{before}
+				<RegularText
+					bold
+					style={[{ textAlign: 'center' }, fontSizes[size], textStyle]}
+				>
+					{children}
+				</RegularText>
+				{after}
+			</Pressable>
+		)
+	}
+
 	return (
-		<Pressable 
+		<Pressable
 			onPress={onPress}
-			style={[styles.buttonBase, variants[variant], buttonStyle, props.style, block && {width : '100%'}]}
+			style={[
+				styles.buttonBase,
+				variants[variant],
+				sizes[size],
+				buttonStyle,
+				props.style,
+				block && { width: '100%' },
+				circle && { borderRadius: 50 },
+			]}
 			{...props}
 		>
 			<View style={styles.groupBase}>
 				{before}
-				<FredokaText style={[styles.text, textStyle]}>{children}</FredokaText>
+				<FredokaText
+					style={[{ textAlign: 'center' }, fontSizes[size], textStyle]}
+				>
+					{children}
+				</FredokaText>
 				{after}
 			</View>
 		</Pressable>
@@ -57,18 +94,11 @@ export default function Button({
 
 const styles = StyleSheet.create({
 	buttonBase: {
-		padding: 20,
-		borderRadius: 10,
 		alignSelf: 'flex-start',
 	},
 	groupBase: {
 		flexDirection: 'row',
 		justifyContent: 'center',
-	},
-	text: {
-		textAlign: 'center',
-		fontSize: 17,
-		fontFamily: 'FredokaOne',
 	},
 })
 
@@ -88,5 +118,32 @@ const variants = StyleSheet.create({
 	white: {
 		backgroundColor: colorLight,
 		color: colorDarkerBlue,
+	},
+})
+
+const sizes = StyleSheet.create({
+	small: {
+		padding: 8,
+		borderRadius: 4,
+	},
+	medium: {
+		padding: 14,
+		borderRadius: 6,
+	},
+	large: {
+		padding: 20,
+		borderRadius: 10,
+	},
+})
+
+const fontSizes = StyleSheet.create({
+	small: {
+		fontSize: 12,
+	},
+	medium: {
+		fontSize: 14,
+	},
+	large: {
+		fontSize: 17,
 	},
 })
