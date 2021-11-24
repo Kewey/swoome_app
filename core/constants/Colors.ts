@@ -7,6 +7,7 @@ export const colorBlack = '#000'
 export const colorWhite = '#fff'
 export const colorLight = '#f8f8f8'
 export const colorGrey = '#ccc'
+export const colorDarkGrey = '#b5b5b5'
 
 export default {
 	light: {
