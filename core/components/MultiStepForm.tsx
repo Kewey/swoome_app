@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { Children, ReactElement, ReactNode, useState } from 'react'
 import {
 	colorBlue,
 	colorDarkBlue,
@@ -18,7 +18,7 @@ import {
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Button from './Button'
-import { FredokaText, RegularText } from './StyledText'
+import { FredokaText, Text } from './StyledText'
 import { ChevronLeftIcon } from 'react-native-heroicons/outline'
 import { useTheme } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
@@ -26,8 +26,9 @@ import { RootStackParamList } from '@types/RootTab'
 import { Controller, useForm } from 'react-hook-form'
 
 type Steps = {
-	steps: Step[]
-	navigation: NativeStackScreenProps<RootStackParamList, 'Root'>
+	steps?: Step[]
+	navigation?: NativeStackScreenProps<RootStackParamList, 'Root'>
+	children: ReactNode
 }
 
 type Action = {
@@ -39,16 +40,21 @@ type Step = {
 	title: string
 	content: string
 	inputName: string
-	data: TextInputProps
-	actions: Action[]
+	data?: TextInputProps
+	actions?: Action[]
 }
 
-const MultiStepForm = ({ steps, navigation }: Steps) => {
+const MultiStepForm = ({ steps, navigation, children }: Steps) => {
+	const childrenArray = Children.toArray(children)
+
+	console.log(`childrenArray`, childrenArray[0].props.step.title)
+
 	const {
 		control,
 		handleSubmit,
 		formState: { errors },
 	} = useForm()
+
 	const [currentStep, setCurrentStep] = useState(0)
 
 	return (
@@ -104,7 +110,7 @@ const MultiStepForm = ({ steps, navigation }: Steps) => {
 						<View
 							style={{
 								height: '100%',
-								width: ((currentStep + 1) * 100) / steps.length + '%',
+								width: ((currentStep + 1) * 100) / childrenArray.length + '%',
 								backgroundColor: colorBlue,
 								borderRadius: 3,
 							}}
@@ -112,83 +118,7 @@ const MultiStepForm = ({ steps, navigation }: Steps) => {
 					</View>
 				</View>
 
-				{steps?.map(
-					(step, index) =>
-						index === currentStep && (
-							<>
-								<ScrollView key={index} style={{ flex: 1 }}>
-									<FredokaText
-										style={{
-											fontSize: 28,
-											textAlign: 'center',
-											marginBottom: 16,
-											color: colorDarkBlue,
-										}}
-									>
-										{step.title}
-									</FredokaText>
-									<RegularText
-										style={{
-											fontSize: 13,
-											lineHeight: 20,
-											opacity: 0.5,
-											textAlign: 'center',
-											color: colorDarkBlue,
-										}}
-									>
-										{step.content}
-									</RegularText>
-								</ScrollView>
-
-								<View style={{ marginBottom: 30 }}>
-									<View
-										style={{
-											borderRadius: 10,
-											borderColor: '#eaeaea',
-											borderWidth: 1,
-											marginBottom: 20,
-										}}
-									>
-										<Controller
-											name={step.inputName}
-											control={control}
-											render={({ field: { onChange, onBlur, value } }) => (
-												<TextInput
-													onBlur={onBlur}
-													onChangeText={onChange}
-													value={value}
-													style={{ paddingHorizontal: 22, paddingVertical: 20 }}
-													placeholder={'Ex. Bob'}
-												/>
-											)}
-										/>
-									</View>
-									<Button
-										block
-										size='large'
-										onPress={
-											() => {
-												setCurrentStep(currentStep + 1)
-											}
-											/*step.actions[0].action()*/
-										}
-									>
-										{step.actions[0].text}
-									</Button>
-									{step.actions[1] && (
-										<Button
-											text
-											block
-											textStyle={{ color: colorDarkBlue }}
-											onPress={() => step.actions[1].action}
-										>
-											{step.actions[1].text}
-										</Button>
-									)}
-								</View>
-							</>
-						)
-				)}
+				{children(control)}
 			</SafeAreaView>
 		</KeyboardAvoidingView>
 	)
@@ -202,4 +132,87 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default MultiStepForm
+const StepFormChild = ({
+	step: { title, content, inputName, data, actions },
+	children,
+}: {
+	step: Step
+	children: ReactElement
+}) => {
+	return (
+		<>
+			<ScrollView style={{ flex: 1 }}>
+				<FredokaText
+					style={{
+						fontSize: 28,
+						textAlign: 'center',
+						marginBottom: 16,
+						color: colorDarkBlue,
+					}}
+				>
+					{title}
+				</FredokaText>
+				<Text
+					style={{
+						fontSize: 13,
+						lineHeight: 20,
+						opacity: 0.5,
+						textAlign: 'center',
+						color: colorDarkBlue,
+					}}
+				>
+					{content}
+				</Text>
+			</ScrollView>
+
+			<View style={{ marginBottom: 30 }}>
+				<View
+					style={{
+						borderRadius: 10,
+						borderColor: '#eaeaea',
+						borderWidth: 1,
+						marginBottom: 20,
+					}}
+				>
+					<Controller
+						name={inputName}
+						control={control}
+						render={({ field: { onChange, onBlur, value } }) => (
+							<TextInput
+								onBlur={onBlur}
+								onChangeText={onChange}
+								value={value}
+								style={{ paddingHorizontal: 22, paddingVertical: 20 }}
+								placeholder={'Ex. Bob'}
+							/>
+						)}
+					/>
+				</View>
+				<Button
+					block
+					size='large'
+					onPress={
+						() => {
+							setCurrentStep(currentStep + 1)
+						}
+						/*step.actions[0].action()*/
+					}
+				>
+					{actions && actions[0].text}
+				</Button>
+				{actions[1] && (
+					<Button
+						text
+						block
+						textStyle={{ color: colorDarkBlue }}
+						onPress={() => actions[1].action}
+					>
+						{actions[1].text}
+					</Button>
+				)}
+			</View>
+		</>
+	)
+}
+
+export { MultiStepForm, StepFormChild }

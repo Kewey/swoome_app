@@ -3,8 +3,8 @@ import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 
 import Colors from '@constants/Colors'
-import { FredokaText, RegularText } from '@components/StyledText'
-import { Text, View } from '@components/Themed'
+import { FredokaText, Text } from '@components/StyledText'
+import { View } from '@components/Themed'
 
 export default function EditScreenInfo({ path }: { path: string }) {
 	return (
@@ -26,14 +26,14 @@ export default function EditScreenInfo({ path }: { path: string }) {
 					<FredokaText>{path}</FredokaText>
 				</View>
 
-				<RegularText
+				<Text
 					style={styles.getStartedText}
 					lightColor='rgba(0,0,0,0.8)'
 					darkColor='rgba(255,255,255,0.8)'
 				>
 					Change any of the text, save the file, and your app will automatically
 					update.
-				</RegularText>
+				</Text>
 			</View>
 
 			<View style={styles.helpContainer}>

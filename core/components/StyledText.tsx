@@ -1,12 +1,12 @@
 import { useTheme } from '@react-navigation/native'
 import * as React from 'react'
 
-import { Text, TextProps } from './Themed'
+import { Text as NativeText, TextProps } from './Themed'
 
 export function FredokaText(props: TextProps) {
 	const color = useTheme()
 	return (
-		<Text
+		<NativeText
 			{...props}
 			style={[
 				{ color: color.colors.text },
@@ -17,13 +17,10 @@ export function FredokaText(props: TextProps) {
 	)
 }
 
-export function RegularText({
-	bold,
-	...props
-}: TextProps & { bold?: boolean }) {
+export function Text({ bold, ...props }: TextProps & { bold?: boolean }) {
 	const color = useTheme()
 	return (
-		<Text
+		<NativeText
 			{...props}
 			style={[
 				{

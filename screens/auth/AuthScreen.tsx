@@ -1,5 +1,5 @@
 import Button from '@components/Button'
-import { FredokaText, RegularText } from '@components/StyledText'
+import { FredokaText, Text } from '@components/StyledText'
 import { NavigationProp } from '@react-navigation/core'
 import React from 'react'
 import { View } from 'react-native'
@@ -19,17 +19,18 @@ export default function AuthScreen({
 					>
 						Bienvenue jeune dépensier ! 👋🏻
 					</FredokaText>
-					<RegularText
-						style={{ fontSize: 13, textAlign: 'center', opacity: 0.5 }}
-					>
+					<Text style={{ fontSize: 13, textAlign: 'center', opacity: 0.5 }}>
 						Commence par décliner ton identité pour pouvoir te connecter et
 						préparer ta meilleure liste de course.
-					</RegularText>
+					</Text>
 				</View>
 				<View style={{ flex: 1, justifyContent: 'flex-end' }}>
-					<Button variant='cyan' buttonStyle={{ marginBottom: 20 }}
-						onPress={() => navigation.navigate('Inscription')} block
-						>
+					<Button
+						variant='cyan'
+						buttonStyle={{ marginBottom: 20 }}
+						onPress={() => navigation.navigate('Inscription')}
+						block
+					>
 						S'incrire à la meilleur app
 					</Button>
 					<Button

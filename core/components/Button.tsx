@@ -16,7 +16,7 @@ import {
 	TextStyle,
 	Pressable,
 } from 'react-native'
-import { FredokaText, RegularText } from './StyledText'
+import { FredokaText, Text } from './StyledText'
 
 interface ButtonInterface {
 	variant?: 'blue' | 'black' | 'white' | 'cyan'
@@ -54,12 +54,12 @@ export default function Button({
 				style={block && { width: '100%' }}
 			>
 				{before}
-				<RegularText
+				<Text
 					bold
 					style={[{ textAlign: 'center' }, fontSizes[size], textStyle]}
 				>
 					{children}
-				</RegularText>
+				</Text>
 				{after}
 			</Pressable>
 		)
