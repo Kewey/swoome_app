@@ -5,11 +5,7 @@
  */
 import { FontAwesome } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import {
-	NavigationContainer,
-	DefaultTheme,
-	DarkTheme,
-} from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import * as React from 'react'
 import { ColorSchemeName, Pressable } from 'react-native'
@@ -36,8 +32,20 @@ import LinkingConfiguration from './LinkingConfiguration'
 import AuthScreen from '@screens/auth/AuthScreen'
 import NameScreen from '@screens/auth/inscription/NameScreen'
 
-const Theme = {
-	dark: true,
+const lightTheme = {
+	dark: false,
+	colors: {
+		primary: colorBlue,
+		background: colorWhite,
+		card: colorLight,
+		text: colorDarkerBlue,
+		border: colorLight,
+		notification: colorCyan,
+	},
+}
+
+const darkTheme = {
+	dark: false,
 	colors: {
 		primary: colorBlue,
 		background: colorDarkerBlue,
@@ -48,13 +56,15 @@ const Theme = {
 	},
 }
 
+const appTheme = lightTheme
+
 export default function Navigation({
 	colorScheme,
 }: {
 	colorScheme: ColorSchemeName
 }) {
 	return (
-		<NavigationContainer linking={LinkingConfiguration} theme={Theme}>
+		<NavigationContainer linking={LinkingConfiguration} theme={appTheme}>
 			<RootNavigator />
 		</NavigationContainer>
 	)
