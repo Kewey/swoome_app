@@ -1,21 +1,18 @@
 import React, { Children, ReactNode, useState } from 'react'
-import {
-	colorBlue,
-	colorDarkerBlue,
-	colorDarkGrey,
-	colorGrey,
-} from '@constants/Colors'
+import { colorBlue, colorGrey } from '@constants/Colors'
 import Button from './Button'
 import { View } from 'react-native'
 import { ChevronLeftIcon } from 'react-native-heroicons/outline'
 import { useTheme } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/core'
 
 type Steps = {
 	goBack?: any
 	children: ReactNode
 }
 
-const MultiStepForm = ({ goBack, children }: Steps) => {
+const MultiStepForm = ({ children }: Steps) => {
+	const navigation = useNavigation()
 	const childrenArray = Children.toArray(children)
 
 	const { colors } = useTheme()
@@ -39,7 +36,7 @@ const MultiStepForm = ({ goBack, children }: Steps) => {
 						variant={'white'}
 						onPress={() => {
 							if (currentStep === 0) {
-								// goBack()
+								navigation.goBack()
 								return
 							}
 							setCurrentStep(currentStep - 1)

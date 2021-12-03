@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { KeyboardAvoidingView, Platform } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-export default function NameScreen({ navigation }: { navigation: any }) {
+export default function NameScreen({ navigation }: any) {
 	const {
 		control,
 		handleSubmit,
@@ -36,23 +36,24 @@ export default function NameScreen({ navigation }: { navigation: any }) {
 							'Connaitre ton prénom va nous permettre de personnaliser ton expérience.'
 						}
 						control={control}
-						name={'name'}
+						name={'email'}
 					/>
 					<StepFormChild
 						title={'Choisis un mot de passe.'}
 						content={
 							'Connaitre ton prénom va nous permettre de personnaliser ton expérience.'
 						}
-						name={'name'}
+						name={'password'}
 						control={control}
 					/>
 					<StepFormChild
+						skippable
 						title={'Utiliser Face ID pour se connecter.'}
 						content={
 							'Connaitre ton prénom va nous permettre de personnaliser ton expérience.'
 						}
 						control={control}
-						name={'name'}
+						name={'faceID'}
 					/>
 				</MultiStepForm>
 			</KeyboardAvoidingView>

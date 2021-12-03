@@ -17,9 +17,17 @@ type Step = {
 	name: string
 	control: any
 	children?: ReactNode
+	skippable?: boolean
 }
 
-const StepFormChild = ({ title, content, name, control, children }: Step) => {
+const StepFormChild = ({
+	title,
+	content,
+	name,
+	control,
+	children,
+	skippable,
+}: Step) => {
 	const { colors } = useTheme()
 
 	if (children) {
@@ -68,6 +76,7 @@ const StepFormChild = ({ title, content, name, control, children }: Step) => {
 							onBlur={onBlur}
 							onChangeText={onChange}
 							value={value}
+							autoFocus={true}
 							style={{
 								paddingHorizontal: 22,
 								paddingVertical: 20,

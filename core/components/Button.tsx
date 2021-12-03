@@ -82,7 +82,12 @@ export default function Button({
 			<View style={styles.groupBase}>
 				{before}
 				<FredokaText
-					style={[{ textAlign: 'center' }, fontSizes[size], textStyle]}
+					style={[
+						{ textAlign: 'center' },
+						variants[variant],
+						fontSizes[size],
+						textStyle,
+					]}
 				>
 					{children}
 				</FredokaText>
