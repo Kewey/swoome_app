@@ -11,11 +11,11 @@ import { ChevronLeftIcon } from 'react-native-heroicons/outline'
 import { useTheme } from '@react-navigation/native'
 
 type Steps = {
-	goBack?: any
+	onFinish?: () => void
 	children: ReactNode
 }
 
-const MultiStepForm = ({ goBack, children }: Steps) => {
+const MultiStepForm = ({ onFinish = () => {}, children }: Steps) => {
 	const childrenArray = Children.toArray(children)
 
 	const { colors } = useTheme()
@@ -81,7 +81,9 @@ const MultiStepForm = ({ goBack, children }: Steps) => {
 					block
 					size='large'
 					onPress={() => {
-						// goNextStep()
+						if (currentStep >= childrenArray.length - 1) {
+							return onFinish()
+						}
 						setCurrentStep(currentStep + 1)
 					}}
 				>

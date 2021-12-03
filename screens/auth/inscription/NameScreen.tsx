@@ -12,6 +12,11 @@ export default function NameScreen({ navigation }: { navigation: any }) {
 		formState: { errors },
 	} = useForm()
 
+	const onFinish = (data: any) => {
+		console.table(data)
+		navigation.navigate('GroupHome')
+	}
+
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
 			<KeyboardAvoidingView
@@ -21,7 +26,7 @@ export default function NameScreen({ navigation }: { navigation: any }) {
 				}}
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 			>
-				<MultiStepForm>
+				<MultiStepForm onFinish={handleSubmit(onFinish)}>
 					<StepFormChild
 						title={'Comment tes amis t’appellent-ils ?'}
 						content={
