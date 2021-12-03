@@ -7,11 +7,11 @@ import { useTheme } from '@react-navigation/native'
 import { useNavigation } from '@react-navigation/core'
 
 type Steps = {
-	goBack?: any
+	onFinish?: () => void
 	children: ReactNode
 }
 
-const MultiStepForm = ({ children }: Steps) => {
+const MultiStepForm = ({ onFinish = () => {}, children }: Steps) => {
 	const navigation = useNavigation()
 	const childrenArray = Children.toArray(children)
 
@@ -78,7 +78,9 @@ const MultiStepForm = ({ children }: Steps) => {
 					block
 					size='large'
 					onPress={() => {
-						// goNextStep()
+						if (currentStep >= childrenArray.length - 1) {
+							return onFinish()
+						}
 						setCurrentStep(currentStep + 1)
 					}}
 				>

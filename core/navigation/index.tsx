@@ -31,6 +31,7 @@ import {
 import LinkingConfiguration from './LinkingConfiguration'
 import AuthScreen from '@screens/auth/AuthScreen'
 import NameScreen from '@screens/auth/inscription/NameScreen'
+import GroupHome from '@screens/group'
 
 const lightTheme = {
 	dark: false,
@@ -87,6 +88,11 @@ function RootNavigator() {
 			<Stack.Screen
 				name='Inscription'
 				component={NameScreen}
+				options={{ headerShown: false }}
+			/>
+			<Stack.Screen
+				name='GroupHome'
+				component={GroupHome}
 				options={{ headerShown: false }}
 			/>
 			<Stack.Screen
