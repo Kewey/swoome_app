@@ -14,8 +14,8 @@ type Action = {
 type Step = {
 	title: string
 	content: string
-	name: string
-	control: any
+	name?: string
+	control?: any
 	children?: ReactNode
 	skippable?: boolean
 }
@@ -68,26 +68,28 @@ const StepFormChild = ({
 					marginBottom: 20,
 				}}
 			>
-				<Controller
-					name={name}
-					control={control}
-					render={({ field: { onChange, onBlur, value } }) => (
-						<TextInput
-							onBlur={onBlur}
-							onChangeText={onChange}
-							value={value}
-							autoFocus={true}
-							style={{
-								paddingHorizontal: 22,
-								paddingVertical: 20,
-								color: colors.text,
-								backgroundColor: colors.card,
-								borderRadius: 8,
-							}}
-							placeholder={'Ex. Bob'}
-						/>
-					)}
-				/>
+				{control && name && (
+					<Controller
+						name={name}
+						control={control}
+						render={({ field: { onChange, onBlur, value } }) => (
+							<TextInput
+								onBlur={onBlur}
+								onChangeText={onChange}
+								value={value}
+								autoFocus={true}
+								style={{
+									paddingHorizontal: 22,
+									paddingVertical: 20,
+									color: colors.text,
+									backgroundColor: colors.card,
+									borderRadius: 8,
+								}}
+								placeholder={'Ex. Bob'}
+							/>
+						)}
+					/>
+				)}
 			</View>
 		</>
 	)

@@ -39,7 +39,7 @@ export default function Button({
 	buttonStyle,
 	textStyle,
 	onPress,
-	size = 'medium',
+	size = 'large',
 	variant = 'blue',
 	block = false,
 	circle = false,

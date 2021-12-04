@@ -1,5 +1,5 @@
 import React, { Children, ReactNode, useState } from 'react'
-import { colorBlue, colorGrey } from '@constants/Colors'
+import { colorBlue, colorDarkBlue, colorGrey } from '@constants/Colors'
 import Button from './Button'
 import { View } from 'react-native'
 import { ChevronLeftIcon } from 'react-native-heroicons/outline'
@@ -17,6 +17,13 @@ const MultiStepForm = ({ onFinish = () => {}, children }: Steps) => {
 
 	const { colors } = useTheme()
 	const [currentStep, setCurrentStep] = useState(0)
+
+	const nextStep = () => {
+		if (currentStep >= childrenArray.length - 1) {
+			return onFinish()
+		}
+		setCurrentStep(currentStep + 1)
+	}
 
 	return (
 		<>
@@ -56,7 +63,6 @@ const MultiStepForm = ({ onFinish = () => {}, children }: Steps) => {
 						width: 150,
 						backgroundColor: colorGrey,
 						borderRadius: 3,
-						marginBottom: 40,
 						alignSelf: 'center',
 					}}
 				>
@@ -74,29 +80,20 @@ const MultiStepForm = ({ onFinish = () => {}, children }: Steps) => {
 			{childrenArray[currentStep]}
 
 			<View style={{ marginBottom: 30 }}>
-				<Button
-					block
-					size='large'
-					onPress={() => {
-						if (currentStep >= childrenArray.length - 1) {
-							return onFinish()
-						}
-						setCurrentStep(currentStep + 1)
-					}}
-				>
+				<Button block size='large' onPress={nextStep}>
 					Suivant
 					{/* {actions && actions[0].text} */}
 				</Button>
-				{/* {actions && actions[1] && (
+				{childrenArray[currentStep].props.skippable && (
 					<Button
 						text
 						block
 						textStyle={{ color: colorDarkBlue }}
-						onPress={() => actions[1].action}
+						onPress={nextStep}
 					>
-						{actions[1].text}
-					</Button> */}
-				{/* )} */}
+						Pas maintenant
+					</Button>
+				)}
 			</View>
 		</>
 	)
