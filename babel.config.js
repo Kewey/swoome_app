@@ -20,10 +20,11 @@ module.exports = function (api) {
 					alias: {
 						'@assets': './assets/',
 						'@components': './core/components/',
-						'@hooks': './core/hooks/',
 						'@constants': './core/constants/',
-						'@services': './core/services/',
+						'@hooks': './core/hooks/',
 						'@navigation': './core/navigation/',
+						'@services': './core/services/',
+						'@styles': './core/styles/',
 						'@types': './core/types/',
 						'@screens': './screens/',
 					},
