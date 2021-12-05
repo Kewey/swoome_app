@@ -1,7 +1,7 @@
 import React, { Children, ReactNode, useState } from 'react'
 import { colorBlue, colorDarkBlue, colorGrey } from '@constants/Colors'
 import Button from './Button'
-import { View } from 'react-native'
+import { ScrollView, View } from 'react-native'
 import { ChevronLeftIcon } from 'react-native-heroicons/outline'
 import { useTheme } from '@react-navigation/native'
 import { useNavigation } from '@react-navigation/core'
@@ -78,7 +78,9 @@ const MultiStepForm = ({ onFinish = () => {}, children }: Steps) => {
 				</View>
 			</View>
 
-			{childrenArray[currentStep]}
+			<ScrollView style={{ flex: 1, backgroundColor: 'red' }}>
+				{childrenArray[currentStep]}
+			</ScrollView>
 
 			<View style={{ marginBottom: 30 }}>
 				<Button block size='large' onPress={nextStep}>

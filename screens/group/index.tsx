@@ -3,10 +3,13 @@ import { FredokaText, Text } from '@components/StyledText'
 import { View } from '@components/Themed'
 import Button from '@components/Button'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { layout } from '@styles/layout'
+import { Screens } from '@navigation/screens'
+// import { layout } from '@styles/layout'
 
-function GroupHome() {
+function GroupHome({ navigation }) {
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
+		<SafeAreaView style={layout.container}>
 			<View>
 				<FredokaText>Ma maison</FredokaText>
 				<Text>
@@ -15,10 +18,19 @@ function GroupHome() {
 				</Text>
 			</View>
 			<View>
-				<Button block size='large'>
+				<Button
+					block
+					variant='cyan'
+					size='large'
+					onPress={() => navigation.navigate(Screens.GroupCreate)}
+				>
 					Créer ma maison
 				</Button>
-				<Button block size='large'>
+				<Button
+					block
+					size='large'
+					onPress={() => navigation.navigate(Screens.GroupJoin)}
+				>
 					Rejoindre ma maison
 				</Button>
 			</View>
