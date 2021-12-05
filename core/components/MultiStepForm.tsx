@@ -5,6 +5,7 @@ import { View } from 'react-native'
 import { ChevronLeftIcon } from 'react-native-heroicons/outline'
 import { useTheme } from '@react-navigation/native'
 import { useNavigation } from '@react-navigation/core'
+import StepFormChild from './StepFormChild'
 
 type Steps = {
 	onFinish?: () => void
@@ -99,4 +100,7 @@ const MultiStepForm = ({ onFinish = () => {}, children }: Steps) => {
 	)
 }
 
-export default MultiStepForm
+let MultiStep: any = MultiStepForm
+MultiStep.Child = StepFormChild
+
+export default MultiStep
