@@ -5,17 +5,18 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { API } from '@services/apiService'
 import { Screens } from '@navigation/screens'
 import MultiStep from '@components/MultiStepForm'
+import { createUser, UserCreation } from '@services/userService'
 
 export default function InscriptionScreen({ navigation }: any) {
 	const {
 		control,
 		handleSubmit,
 		formState: { errors },
-	} = useForm()
+	} = useForm<UserCreation>()
 
-	const onFinish = async (data: any) => {
+	const onFinish = async (data: UserCreation) => {
 		try {
-			// const res = await API.post('/user', { ...data })
+			const res = await createUser(data)
 			navigation.navigate(Screens.Group)
 		} catch (error) {
 			console.error(error)

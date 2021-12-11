@@ -4,11 +4,10 @@
  *
  */
 import { FontAwesome } from '@expo/vector-icons'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import * as React from 'react'
-import { ColorSchemeName, Pressable } from 'react-native'
+import { ColorSchemeName } from 'react-native'
 
 import Colors, {
 	colorBlue,
@@ -19,13 +18,8 @@ import Colors, {
 	colorWhite,
 } from '@constants/Colors'
 import useColorScheme from '@hooks/useColorScheme'
-import {
-	RootStackParamList,
-	RootTabParamList,
-	RootTabScreenProps,
-} from '@types'
+import { RootStackParamList } from '@types'
 import { Screens } from './screens'
-import LinkingConfiguration from './LinkingConfiguration'
 import AuthScreen from '@screens/auth'
 import GroupHome from '@screens/group'
 import InscriptionScreen from '@screens/auth/InscriptionScreen'
@@ -63,7 +57,7 @@ export default function Navigation({
 	colorScheme: ColorSchemeName
 }) {
 	return (
-		<NavigationContainer linking={LinkingConfiguration} theme={appTheme}>
+		<NavigationContainer theme={appTheme}>
 			<RootNavigator />
 		</NavigationContainer>
 	)
