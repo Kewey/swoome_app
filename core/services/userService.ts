@@ -7,6 +7,11 @@ export interface UserCreation {
 	password: string
 }
 
+export interface UserLogin {
+	mail: string
+	password: string
+}
+
 export function getUser(id = 'me') {
 	axios.get(`${API_URL}/user/${id}`)
 }
