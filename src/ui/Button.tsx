@@ -1,5 +1,6 @@
 import Colors, { Blue, Cyan, White } from '@constants/Colors'
 import { borderRadius } from '@styles/layout'
+import { FONTS } from '@types/Fonts'
 import React, { ReactChildren, ReactElement } from 'react'
 import { View, Text, Pressable, PressableProps, StyleSheet } from 'react-native'
 
@@ -34,5 +35,6 @@ const styles = StyleSheet.create({
 		paddingVertical: 16,
 		borderRadius: borderRadius,
 		textAlign: 'center',
+		fontFamily: FONTS.FREDOKAONE,
 	},
 })
