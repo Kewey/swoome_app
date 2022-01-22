@@ -9,8 +9,9 @@ import userReducer, { getToken } from '@redux/reducers/user.reducer'
 import { configureStore } from '@reduxjs/toolkit'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useFonts } from 'expo-font'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import { FONTS } from '@types/Fonts'
+import Text from '@ui/Text'
 
 const store = configureStore({
 	reducer: {
@@ -25,10 +26,10 @@ export type RootState = ReturnType<typeof store.getState>
 export function App(): ReactElement {
 	const colorScheme = useColorScheme()
 	const [loaded] = useFonts({
+		[FONTS.FREDOKAONE]: require('./src/assets/fonts/FredokaOne-Regular.ttf'),
 		[FONTS.MONTSERRAT_REGULAR]: require('./src/assets/fonts/Montserrat-Regular.ttf'),
 		[FONTS.MONTSERRAT_BOLD]: require('./src/assets/fonts/Montserrat-Bold.ttf'),
 		[FONTS.MONTSERRAT_LIGHT]: require('./src/assets/fonts/Montserrat-Light.ttf'),
-		[FONTS.FREDOKAONE]: require('./src/assets/fonts/FredokaOne-Regular.ttf'),
 	})
 	const token = useSelector(getToken)
 

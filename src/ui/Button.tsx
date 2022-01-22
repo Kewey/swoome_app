@@ -1,25 +1,43 @@
-import Colors, { Blue, Cyan, White } from '@constants/Colors'
+import { ReactElement } from 'react'
+import { Blue, Cyan, White } from '@constants/Colors'
 import { borderRadius } from '@styles/layout'
 import { FONTS } from '@types/Fonts'
-import React, { ReactChildren, ReactElement } from 'react'
-import { View, Text, Pressable, PressableProps, StyleSheet } from 'react-native'
+import { View, Pressable, PressableProps, StyleSheet } from 'react-native'
+import FredokaText from './FredokaText'
 
 interface ButtonProps extends PressableProps {
-	variant: 'primary' | 'secondary'
+	variant?: 'primary' | 'secondary'
 	block?: boolean
+	size?: 'large' | 'medium' | 'small'
 }
 
-const Button = ({ block, variant, ...props }: ButtonProps): ReactElement => {
+const Button = ({
+	block,
+	variant = 'primary',
+	size = 'medium',
+	...props
+}: ButtonProps): ReactElement => {
 	return (
 		<Pressable {...props}>
-			<Text style={[styles[variant], styles.default]}>{props.children}</Text>
+			<View
+				style={[ButtonStyle[variant], ButtonStyle[size], ButtonStyle.default]}
+			>
+				<FredokaText
+					style={{
+						color: '#fff',
+						textAlign: 'center',
+					}}
+				>
+					{props.children}
+				</FredokaText>
+			</View>
 		</Pressable>
 	)
 }
 
 export default Button
 
-const styles = StyleSheet.create({
+const ButtonStyle = StyleSheet.create({
 	primary: {
 		backgroundColor: Blue,
 		color: White,
@@ -31,10 +49,23 @@ const styles = StyleSheet.create({
 	},
 
 	default: {
+		borderRadius: borderRadius,
+	},
+
+	large: {
+		paddingVertical: 19,
+		paddingHorizontal: 28,
+	},
+
+	medium: {
 		paddingHorizontal: 22,
 		paddingVertical: 16,
-		borderRadius: borderRadius,
-		textAlign: 'center',
-		fontFamily: FONTS.FREDOKAONE,
+	},
+
+	small: {
+		paddingHorizontal: 16,
+		paddingVertical: 8,
 	},
 })
+
+const LabelStyle = StyleSheet.create({})

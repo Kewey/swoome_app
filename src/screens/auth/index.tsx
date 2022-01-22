@@ -2,8 +2,10 @@ import { AuthScreens } from '@navigation/Routes'
 import { AuthNavigationProp } from '@types/routes'
 import Button from '@ui/Button'
 import React from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import Text from '@ui/Text'
+import FredokaText from '@ui/FredokaText'
 
 type AuthScreenProps = {
 	navigation: AuthNavigationProp<AuthScreens.Auth>
@@ -14,9 +16,11 @@ export default function AuthScreen({ navigation }: AuthScreenProps) {
 		<SafeAreaView style={{ flex: 1 }}>
 			<View style={{ padding: 35, flex: 1, justifyContent: 'space-between' }}>
 				<View style={{ flex: 2, justifyContent: 'center' }}>
-					<Text style={{ fontSize: 30, textAlign: 'center', marginBottom: 20 }}>
+					<FredokaText
+						style={{ fontSize: 30, textAlign: 'center', marginBottom: 20 }}
+					>
 						Bienvenue jeune dépensier ! 👋🏻
-					</Text>
+					</FredokaText>
 					<Text style={{ fontSize: 13, textAlign: 'center', opacity: 0.5 }}>
 						Commence par décliner ton identité pour pouvoir te connecter et
 						préparer ta meilleure liste de course.
@@ -26,15 +30,16 @@ export default function AuthScreen({ navigation }: AuthScreenProps) {
 					<Button
 						block
 						variant='primary'
+						style={{ marginBottom: 15 }}
 						onPress={() => navigation.navigate(AuthScreens.SignIn)}
 					>
-						<Text>Connexion</Text>
+						Connexion
 					</Button>
 					<Button
 						variant='secondary'
 						onPress={() => navigation.navigate(AuthScreens.SignUp)}
 					>
-						<Text>Inscription</Text>
+						Inscription
 					</Button>
 
 					{/* <Button
