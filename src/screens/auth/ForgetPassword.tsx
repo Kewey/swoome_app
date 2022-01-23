@@ -15,19 +15,19 @@ import { View, TouchableOpacity } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useDispatch } from 'react-redux'
 
-type SignInScreenProps = {
+type ForgetPasswordProps = {
 	navigation: AuthNavigationProp<AuthScreens.SignIn>
 }
 
-const SignInScreen = ({ navigation }: SignInScreenProps) => {
+const ForgetPassword = ({ navigation }: ForgetPasswordProps) => {
 	const dispatch = useDispatch()
 	const {
 		control,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<UserLogin>()
+	} = useForm<{ email: string }>()
 
-	const onSubmit = (data: UserLogin) => {
+	const onSubmit = (data: { email: string }) => {
 		console.log(`data`, data)
 		// TODO login into dispatch user + token
 
@@ -51,11 +51,10 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 					<FredokaText
 						style={{ fontSize: 30, textAlign: 'center', marginBottom: 20 }}
 					>
-						Bienvenue jeune dépensier ! 👋🏻
+						Tu as oublié ton mot de passe ?
 					</FredokaText>
 					<Text style={{ textAlign: 'center', opacity: 0.55, fontSize: 13 }}>
-						Commence par décliner ton identité pour pouvoir te connecter et
-						préparer ta meilleure liste de course.
+						Tu devrais essayer les mots croisés, c’est bon pour la mémoire.
 					</Text>
 				</View>
 				<View>
@@ -80,61 +79,13 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 						/>
 						{errors.email && <Text>This is required.</Text>}
 					</View>
-
-					<View style={{ marginBottom: 25 }}>
-						<Text style={{ marginBottom: 5 }}>Mot de passe</Text>
-						<Controller
-							control={control}
-							rules={{
-								required: true,
-							}}
-							render={({ field: { onChange, onBlur, value } }) => (
-								<TextInput
-									style={{
-										marginBottom: 5,
-									}}
-									onBlur={onBlur}
-									onChangeText={onChange}
-									value={value}
-									secureTextEntry
-								/>
-							)}
-							name='password'
-						/>
-						{errors.password && <Text>This is required.</Text>}
-						<TouchableOpacity
-							onPress={() => navigation.navigate(AuthScreens.ForgetPassword)}
-						>
-							<Text style={{ marginTop: 5, opacity: 0.5, textAlign: 'right' }}>
-								Mot de passe oublié ?
-							</Text>
-						</TouchableOpacity>
-					</View>
 				</View>
-				<View>
-					<Button size='large' onPress={handleSubmit(onSubmit)}>
-						Se connecter
-					</Button>
-					<View
-						style={{
-							flexDirection: 'row',
-							justifyContent: 'center',
-							marginTop: 15,
-						}}
-					>
-						<Text>Pas encore de compte ?</Text>
-						<TouchableOpacity
-							onPress={() => navigation.navigate(AuthScreens.SignUp)}
-						>
-							<Text style={{ textDecorationLine: 'underline' }}>
-								Inscris-toi
-							</Text>
-						</TouchableOpacity>
-					</View>
-				</View>
+				<Button size='large' onPress={handleSubmit(onSubmit)}>
+					Recevoir le lien
+				</Button>
 			</View>
 		</KeyboardAwareScrollView>
 	)
 }
 
-export default SignInScreen
+export default ForgetPassword

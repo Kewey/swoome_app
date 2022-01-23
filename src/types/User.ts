@@ -14,4 +14,10 @@ export type UserAction = {
 	user: User
 }
 
+export type UserSignUp = {
+	name: string
+	email: string
+	password: string
+}
+
 export type DispatchType = (args: UserAction) => UserAction

@@ -12,6 +12,7 @@ import { useFonts } from 'expo-font'
 import { View } from 'react-native'
 import { FONTS } from '@types/Fonts'
 import Text from '@ui/Text'
+import { White } from '@constants/Colors'
 
 const store = configureStore({
 	reducer: {
@@ -42,8 +43,8 @@ export function App(): ReactElement {
 	}
 
 	return (
-		<SafeAreaProvider>
-			<StatusBar style={colorScheme} />
+		<SafeAreaProvider style={{ backgroundColor: White }}>
+			<StatusBar style={colorScheme === 'light' ? 'dark' : 'light'} />
 			{token ? <MainNavigation /> : <AuthNavigation />}
 		</SafeAreaProvider>
 	)

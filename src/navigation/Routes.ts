@@ -4,6 +4,7 @@ export enum AuthScreens {
 	Auth = 'AuthScreen',
 	SignUp = 'SignUpScreen',
 	SignIn = 'SignInScreen',
+	ForgetPassword = 'ForgetPasswordScreen',
 }
 
 export enum GroupScreens {
@@ -21,6 +22,7 @@ export type AuthStackParamList = {
 	[AuthScreens.Auth]: undefined
 	[AuthScreens.SignUp]: undefined
 	[AuthScreens.SignIn]: undefined
+	[AuthScreens.ForgetPassword]: undefined
 }
 
 export type GroupStackParamList = {

@@ -1,3 +1,4 @@
+import { White } from '@constants/Colors'
 import { borderRadius } from '@styles/layout'
 import React from 'react'
 import { TextInput as NativeTextInput, TextInputProps } from 'react-native'
@@ -16,6 +17,7 @@ const TextInput = ({ ...props }: TextInputProp) => {
 					borderRadius: borderRadius,
 					paddingHorizontal: 16,
 					paddingVertical: 12,
+					backgroundColor: White,
 				},
 				props.style,
 			]}

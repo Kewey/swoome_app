@@ -20,7 +20,12 @@ const Button = ({
 	return (
 		<Pressable {...props}>
 			<View
-				style={[ButtonStyle[variant], ButtonStyle[size], ButtonStyle.default]}
+				style={[
+					ButtonStyle[variant],
+					ButtonStyle[size],
+					ButtonStyle.default,
+					props.disabled && { opacity: 0.5 },
+				]}
 			>
 				<FredokaText
 					style={{

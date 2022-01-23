@@ -1,3 +1,4 @@
+import { useTheme } from '@react-navigation/native'
 import { FONTS } from '@types/Fonts'
 import { Text as NativeText, TextProps } from 'react-native'
 
@@ -6,6 +7,8 @@ interface TextProp extends TextProps {
 }
 
 const Text = ({ weight = 'regular', children, ...props }: TextProp) => {
+	const { colors } = useTheme()
+
 	let textWeight
 	switch (weight) {
 		case 'bold':
@@ -20,7 +23,10 @@ const Text = ({ weight = 'regular', children, ...props }: TextProp) => {
 	}
 
 	return (
-		<NativeText {...props} style={[props.style, { fontFamily: textWeight }]}>
+		<NativeText
+			{...props}
+			style={[{ fontFamily: textWeight, color: colors.text }, props.style]}
+		>
 			{children}
 		</NativeText>
 	)
