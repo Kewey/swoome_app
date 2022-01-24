@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import * as SecureStorage from 'expo-secure-store'
+import { Group } from '@types/Group'
 import { User } from '@types/user'
 import { RootState } from '../../../App'
 
@@ -31,20 +31,25 @@ const userSlice = createSlice({
 		},
 		setToken: {
 			reducer: (state, action: PayloadAction<string>) => {
-				// Add Async
-				SecureStorage.setItemAsync('token', action.payload)
 				state.token = action.payload
 			},
 			prepare: (token: string) => ({ payload: token }),
 		},
+		// setGroup: {
+		// 	reducer: (state, action: PayloadAction<Group>) => {
+		// 		state.user = {...state.user, groups: [action.payload]}
+		// 	}
+		// 	prepare: (group: Group) => ({ payload: group }),
+		// }
 	},
 })
 
-const getCurrentUser = (state: RootState) => state.user
+const getCurrentUser = (state: RootState) => state.user.user
+const getUserGroups = (state: RootState) => state.user.user?.groups
 const getToken = (state: RootState) => state.user.token
 const isCurrentUserLoading = (state: RootState) => state.user.isLoading
 
 export const { setUser, setToken } = userSlice.actions
-export { getCurrentUser, getToken, isCurrentUserLoading }
+export { getCurrentUser, getToken, isCurrentUserLoading, getUserGroups }
 
 export default userSlice.reducer

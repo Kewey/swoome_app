@@ -1,26 +1,21 @@
-import { Blue, DarkerBlue, White } from '@constants/Colors'
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
 import AuthScreen from '@screens/auth'
 import ForgetPassword from '@screens/auth/ForgetPassword'
 import SignInScreen from '@screens/auth/SignInScreen'
 import SignUpScreen from '@screens/auth/SignUpScreen'
+import { theme } from '@styles/theme'
 import React, { ReactElement } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AuthStack, AuthScreens } from './Routes'
 
-const theme = {
-	...DefaultTheme,
-	colors: {
-		...DefaultTheme.colors,
-		background: White,
-		primary: Blue,
-		text: DarkerBlue,
-	},
-}
-
 const AuthNavigation = (): ReactElement => {
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
+		<SafeAreaView
+			style={{
+				flex: 1,
+				padding: 30,
+			}}
+		>
 			<NavigationContainer theme={theme}>
 				<AuthStack.Navigator
 					initialRouteName={AuthScreens.Auth}

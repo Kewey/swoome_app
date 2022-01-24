@@ -1,7 +1,9 @@
+import { Group } from './Group'
+
 export type User = {
 	name: string
 	email: string
-	group: any // TODO
+	groups: Group[]
 } | null
 
 export type UserLogin = {

@@ -28,10 +28,13 @@ const Button = ({
 				]}
 			>
 				<FredokaText
-					style={{
-						color: '#fff',
-						textAlign: 'center',
-					}}
+					style={[
+						LabelStyle[size],
+						{
+							color: '#fff',
+							textAlign: 'center',
+						},
+					]}
 				>
 					{props.children}
 				</FredokaText>
@@ -73,4 +76,16 @@ const ButtonStyle = StyleSheet.create({
 	},
 })
 
-const LabelStyle = StyleSheet.create({})
+const LabelStyle = StyleSheet.create({
+	large: {
+		fontSize: 17,
+	},
+
+	medium: {
+		fontSize: 14,
+	},
+
+	small: {
+		fontSize: 12,
+	},
+})

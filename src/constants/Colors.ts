@@ -6,6 +6,7 @@ const Pink = '#f62584'
 const Black = '#000'
 const White = '#fff'
 const Light = '#f8f8f8'
+const LightGrey = '#f0f0f0'
 const Grey = '#ccc'
 const DarkGrey = '#b5b5b5'
 
@@ -17,6 +18,7 @@ export {
 	Pink,
 	Black,
 	White,
+	LightGrey,
 	Light,
 	Grey,
 	DarkGrey,

@@ -1,11 +1,12 @@
 import { NavigationContainer } from '@react-navigation/native'
 import HomeScreen from '@screens/tabs/HomeScreen'
+import { theme } from '@styles/theme'
 import React, { ReactElement } from 'react'
 import { MainStack, MainScreens } from './Routes'
 
 const MainNavigation = (): ReactElement => {
 	return (
-		<NavigationContainer>
+		<NavigationContainer theme={theme}>
 			<MainStack.Navigator>
 				<MainStack.Screen name={MainScreens.Home} component={HomeScreen} />
 				<MainStack.Screen name={MainScreens.Profile} component={HomeScreen} />

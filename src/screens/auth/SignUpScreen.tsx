@@ -14,7 +14,6 @@ import { Controller, useForm } from 'react-hook-form'
 import { View, TouchableOpacity } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useDispatch } from 'react-redux'
-import { MotiView } from 'moti'
 
 const NB_STEPS = 3
 
@@ -146,7 +145,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 								)}
 								name='name'
 							/>
-							{errors.email && <Text>This is required.</Text>}
+							{errors.name && <Text>This is required.</Text>}
 						</View>
 					</View>
 				</View>
@@ -228,7 +227,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 								)}
 								name='password'
 							/>
-							{errors.email && <Text>This is required.</Text>}
+							{errors.password && <Text>This is required.</Text>}
 						</View>
 					</View>
 				</View>
