@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { API_URL } from '@env'
 
-const API = axios.create({
+export const API = axios.create({
 	baseURL: API_URL,
 	headers: {
 		'Content-Type': 'application/json',
@@ -14,9 +14,11 @@ API.interceptors.request.use(
 		// if (token) {
 		// 	config.headers['Authorization'] = `Bearer ${token}`
 		// }
-		// return config
+		return config
 	},
-	(error) => Promise.reject(error)
+	(error) => {
+		console.error('Fetch :', error)
+	}
 )
 
 async function getMe() {}

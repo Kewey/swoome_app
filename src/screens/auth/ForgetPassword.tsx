@@ -38,7 +38,6 @@ const ForgetPassword = ({ navigation }: ForgetPasswordProps) => {
 		<KeyboardAwareScrollView
 			contentContainerStyle={{
 				flex: 1,
-				padding: 30,
 			}}
 		>
 			<View>

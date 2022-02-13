@@ -1,7 +1,7 @@
 import { API_URL } from '@env'
 import { setToken, setUser } from '@redux/reducers/user.reducer'
-import { useDispatch } from 'react-redux'
-import { API } from './apiService'
+import { API } from '@services/apiService'
+import { User, UserLogin } from '@types/user'
 
 export interface UserCreation {
 	firstname: string
@@ -24,14 +24,31 @@ export async function getUser(id = 'me') {
 	} catch (error) {}
 }
 
-export async function createUser({ firstname, mail, password }: UserCreation) {
+export async function login(
+	email: string,
+	password: string
+): Promise<User | undefined> {
 	try {
 		return await API.post(`${API_URL}/user/`, {
-			firstname,
-			mail,
+			email,
 			password,
 		})
 	} catch (error) {}
+}
+
+export async function createUser(
+	username: string,
+	email: string,
+	password: string
+): Promise<{ user: User; token: string }> {
+	const {
+		data: { user, token },
+	} = await API.post(`${API_URL}/user`, {
+		firstname: username,
+		email,
+		password,
+	})
+	return { user, token }
 }
 
 export function logout() {

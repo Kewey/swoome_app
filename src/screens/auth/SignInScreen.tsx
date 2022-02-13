@@ -11,8 +11,13 @@ import TextInput from '@ui/TextInput'
 import { NavArrowLeft } from 'iconoir-react-native'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { View, TouchableOpacity } from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import {
+	View,
+	TouchableOpacity,
+	KeyboardAvoidingView,
+	ScrollView,
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { useDispatch } from 'react-redux'
 
 type SignInScreenProps = {
@@ -30,110 +35,114 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 	const onSubmit = (data: UserLogin) => {
 		console.log(`data`, data)
 		// TODO login into dispatch user + token
-
-		dispatch(setToken('TODO'))
+		try {
+			dispatch(setToken('TODO'))
+		} catch (error) {
+			console.log('error', error)
+		}
 	}
 
 	return (
-		<KeyboardAwareScrollView
-			contentContainerStyle={{
+		<KeyboardAvoidingView
+			style={{
 				flex: 1,
-				padding: 30,
 			}}
 		>
-			<View>
-				<CircleButton onPress={() => navigation.goBack()}>
-					<NavArrowLeft height={25} width={25} color={DarkGrey} />
-				</CircleButton>
-			</View>
-			<View style={{ flex: 1, justifyContent: 'center' }}>
-				<View style={{ marginBottom: 50 }}>
-					<FredokaText
-						style={{ fontSize: 30, textAlign: 'center', marginBottom: 20 }}
-					>
-						Bienvenue jeune dépensier ! 👋🏻
-					</FredokaText>
-					<Text style={{ textAlign: 'center', opacity: 0.55, fontSize: 13 }}>
-						Commence par décliner ton identité pour pouvoir te connecter et
-						préparer ta meilleure liste de course.
-					</Text>
-				</View>
-				<View>
-					<View style={{ marginBottom: 15 }}>
-						<Text style={{ marginBottom: 5 }}>Adresse mail</Text>
-						<Controller
-							control={control}
-							rules={{
-								required: true,
-							}}
-							render={({ field: { onChange, onBlur, value } }) => (
-								<TextInput
-									style={{
-										marginBottom: 5,
-									}}
-									onBlur={onBlur}
-									onChangeText={onChange}
-									value={value}
-								/>
-							)}
-							name='email'
-						/>
-						{errors.email && <Text>This is required.</Text>}
+			<ScrollView
+				style={{ flex: 1, padding: 30 }}
+				contentContainerStyle={{ justifyContent: 'center', flexGrow: 1 }}
+			>
+				<View style={{ flex: 1, justifyContent: 'center' }}>
+					<View style={{ marginBottom: 50 }}>
+						<FredokaText
+							style={{ fontSize: 30, textAlign: 'center', marginBottom: 20 }}
+						>
+							Bienvenue jeune dépensier ! 👋🏻
+						</FredokaText>
+						<Text style={{ textAlign: 'center', opacity: 0.55, fontSize: 13 }}>
+							Commence par décliner ton identité pour pouvoir te connecter et
+							préparer ta meilleure liste de course.
+						</Text>
 					</View>
+					<View>
+						<View style={{ marginBottom: 15 }}>
+							<Text style={{ marginBottom: 5 }}>Adresse mail</Text>
+							<Controller
+								control={control}
+								rules={{
+									required: true,
+								}}
+								render={({ field: { onChange, onBlur, value } }) => (
+									<TextInput
+										style={{
+											marginBottom: 5,
+										}}
+										onBlur={onBlur}
+										onChangeText={onChange}
+										value={value}
+									/>
+								)}
+								name='email'
+							/>
+							{errors.email && <Text>This is required.</Text>}
+						</View>
 
-					<View style={{ marginBottom: 25 }}>
-						<Text style={{ marginBottom: 5 }}>Mot de passe</Text>
-						<Controller
-							control={control}
-							rules={{
-								required: true,
+						<View style={{ marginBottom: 25 }}>
+							<Text style={{ marginBottom: 5 }}>Mot de passe</Text>
+							<Controller
+								control={control}
+								rules={{
+									required: true,
+								}}
+								render={({ field: { onChange, onBlur, value } }) => (
+									<TextInput
+										style={{
+											marginBottom: 5,
+										}}
+										onBlur={onBlur}
+										onChangeText={onChange}
+										value={value}
+										secureTextEntry
+									/>
+								)}
+								name='password'
+							/>
+							{errors.password && <Text>This is required.</Text>}
+							<TouchableOpacity
+								onPress={() => navigation.navigate(AuthScreens.ForgetPassword)}
+							>
+								<Text
+									style={{ marginTop: 5, opacity: 0.5, textAlign: 'right' }}
+								>
+									Mot de passe oublié ?
+								</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
+					<View>
+						<Button size='large' onPress={handleSubmit(onSubmit)}>
+							Se connecter
+						</Button>
+						<View
+							style={{
+								flexDirection: 'row',
+								justifyContent: 'center',
+								marginTop: 15,
 							}}
-							render={({ field: { onChange, onBlur, value } }) => (
-								<TextInput
-									style={{
-										marginBottom: 5,
-									}}
-									onBlur={onBlur}
-									onChangeText={onChange}
-									value={value}
-									secureTextEntry
-								/>
-							)}
-							name='password'
-						/>
-						{errors.password && <Text>This is required.</Text>}
-						<TouchableOpacity
-							onPress={() => navigation.navigate(AuthScreens.ForgetPassword)}
 						>
-							<Text style={{ marginTop: 5, opacity: 0.5, textAlign: 'right' }}>
-								Mot de passe oublié ?
-							</Text>
-						</TouchableOpacity>
+							<Text>Pas encore de compte ?</Text>
+							<TouchableOpacity
+								onPress={() => navigation.navigate(AuthScreens.SignUp)}
+							>
+								<Text style={{ textDecorationLine: 'underline' }}>
+									Inscris-toi
+								</Text>
+							</TouchableOpacity>
+						</View>
 					</View>
 				</View>
-				<View>
-					<Button size='large' onPress={handleSubmit(onSubmit)}>
-						Se connecter
-					</Button>
-					<View
-						style={{
-							flexDirection: 'row',
-							justifyContent: 'center',
-							marginTop: 15,
-						}}
-					>
-						<Text>Pas encore de compte ?</Text>
-						<TouchableOpacity
-							onPress={() => navigation.navigate(AuthScreens.SignUp)}
-						>
-							<Text style={{ textDecorationLine: 'underline' }}>
-								Inscris-toi
-							</Text>
-						</TouchableOpacity>
-					</View>
-				</View>
-			</View>
-		</KeyboardAwareScrollView>
+			</ScrollView>
+		</KeyboardAvoidingView>
 	)
 }
 

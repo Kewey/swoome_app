@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Group } from '@types/Group'
 import { User } from '@types/user'
 import { RootState } from '../../../App'
 
@@ -7,10 +6,6 @@ interface UserSlice {
 	isLoading: boolean
 	user: User | null
 	token: string | null
-}
-
-async function initTokenFromStorage() {
-	return await SecureStorage.getItemAsync('token')
 }
 
 const initialState: UserSlice = {

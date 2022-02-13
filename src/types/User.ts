@@ -17,7 +17,7 @@ export type UserAction = {
 }
 
 export type UserSignUp = {
-	name: string
+	username: string
 	email: string
 	password: string
 }

@@ -1,42 +1,75 @@
-import { NavigationContainer } from '@react-navigation/native'
+import { White } from '@constants/Colors'
+import {
+	NavigationContainer,
+	useNavigation,
+	useTheme,
+} from '@react-navigation/native'
 import AuthScreen from '@screens/auth'
 import ForgetPassword from '@screens/auth/ForgetPassword'
 import SignInScreen from '@screens/auth/SignInScreen'
 import SignUpScreen from '@screens/auth/SignUpScreen'
 import { theme } from '@styles/theme'
+import CircleButton from '@ui/CircleButton'
+import Text from '@ui/Text'
+import { NavArrowLeft } from 'iconoir-react-native'
 import React, { ReactElement } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { TouchableOpacity, View } from 'react-native'
 import { AuthStack, AuthScreens } from './Routes'
 
 const AuthNavigation = (): ReactElement => {
 	return (
-		<SafeAreaView
-			style={{
-				flex: 1,
-				padding: 30,
-			}}
-		>
-			<NavigationContainer theme={theme}>
-				<AuthStack.Navigator
-					initialRouteName={AuthScreens.Auth}
-					screenOptions={{ headerShown: false }}
-				>
-					<AuthStack.Screen name={AuthScreens.Auth} component={AuthScreen} />
-					<AuthStack.Screen
-						name={AuthScreens.SignIn}
-						component={SignInScreen}
-					/>
-					<AuthStack.Screen
-						name={AuthScreens.SignUp}
-						component={SignUpScreen}
-					/>
-					<AuthStack.Screen
-						name={AuthScreens.ForgetPassword}
-						component={ForgetPassword}
-					/>
-				</AuthStack.Navigator>
-			</NavigationContainer>
-		</SafeAreaView>
+		<NavigationContainer theme={theme}>
+			<AuthStack.Navigator
+				initialRouteName={AuthScreens.Auth}
+				screenOptions={({ route, navigation }) => ({
+					headerTitle: '',
+					headerStyle: {
+						backgroundColor: White,
+					},
+					headerLeft: () => {
+						const { colors } = useTheme()
+						return (
+							<View style={{ marginLeft: 30 }}>
+								<CircleButton
+									backgroundColor={colors.card}
+									onPress={() => navigation.goBack()}
+								>
+									<NavArrowLeft height={25} width={25} color={colors.text} />
+								</CircleButton>
+							</View>
+						)
+					},
+				})}
+			>
+				<AuthStack.Screen
+					name={AuthScreens.Auth}
+					component={AuthScreen}
+					options={{ headerShown: false }}
+				/>
+				<AuthStack.Screen name={AuthScreens.SignIn} component={SignInScreen} />
+				<AuthStack.Screen
+					name={AuthScreens.SignUp}
+					component={SignUpScreen}
+					options={({ navigation }) => ({
+						headerRight: () => {
+							return (
+								<View style={{ marginRight: 30 }}>
+									<TouchableOpacity
+										onPress={() => navigation.navigate(AuthScreens.SignIn)}
+									>
+										<Text weight='bold'>Déjà un compte ?</Text>
+									</TouchableOpacity>
+								</View>
+							)
+						},
+					})}
+				/>
+				<AuthStack.Screen
+					name={AuthScreens.ForgetPassword}
+					component={ForgetPassword}
+				/>
+			</AuthStack.Navigator>
+		</NavigationContainer>
 	)
 }
 

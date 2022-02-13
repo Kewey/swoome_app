@@ -3,9 +3,9 @@ import { AuthNavigationProp } from '@types/routes'
 import Button from '@ui/Button'
 import React from 'react'
 import { View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import Text from '@ui/Text'
 import FredokaText from '@ui/FredokaText'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 
 type AuthScreenProps = {
 	navigation: AuthNavigationProp<AuthScreens.Auth>
@@ -13,7 +13,13 @@ type AuthScreenProps = {
 
 export default function AuthScreen({ navigation }: AuthScreenProps) {
 	return (
-		<>
+		<SafeAreaView
+			style={{
+				flex: 1,
+				paddingHorizontal: 30,
+				paddingBottom: 30,
+			}}
+		>
 			<View style={{ flex: 1, justifyContent: 'center' }}>
 				<FredokaText
 					style={{ fontSize: 30, textAlign: 'center', marginBottom: 20 }}
@@ -29,6 +35,7 @@ export default function AuthScreen({ navigation }: AuthScreenProps) {
 				<Button
 					block
 					variant='primary'
+					size='large'
 					style={{ marginBottom: 15 }}
 					onPress={() => navigation.navigate(AuthScreens.SignIn)}
 				>
@@ -36,11 +43,12 @@ export default function AuthScreen({ navigation }: AuthScreenProps) {
 				</Button>
 				<Button
 					variant='secondary'
+					size='large'
 					onPress={() => navigation.navigate(AuthScreens.SignUp)}
 				>
 					Inscription
 				</Button>
 			</View>
-		</>
+		</SafeAreaView>
 	)
 }

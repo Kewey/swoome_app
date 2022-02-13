@@ -4,10 +4,12 @@ import { View, Pressable, StyleSheet, PressableProps } from 'react-native'
 
 interface CircleButtonProps extends PressableProps {
 	size?: number
+	backgroundColor?: string
 }
 
 const CircleButton = ({
 	size = 35,
+	backgroundColor = Light,
 	...props
 }: CircleButtonProps): ReactElement => {
 	return (
@@ -15,7 +17,12 @@ const CircleButton = ({
 			<View
 				style={[
 					ButtonStyle.default,
-					{ height: size, width: size, borderRadius: size / 2 },
+					{
+						height: size,
+						width: size,
+						borderRadius: size / 2,
+						backgroundColor,
+					},
 				]}
 			>
 				{props.children}
@@ -30,7 +37,6 @@ const ButtonStyle = StyleSheet.create({
 	default: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		backgroundColor: Light,
 	},
 })
 

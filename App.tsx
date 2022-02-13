@@ -84,7 +84,6 @@ export function App(): ReactElement {
 			) : !haveGroups ? (
 				<GroupNavigation />
 			) : (
-				// <GroupNavigation />
 				<MainNavigation />
 			)}
 		</SafeAreaProvider>
