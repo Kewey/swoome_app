@@ -1,16 +1,18 @@
 import { AuthScreens } from '@navigation/Routes'
 import { useTheme } from '@react-navigation/native'
 import { setToken, setUser } from '@redux/reducers/user.reducer'
-import { createUser, login } from '@services/userService'
+import { createUser } from '@services/userService'
 import { AuthNavigationProp } from '@types/routes'
 import { UserSignUp } from '@types/user'
 import Button from '@ui/Button'
+import CircleButton from '@ui/CircleButton'
 import FredokaText from '@ui/FredokaText'
 import Text from '@ui/Text'
 import TextInput from '@ui/TextInput'
+import { NavArrowLeft } from 'iconoir-react-native'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { ScrollView, View } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useDispatch } from 'react-redux'
@@ -26,44 +28,60 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 	const { colors } = useTheme()
 	const dispatch = useDispatch()
 
-	const [currentStep, setStep] = useState<number>(0)
+	const [currentStep, setCurrentStep] = useState<number>(0)
 	const width = (145 / (NB_STEPS - 1)) * currentStep
 
-	const {
-		control,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<UserSignUp>({
+	navigation.setOptions({
+		headerLeft: () => (
+			<View style={{ marginLeft: 30 }}>
+				<CircleButton
+					backgroundColor={colors.card}
+					onPress={() => {
+						if (currentStep === 0) {
+							navigation.goBack()
+						}
+						setCurrentStep(currentStep - 1)
+					}}
+				>
+					<NavArrowLeft height={25} width={25} color={colors.text} />
+				</CircleButton>
+			</View>
+		),
+		headerRight: () => (
+			<View style={{ marginRight: 30 }}>
+				<TouchableOpacity
+					onPress={() => navigation.navigate(AuthScreens.SignIn)}
+				>
+					<Text weight='bold'>Déjà un compte ?</Text>
+				</TouchableOpacity>
+			</View>
+		),
+	})
+
+	const { control, handleSubmit } = useForm<UserSignUp>({
 		mode: 'onChange',
+		defaultValues: {
+			username: '',
+			email: '',
+			password: '',
+		},
 	})
 
 	const onSubmit = async ({ email, username, password }: UserSignUp) => {
 		try {
 			setLoading(true)
 			const { user, token } = await createUser(username, email, password)
-			setLoading(false)
 			dispatch(setUser(user))
 			dispatch(setToken(token))
 		} catch (error) {}
-	}
-
-	const isUsernameError = currentStep === 0 && errors.username
-	const isEmailError = currentStep === 1 && errors.email
-	const isPasswordError = currentStep === 2 && errors.password
-
-	function goNextStep() {
-		if (currentStep === NB_STEPS - 1) {
-			return
-		}
-
-		setStep(currentStep + 1)
+		setLoading(false)
 	}
 
 	// function goPrevStep() {
 	// 	if (currentStep === 0) {
 	// 		return navigation.goBack()
 	// 	}
-	// 	setStep(currentStep - 1)
+	// 	setCurrentStep(currentStep - 1)
 	// }
 
 	return (
@@ -71,9 +89,11 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 			<KeyboardAwareScrollView
 				contentContainerStyle={{
 					flex: 1,
+					paddingHorizontal: 30,
+					paddingBottom: 15,
 				}}
 			>
-				<View style={{ marginTop: 30, marginBottom: 10, alignItems: 'center' }}>
+				<View style={{ marginBottom: 40, alignItems: 'center' }}>
 					<View
 						style={{
 							height: 5,
@@ -92,9 +112,8 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 						/>
 					</View>
 				</View>
-
-				<ScrollView contentContainerStyle={{ padding: 30, flex: 1 }}>
-					{currentStep === 0 && (
+				{currentStep === 0 && (
+					<>
 						<View style={{ flex: 1, justifyContent: 'center' }}>
 							<View style={{ flex: 1, marginBottom: 50 }}>
 								<FredokaText
@@ -118,29 +137,53 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 									<Controller
 										control={control}
 										rules={{
-											required: true,
+											required: 'Il nous faut un nom !',
+											minLength: {
+												value: 2,
+												message: 'Ton nom doit faire au moins 2 caractères',
+											},
 										}}
-										render={({ field: { onChange, onBlur, value } }) => (
-											<TextInput
-												style={{
-													marginBottom: 5,
-												}}
-												placeholder='Ex. Michel'
-												onBlur={onBlur}
-												onChangeText={onChange}
-												value={value}
-												autoFocus
-											/>
+										render={({
+											field: { onChange, onBlur, value },
+											fieldState: { invalid, isDirty, error },
+										}) => (
+											<>
+												{error && (
+													<Text style={{ marginBottom: 5 }}>
+														{error.message}
+													</Text>
+												)}
+												<TextInput
+													style={{
+														marginBottom: 10,
+													}}
+													placeholder='Ex. Michel'
+													onBlur={onBlur}
+													onChangeText={onChange}
+													value={value}
+													autoFocus
+												/>
+												<Button
+													size='large'
+													disabled={!isDirty || invalid}
+													onPress={() => {
+														setCurrentStep(currentStep + 1)
+													}}
+												>
+													Continuer
+												</Button>
+											</>
 										)}
 										name='username'
 									/>
-									{errors.username && <Text>This is required.</Text>}
 								</View>
 							</View>
 						</View>
-					)}
+					</>
+				)}
 
-					{currentStep === 1 && (
+				{currentStep === 1 && (
+					<>
 						<View style={{ flex: 1, justifyContent: 'center' }}>
 							<View style={{ flex: 1, marginBottom: 50 }}>
 								<FredokaText
@@ -165,31 +208,52 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 										control={control}
 										rules={{
 											required: true,
-											pattern:
-												/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+											pattern: {
+												value:
+													/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+												message: 'Ca ne ressemble pas à un mail 😳',
+											},
 										}}
-										render={({ field: { onChange, onBlur, value } }) => (
-											<TextInput
-												style={{
-													marginBottom: 5,
-												}}
-												placeholder='Ex. ilovepotatoes@mail.com'
-												onBlur={onBlur}
-												onChangeText={onChange}
-												value={value}
-												autoFocus
-												keyboardType='email-address'
-											/>
+										render={({
+											field: { onChange, onBlur, value },
+											fieldState: { isDirty, invalid, error },
+										}) => (
+											<>
+												{error && (
+													<Text style={{ marginBottom: 5 }}>
+														{error.message}
+													</Text>
+												)}
+												<TextInput
+													style={{
+														marginBottom: 10,
+													}}
+													placeholder='Ex. ilovepotatoes@mail.com'
+													onBlur={onBlur}
+													onChangeText={onChange}
+													value={value}
+													keyboardType='email-address'
+													autoFocus
+												/>
+												<Button
+													size='large'
+													disabled={!isDirty || invalid}
+													onPress={() => setCurrentStep(currentStep + 1)}
+												>
+													Continuer
+												</Button>
+											</>
 										)}
 										name='email'
 									/>
-									{errors.email && <Text>This is required.</Text>}
 								</View>
 							</View>
 						</View>
-					)}
+					</>
+				)}
 
-					{currentStep === 2 && (
+				{currentStep === 2 && (
+					<>
 						<View style={{ flex: 1, justifyContent: 'center' }}>
 							<View style={{ flex: 1, marginBottom: 50 }}>
 								<FredokaText
@@ -214,48 +278,49 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 										control={control}
 										rules={{
 											required: true,
-											minLength: 6,
+											minLength: {
+												value: 6,
+												message:
+													'Pour un max de sécurité il faut 6 caractères minimun',
+											},
 										}}
-										render={({ field: { onChange, onBlur, value } }) => (
-											<TextInput
-												style={{
-													marginBottom: 5,
-												}}
-												placeholder='TuTr0uv3r4_P4s'
-												onBlur={onBlur}
-												onChangeText={onChange}
-												value={value}
-												autoFocus
-												secureTextEntry
-											/>
+										render={({
+											field: { onChange, onBlur, value },
+											fieldState: { isDirty, invalid, error },
+										}) => (
+											<>
+												{error && (
+													<Text style={{ marginBottom: 5 }}>
+														{error.message}
+													</Text>
+												)}
+												<TextInput
+													style={{
+														marginBottom: 10,
+													}}
+													placeholder='TuTr0uv3r4_P4s'
+													onBlur={onBlur}
+													onChangeText={onChange}
+													value={value}
+													secureTextEntry
+													autoFocus
+												/>
+												<Button
+													size='large'
+													disabled={!isDirty || invalid || isLoading}
+													onPress={handleSubmit(onSubmit)}
+												>
+													{isLoading ? 'Chargement' : "M'inscrire"}
+												</Button>
+											</>
 										)}
 										name='password'
 									/>
-									{errors.password && <Text>This is required.</Text>}
 								</View>
 							</View>
 						</View>
-					)}
-
-					{currentStep !== NB_STEPS - 1 && (
-						<Button
-							size='large'
-							disabled={isUsernameError || isEmailError}
-							onPress={() => goNextStep()}
-						>
-							Continuer
-						</Button>
-					)}
-					{currentStep === NB_STEPS - 1 && (
-						<Button
-							size='large'
-							disabled={isPasswordError || isLoading}
-							onPress={handleSubmit(onSubmit)}
-						>
-							{isLoading ? 'Chargement' : "M'inscrire"}
-						</Button>
-					)}
-				</ScrollView>
+					</>
+				)}
 			</KeyboardAwareScrollView>
 		</SafeAreaView>
 	)

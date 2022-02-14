@@ -42,12 +42,14 @@ export async function createUser(
 	password: string
 ): Promise<{ user: User; token: string }> {
 	const {
-		data: { user, token },
-	} = await API.post(`${API_URL}/user`, {
+		// data: { user, token },
+		data: user,
+	} = await API.post(`${API_URL}/users`, {
 		firstname: username,
 		email,
 		password,
 	})
+	const token = 'dzdzada'
 	return { user, token }
 }
 

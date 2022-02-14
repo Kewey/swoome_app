@@ -1,9 +1,12 @@
 import { Group } from './Group'
 
 export type User = {
-	name: string
+	id: string
+	firstname: string
 	email: string
 	groups: Group[]
+	createdAt?: string
+	updatedAt?: string
 } | null
 
 export type UserLogin = {

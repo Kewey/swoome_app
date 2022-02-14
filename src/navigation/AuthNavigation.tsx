@@ -21,7 +21,7 @@ const AuthNavigation = (): ReactElement => {
 		<NavigationContainer theme={theme}>
 			<AuthStack.Navigator
 				initialRouteName={AuthScreens.Auth}
-				screenOptions={({ route, navigation }) => ({
+				screenOptions={({ navigation }) => ({
 					headerTitle: '',
 					headerStyle: {
 						backgroundColor: White,
@@ -47,23 +47,7 @@ const AuthNavigation = (): ReactElement => {
 					options={{ headerShown: false }}
 				/>
 				<AuthStack.Screen name={AuthScreens.SignIn} component={SignInScreen} />
-				<AuthStack.Screen
-					name={AuthScreens.SignUp}
-					component={SignUpScreen}
-					options={({ navigation }) => ({
-						headerRight: () => {
-							return (
-								<View style={{ marginRight: 30 }}>
-									<TouchableOpacity
-										onPress={() => navigation.navigate(AuthScreens.SignIn)}
-									>
-										<Text weight='bold'>Déjà un compte ?</Text>
-									</TouchableOpacity>
-								</View>
-							)
-						},
-					})}
-				/>
+				<AuthStack.Screen name={AuthScreens.SignUp} component={SignUpScreen} />
 				<AuthStack.Screen
 					name={AuthScreens.ForgetPassword}
 					component={ForgetPassword}

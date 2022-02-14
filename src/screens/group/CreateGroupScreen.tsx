@@ -20,6 +20,7 @@ import TextInput from '@ui/TextInput'
 import Button from '@ui/Button'
 import { Cyan, LightGrey, White } from '@constants/Colors'
 import { borderRadius } from '@styles/layout'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 type GroupCreateProps = {
 	navigation: GroupNavigationProp<GroupScreens.Create>
@@ -57,48 +58,23 @@ const DATA = [
 ]
 
 export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
+	const [isLoading, setLoading] = useState(false)
 	const { colors } = useTheme()
 	const dispatch = useDispatch()
 
-	const [currentStep, setStep] = useState<number>(0)
-	const width = (145 / (NB_STEPS - 1)) * currentStep
+	const [currentStep, setCurrentStep] = useState<number>(0)
 
-	const {
-		control,
-		watch,
-		setValue,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<GroupCreate>()
+	const { control, watch, setValue, handleSubmit } = useForm<GroupCreate>()
 
 	const onSubmit = (data: GroupCreate) => {
+		setLoading(true)
+		try {
+		} catch (error) {}
+		setLoading(false)
 		console.log(`data`, data)
 		// TODO create group + add to user
 
 		// dispatch(setToken('TODO'))
-	}
-
-	function isDisabled() {
-		if (
-			(currentStep === 0 && !watch('type')) ||
-			(currentStep === 1 && !watch('name'))
-		) {
-			return true
-		}
-	}
-
-	function goNextStep() {
-		if (currentStep === NB_STEPS - 1) {
-			return
-		}
-		setStep(currentStep + 1)
-	}
-
-	function goPrevStep() {
-		if (currentStep === 0) {
-			return navigation.goBack()
-		}
-		setStep(currentStep - 1)
 	}
 
 	const renderItem = ({ item }: any) => {
@@ -143,49 +119,12 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 	}
 
 	return (
-		<View
+		<SafeAreaView
 			style={{
 				flex: 1,
+				paddingBottom: 30,
 			}}
 		>
-			<View
-				style={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					justifyContent: 'space-between',
-				}}
-			>
-				<CircleButton onPress={() => goPrevStep()}>
-					<NavArrowLeft height={25} width={25} color={colors.text} />
-				</CircleButton>
-
-				<TouchableOpacity
-					onPress={() => navigation.navigate(GroupScreens.Join)}
-				>
-					<Text weight='bold'>Déjà une maison ?</Text>
-				</TouchableOpacity>
-			</View>
-			<View style={{ marginTop: 30, marginBottom: 40, alignItems: 'center' }}>
-				<View
-					style={{
-						height: 5,
-						width: 145,
-						backgroundColor: colors.border,
-						borderRadius: 3,
-					}}
-				>
-					<View
-						// animate={{ width }}
-						style={{
-							width,
-							height: 5,
-							borderRadius: 3,
-							backgroundColor: colors.primary,
-						}}
-					/>
-				</View>
-			</View>
-
 			{currentStep === 0 && (
 				<View style={{ flex: 1 }}>
 					<FredokaText
@@ -207,14 +146,24 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 					<FlatList
 						data={DATA}
 						renderItem={renderItem}
+						contentContainerStyle={{ paddingHorizontal: 30 }}
 						keyExtractor={(item) => item.id}
-						extraData={watch('type')}
 					/>
+					<Button
+						size='large'
+						style={{ paddingHorizontal: 30 }}
+						// disabled={}
+						onPress={() => setCurrentStep(currentStep + 1)}
+					>
+						Continuer
+					</Button>
 				</View>
 			)}
 
 			{currentStep === 1 && (
-				<View style={{ flex: 1, justifyContent: 'center' }}>
+				<View
+					style={{ flex: 1, justifyContent: 'center', paddingHorizontal: 30 }}
+				>
 					<View style={{ flex: 1, marginBottom: 50 }}>
 						<FredokaText
 							style={{ fontSize: 30, textAlign: 'center', marginBottom: 20 }}
@@ -231,47 +180,45 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 							<Controller
 								control={control}
 								rules={{
-									required: true,
+									required: 'Il nous faut un nom !',
+									minLength: {
+										value: 2,
+										message: 'Ton nom doit faire au moins 2 caractères',
+									},
 								}}
-								render={({ field: { onChange, onBlur, value } }) => (
-									<TextInput
-										style={{
-											marginBottom: 5,
-										}}
-										placeholder='Ex. Maison du bonheur'
-										onBlur={onBlur}
-										onChangeText={onChange}
-										value={value}
-										autoFocus
-									/>
+								render={({
+									field: { onChange, onBlur, value },
+									fieldState: { invalid, isDirty, error },
+								}) => (
+									<>
+										{error && (
+											<Text style={{ marginBottom: 5 }}>{error.message}</Text>
+										)}
+										<TextInput
+											style={{
+												marginBottom: 10,
+											}}
+											placeholder='Ex. Maison du bonheur'
+											onBlur={onBlur}
+											onChangeText={onChange}
+											value={value}
+											autoFocus
+										/>
+										<Button
+											size='large'
+											disabled={!isDirty || invalid || isLoading}
+											onPress={handleSubmit(onSubmit)}
+										>
+											{isLoading ? 'Chargement' : 'Créer ma maison'}
+										</Button>
+									</>
 								)}
 								name='name'
 							/>
-							{errors.name && <Text>This is required.</Text>}
 						</View>
 					</View>
 				</View>
 			)}
-
-			{currentStep !== NB_STEPS - 1 && (
-				<Button
-					size='large'
-					disabled={isDisabled()}
-					onPress={() => goNextStep()}
-				>
-					Continuer
-				</Button>
-			)}
-			{currentStep === NB_STEPS - 1 && (
-				<Button
-					size='large'
-					disabled={isDisabled()}
-					variant='secondary'
-					onPress={handleSubmit(onSubmit)}
-				>
-					Créer ma maison
-				</Button>
-			)}
-		</View>
+		</SafeAreaView>
 	)
 }

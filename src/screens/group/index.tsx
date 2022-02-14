@@ -6,19 +6,30 @@ import { GroupScreens } from '@navigation/Routes'
 import { GroupNavigationProp } from '@types/routes'
 import FredokaText from '@ui/FredokaText'
 import Text from '@ui/Text'
+import { getCurrentUser } from '@redux/reducers/user.reducer'
+import { useSelector } from 'react-redux'
 
 type GroupIndexProps = {
 	navigation: GroupNavigationProp<GroupScreens.Index>
 }
 
 export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
+	const user = useSelector(getCurrentUser)
+	console.log('user', user)
+
 	return (
-		<>
+		<SafeAreaView
+			style={{
+				flex: 1,
+				paddingHorizontal: 30,
+				paddingBottom: 30,
+			}}
+		>
 			<View style={{ flex: 1, justifyContent: 'center' }}>
 				<FredokaText
 					style={{ fontSize: 30, textAlign: 'center', marginBottom: 15 }}
 				>
-					Ma maison
+					Bienvenue {user?.firstname}
 				</FredokaText>
 				<Text
 					style={{
@@ -51,6 +62,6 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 					Rejoindre ma maison
 				</Button>
 			</View>
-		</>
+		</SafeAreaView>
 	)
 }
