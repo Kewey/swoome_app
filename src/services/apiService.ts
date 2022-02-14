@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { API_URL } from '@env'
+import { useSelector } from 'react-redux'
+import { getToken } from '@redux/user.reducer'
 
 export const API = axios.create({
 	baseURL: API_URL,
@@ -10,9 +12,9 @@ export const API = axios.create({
 
 API.interceptors.request.use(
 	(config) => {
-		// const token = localStorage.getItem('token')
-		// if (token) {
-		// 	config.headers['Authorization'] = `Bearer ${token}`
+		// const token = useSelector(getToken)
+		// if (!config.headers?.Authorization && config.headers) {
+		// 	config.headers.Authorization = `Bearer ${token}`
 		// }
 		return config
 	},

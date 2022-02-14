@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Group } from '@types/Group'
 import { User } from '@types/user'
 import { RootState } from '../../App'
 
@@ -32,6 +31,14 @@ const userSlice = createSlice({
 			prepare: (token: string) => ({ payload: token }),
 		},
 	},
+	// extraReducers: {
+	// 	'signIn/fulfilled': (state, action) => {
+	// 		const { accessToken, user } = action.payload
+	// 		state.token = accessToken
+	// 		state.user = user
+	// 		state.isLoading = false
+	// 	},
+	// },
 })
 
 const getCurrentUser = (state: RootState) => state.user.user

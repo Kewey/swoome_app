@@ -1,15 +1,15 @@
 import { DarkGrey } from '@constants/Colors'
 import { AuthScreens } from '@navigation/Routes'
-import { setToken } from '@redux/user.reducer'
+import { setToken, setUser } from '@redux/user.reducer'
+import { API } from '@services/apiService'
+import { login } from '@services/userService'
 import { AuthNavigationProp } from '@types/routes'
 import { UserLogin } from '@types/user'
 import Button from '@ui/Button'
-import CircleButton from '@ui/CircleButton'
 import FredokaText from '@ui/FredokaText'
 import Text from '@ui/Text'
 import TextInput from '@ui/TextInput'
-import { NavArrowLeft } from 'iconoir-react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import {
 	View,
@@ -17,7 +17,6 @@ import {
 	KeyboardAvoidingView,
 	ScrollView,
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { useDispatch } from 'react-redux'
 
 type SignInScreenProps = {
@@ -26,20 +25,26 @@ type SignInScreenProps = {
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
 	const dispatch = useDispatch()
+	const [isLoading, setIsLoading] = useState(false)
 	const {
 		control,
 		handleSubmit,
 		formState: { errors },
 	} = useForm<UserLogin>()
 
-	const onSubmit = (data: UserLogin) => {
-		console.log(`data`, data)
-		// TODO login into dispatch user + token
+	const onSubmit = async ({ email, password }: UserLogin) => {
+		setIsLoading(true)
 		try {
-			dispatch(setToken('TODO'))
+			const {
+				data: { access_token },
+			} = await login(email, password)
+			API.defaults.headers['Authorization'] = `Bearer ${access_token}`
+			dispatch(setToken(access_token))
+			// dispatch(setUser())
 		} catch (error) {
 			console.log('error', error)
 		}
+		setIsLoading(false)
 	}
 
 	return (

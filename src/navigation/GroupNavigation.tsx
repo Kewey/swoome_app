@@ -37,7 +37,7 @@ const GroupNavigation = (): ReactElement => {
 				<GroupStack.Screen
 					name={GroupScreens.Index}
 					component={GroupIndexScreen}
-					options={{ headerShown: false }}
+					options={{ headerLeft: () => null }}
 				/>
 				<GroupStack.Screen
 					name={GroupScreens.Create}

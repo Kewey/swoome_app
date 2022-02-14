@@ -1,3 +1,4 @@
+import { SelectButton } from '@screens/group/CreateGroupScreen'
 import { User } from './user'
 
 export type Group = {
@@ -9,6 +10,6 @@ export type Group = {
 }
 
 export type GroupCreate = {
-	type: string
+	type: SelectButton
 	name: string
 }

@@ -21,39 +21,51 @@ import Button from '@ui/Button'
 import { Cyan, LightGrey, White } from '@constants/Colors'
 import { borderRadius } from '@styles/layout'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { setGroup } from '@redux/group.reducer'
+import { createGroup } from '@services/groupService'
 
 type GroupCreateProps = {
 	navigation: GroupNavigationProp<GroupScreens.Create>
 }
 
-const NB_STEPS = 2
+export interface SelectButton {
+	id: string
+	title: string
+	icon: string
+	selected: boolean
+}
 
 // Pass to API
-const DATA = [
+const DATA: SelectButton[] = [
 	{
 		id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba1',
 		title: 'Colacation',
 		icon: '🏠',
+		selected: false,
 	},
 	{
 		id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba2',
 		title: 'Vie en couple',
 		icon: '❤️',
+		selected: false,
 	},
 	{
 		id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba3',
 		title: 'Voyage',
 		icon: '✈️',
+		selected: false,
 	},
 	{
 		id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba4',
 		title: 'Projet',
 		icon: '💎',
+		selected: false,
 	},
 	{
 		id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba5',
 		title: 'Evenement',
 		icon: '🎊',
+		selected: false,
 	},
 ]
 
@@ -79,69 +91,20 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 				</CircleButton>
 			</View>
 		),
-		headerRight: () => (
-			<View style={{ marginRight: 30 }}>
-				<TouchableOpacity
-					onPress={() => navigation.navigate(GroupScreens.Join)}
-				>
-					<Text weight='bold'>Rejoindre un groupe</Text>
-				</TouchableOpacity>
-			</View>
-		),
 	})
 
-	const { control, watch, setValue, handleSubmit } = useForm<GroupCreate>()
+	const { control, setValue, getValues, handleSubmit } = useForm<GroupCreate>()
 
-	const onSubmit = (data: GroupCreate) => {
+	const onSubmit = async ({ name, type }: GroupCreate) => {
 		setLoading(true)
 		try {
+			const res = await createGroup(name)
+			dispatch(setGroup(res))
 		} catch (error) {}
 		setLoading(false)
-		console.log(`data`, data)
 		// TODO create group + add to user
 
 		// dispatch(setToken('TODO'))
-	}
-
-	const renderItem = ({ item }: any) => {
-		const backgroundColorIcon =
-			item.id === watch('type') ? colors.card : LightGrey
-		const backgroundColorCard =
-			item.id === watch('type') ? LightGrey : colors.card
-		const color = item.id === watch('type') ? Cyan : colors.text
-
-		return (
-			<TouchableWithoutFeedback onPress={() => setValue('type', item.id)}>
-				<View
-					style={{
-						backgroundColor: backgroundColorCard,
-						flexDirection: 'row',
-						paddingHorizontal: 20,
-						paddingVertical: 14,
-						borderRadius: borderRadius,
-						alignItems: 'center',
-						marginBottom: 15,
-					}}
-				>
-					<View
-						style={{
-							backgroundColor: backgroundColorIcon,
-							height: 60,
-							width: 60,
-							borderRadius: 30,
-							marginRight: 20,
-							alignItems: 'center',
-							justifyContent: 'center',
-						}}
-					>
-						<Text style={{ fontSize: 20 }}>{item.icon}</Text>
-					</View>
-					<Text weight='bold' style={{ color }}>
-						{item.title}
-					</Text>
-				</View>
-			</TouchableWithoutFeedback>
-		)
 	}
 
 	return (
@@ -169,12 +132,7 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 						Pour commencer à utiliser l’application, tu dois créer ou rejoindre
 						une maison.
 					</Text>
-					<FlatList
-						data={DATA}
-						renderItem={renderItem}
-						contentContainerStyle={{ paddingHorizontal: 30 }}
-						keyExtractor={(item) => item.id}
-					/>
+
 					<Button
 						size='large'
 						style={{ paddingHorizontal: 30 }}
