@@ -4,7 +4,7 @@ export type User = {
 	id: string
 	firstname: string
 	email: string
-	groups: Group[]
+	groups: string[]
 	createdAt?: string
 	updatedAt?: string
 } | null

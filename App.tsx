@@ -5,10 +5,7 @@ import useColorScheme from '@hooks/useColorScheme'
 import AuthNavigation from '@navigation/AuthNavigation'
 import GroupNavigation from '@navigation/GroupNavigation'
 import MainNavigation from '@navigation/MainNavigation'
-import userReducer, {
-	getToken,
-	getUserGroups,
-} from '@redux/reducers/user.reducer'
+import userReducer, { getToken, getUserGroups } from '@redux/user.reducer'
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useFonts } from 'expo-font'

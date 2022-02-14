@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import Button from '@ui/Button'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+import { FlatList, View } from 'react-native'
 import { GroupScreens } from '@navigation/Routes'
 import { GroupNavigationProp } from '@types/routes'
 import FredokaText from '@ui/FredokaText'
 import Text from '@ui/Text'
-import { getCurrentUser } from '@redux/reducers/user.reducer'
+import { getCurrentUser } from '@redux/user.reducer'
 import { useSelector } from 'react-redux'
 
 type GroupIndexProps = {
@@ -15,7 +15,9 @@ type GroupIndexProps = {
 
 export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 	const user = useSelector(getCurrentUser)
-	console.log('user', user)
+	console.log('user.groups', user?.groups)
+
+	useLayoutEffect(() => {}, [])
 
 	return (
 		<SafeAreaView
@@ -43,6 +45,7 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 					les membres de ton foyer.
 				</Text>
 			</View>
+			<FlatList renderItem={() => <Text>test</Text>} data={user?.groups} />
 			<View>
 				<Button
 					block
@@ -52,14 +55,6 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 					onPress={() => navigation.navigate(GroupScreens.Create)}
 				>
 					Créer ma maison
-				</Button>
-				<Button
-					block
-					size='large'
-					variant='secondary'
-					onPress={() => navigation.navigate(GroupScreens.Join)}
-				>
-					Rejoindre ma maison
 				</Button>
 			</View>
 		</SafeAreaView>

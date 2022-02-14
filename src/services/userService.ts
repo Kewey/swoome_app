@@ -1,6 +1,7 @@
 import { API_URL } from '@env'
-import { setToken, setUser } from '@redux/reducers/user.reducer'
+import { setToken, setUser } from '@redux/user.reducer'
 import { API } from '@services/apiService'
+import { Group } from '@types/Group'
 import { User, UserLogin } from '@types/user'
 
 export interface UserCreation {
@@ -14,12 +15,12 @@ export interface UserCredential {
 	password: string
 }
 
-export async function getUser(id = 'me') {
+export async function getUser(userId = 'me') {
 	try {
-		if (id === 'me') {
+		if (!userId) {
 			return await API.get(`${API_URL}/me`)
 		} else {
-			return await API.get(`${API_URL}/user/${id}`)
+			return await API.get(`${API_URL}/user/${userId}`)
 		}
 	} catch (error) {}
 }
@@ -29,7 +30,7 @@ export async function login(
 	password: string
 ): Promise<User | undefined> {
 	try {
-		return await API.post(`${API_URL}/user/`, {
+		return await API.post(`${API_URL}/auth/login`, {
 			email,
 			password,
 		})
@@ -51,6 +52,15 @@ export async function createUser(
 	})
 	const token = 'dzdzada'
 	return { user, token }
+}
+
+export async function getUserGroups(userId: string[]): Promise<Group[]> {
+	const {
+		// data: { user, token },
+		data: groups,
+	} = await API.get(`${API_URL}/users/${userId}/groups`)
+	const token = 'dzdzada'
+	return groups
 }
 
 export function logout() {

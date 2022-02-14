@@ -1,6 +1,6 @@
 import { AuthScreens } from '@navigation/Routes'
 import { useTheme } from '@react-navigation/native'
-import { setToken, setUser } from '@redux/reducers/user.reducer'
+import { setToken, setUser } from '@redux/user.reducer'
 import { createUser } from '@services/userService'
 import { AuthNavigationProp } from '@types/routes'
 import { UserSignUp } from '@types/user'

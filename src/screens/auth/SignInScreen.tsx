@@ -1,6 +1,6 @@
 import { DarkGrey } from '@constants/Colors'
 import { AuthScreens } from '@navigation/Routes'
-import { setToken } from '@redux/reducers/user.reducer'
+import { setToken } from '@redux/user.reducer'
 import { AuthNavigationProp } from '@types/routes'
 import { UserLogin } from '@types/user'
 import Button from '@ui/Button'

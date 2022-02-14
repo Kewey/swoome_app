@@ -10,7 +10,6 @@ export enum AuthScreens {
 export enum GroupScreens {
 	Index = 'GroupIndexScreen',
 	Create = 'GroupCreateScreen',
-	Join = 'GroupJoinScreen',
 }
 
 export enum MainScreens {
@@ -28,7 +27,6 @@ export type AuthStackParamList = {
 export type GroupStackParamList = {
 	[GroupScreens.Index]: undefined
 	[GroupScreens.Create]: undefined
-	[GroupScreens.Join]: undefined
 }
 
 export type MainStackParamList = {

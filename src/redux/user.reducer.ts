@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Group } from '@types/Group'
 import { User } from '@types/user'
-import { RootState } from '../../../App'
+import { RootState } from '../../App'
 
 interface UserSlice {
 	isLoading: boolean
@@ -30,12 +31,6 @@ const userSlice = createSlice({
 			},
 			prepare: (token: string) => ({ payload: token }),
 		},
-		// setGroup: {
-		// 	reducer: (state, action: PayloadAction<Group>) => {
-		// 		state.user = {...state.user, groups: [action.payload]}
-		// 	}
-		// 	prepare: (group: Group) => ({ payload: group }),
-		// }
 	},
 })
 

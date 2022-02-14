@@ -58,11 +58,37 @@ const DATA = [
 ]
 
 export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
+	const [currentStep, setCurrentStep] = useState<number>(0)
 	const [isLoading, setLoading] = useState(false)
 	const { colors } = useTheme()
 	const dispatch = useDispatch()
 
-	const [currentStep, setCurrentStep] = useState<number>(0)
+	navigation.setOptions({
+		headerLeft: () => (
+			<View style={{ marginLeft: 30 }}>
+				<CircleButton
+					backgroundColor={colors.card}
+					onPress={() => {
+						if (currentStep === 0) {
+							navigation.goBack()
+						}
+						setCurrentStep(currentStep - 1)
+					}}
+				>
+					<NavArrowLeft height={25} width={25} color={colors.text} />
+				</CircleButton>
+			</View>
+		),
+		headerRight: () => (
+			<View style={{ marginRight: 30 }}>
+				<TouchableOpacity
+					onPress={() => navigation.navigate(GroupScreens.Join)}
+				>
+					<Text weight='bold'>Rejoindre un groupe</Text>
+				</TouchableOpacity>
+			</View>
+		),
+	})
 
 	const { control, watch, setValue, handleSubmit } = useForm<GroupCreate>()
 
