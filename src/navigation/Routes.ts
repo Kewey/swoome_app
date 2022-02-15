@@ -1,3 +1,4 @@
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 
 export enum AuthScreens {
@@ -14,6 +15,7 @@ export enum GroupScreens {
 
 export enum MainScreens {
 	Home = 'HomeScreen',
+	Expense = 'ExpenseScreen',
 	Profile = 'ProfileScreen',
 }
 
@@ -30,10 +32,11 @@ export type GroupStackParamList = {
 }
 
 export type MainStackParamList = {
-	[MainScreens.Home]: { groupID: string } | undefined
-	[MainScreens.Profile]: undefined
+	[MainScreens.Home]: { groupId: string } | undefined
+	[MainScreens.Expense]: undefined
+	[MainScreens.Profile]: { userId: string } | undefined
 }
 
 export const AuthStack = createStackNavigator<AuthStackParamList>()
 export const GroupStack = createStackNavigator<GroupStackParamList>()
-export const MainStack = createStackNavigator<MainStackParamList>()
+export const MainStack = createBottomTabNavigator<MainStackParamList>()

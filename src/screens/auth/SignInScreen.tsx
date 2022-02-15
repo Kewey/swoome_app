@@ -29,20 +29,18 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 	const {
 		control,
 		handleSubmit,
-		formState: { errors },
+		formState: { errors, isDirty, isValid },
 	} = useForm<UserLogin>()
 
 	const onSubmit = async ({ email, password }: UserLogin) => {
 		setIsLoading(true)
 		try {
-			const {
-				data: { access_token },
-			} = await login(email, password)
+			const { access_token } = await login(email, password)
 			API.defaults.headers['Authorization'] = `Bearer ${access_token}`
 			dispatch(setToken(access_token))
 			// dispatch(setUser())
 		} catch (error) {
-			console.log('error', error)
+			console.log('LOGIN |', error)
 		}
 		setIsLoading(false)
 	}
@@ -76,6 +74,11 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 								control={control}
 								rules={{
 									required: true,
+									pattern: {
+										value:
+											/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+										message: 'Ca ne ressemble pas à un mail 😳',
+									},
 								}}
 								render={({ field: { onChange, onBlur, value } }) => (
 									<TextInput
@@ -85,6 +88,8 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 										onBlur={onBlur}
 										onChangeText={onChange}
 										value={value}
+										autoCapitalize='none'
+										keyboardType='email-address'
 									/>
 								)}
 								name='email'
@@ -125,8 +130,12 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 						</View>
 					</View>
 					<View>
-						<Button size='large' onPress={handleSubmit(onSubmit)}>
-							Se connecter
+						<Button
+							size='large'
+							disabled={isLoading || (!isDirty && isValid)}
+							onPress={handleSubmit(onSubmit)}
+						>
+							{isLoading ? 'Chargement' : 'Se connecter'}
 						</Button>
 						<View
 							style={{

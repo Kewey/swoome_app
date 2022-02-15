@@ -27,12 +27,13 @@ export async function getUser(userId = 'me') {
 
 export async function login(email: string, password: string): Promise<any> {
 	try {
-		return await API.post(`/auth/login`, {
+		const { data } = await API.post(`/auth/login`, {
 			email,
 			password,
 		})
+		return data
 	} catch (error) {
-		console.log('LOGIN |', error)
+		return Promise.reject(error)
 	}
 }
 

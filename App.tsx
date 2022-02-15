@@ -26,6 +26,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import persistReducer from 'redux-persist/es/persistReducer'
 import { combineReducers } from 'redux'
+import groupReducer, { getCurrentGroup } from '@redux/group.reducer'
 
 const persistConfig = {
 	key: 'root',
@@ -35,6 +36,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
 	user: userReducer,
+	group: groupReducer,
 })
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
@@ -63,7 +65,7 @@ export function App(): ReactElement {
 	})
 
 	const token = useSelector(getToken)
-	const haveGroups = useSelector(getUserGroups)
+	const selectedGroup = useSelector(getCurrentGroup)
 
 	if (!loaded) {
 		return (
@@ -78,7 +80,7 @@ export function App(): ReactElement {
 			<StatusBar style={colorScheme === 'light' ? 'dark' : 'light'} />
 			{!token ? (
 				<AuthNavigation />
-			) : !haveGroups ? (
+			) : !selectedGroup ? (
 				<GroupNavigation />
 			) : (
 				<MainNavigation />

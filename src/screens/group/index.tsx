@@ -9,16 +9,17 @@ import { Group } from '@types/Group'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FredokaText from '@ui/FredokaText'
 import Button from '@ui/Button'
+import { setGroup } from '@redux/group.reducer'
 
 type GroupIndexProps = {
 	navigation: GroupNavigationProp<GroupScreens.Index>
 }
 
 export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
-	const user = useSelector(getCurrentUser)
+	const currentUser = useSelector(getCurrentUser)
 	const [groups, setGroups] = useState<Group[]>([])
 	const dispatch = useDispatch()
-	console.log('user.groups', user?.groups)
+	console.log('user.groups', currentUser?.groups)
 
 	navigation.setOptions({
 		headerRight: () => (
@@ -56,7 +57,7 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 				<FredokaText
 					style={{ fontSize: 30, textAlign: 'center', marginBottom: 15 }}
 				>
-					Hello {user?.firstname} 👋
+					Hello {currentUser?.firstname} 👋
 				</FredokaText>
 				<Text
 					style={{
@@ -70,6 +71,24 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 					les membres de ton foyer.
 				</Text>
 			</View>
+			<Button
+				block
+				size='large'
+				variant='secondary'
+				onPress={() => {
+					dispatch(
+						setGroup({
+							id: 'test',
+							name: 'Test',
+							type: 'test',
+							shareCode: '0000',
+							membres: [currentUser],
+						})
+					)
+				}}
+			>
+				test group
+			</Button>
 			{/* <FlatList renderItem={() => <Text>test</Text>} data={groups} /> */}
 			<View>
 				<Button

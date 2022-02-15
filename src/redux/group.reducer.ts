@@ -2,14 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Group } from '@types/Group'
 import { RootState } from '../../App'
 
-interface GroupSlice extends Group {}
+interface GroupSlice {
+	group: Group | null
+}
 
 const initialState: GroupSlice = {
-	id: '',
-	name: '',
-	type: '',
-	shareCode: '',
-	membres: [],
+	group: null,
 }
 
 const groupSlice = createSlice({
@@ -18,15 +16,14 @@ const groupSlice = createSlice({
 	reducers: {
 		setGroup: {
 			reducer: (state, action: PayloadAction<Group>) => {
-				state = action.payload
-				console.log('Group', state)
+				state.group = action.payload
 			},
 			prepare: (group: Group) => ({ payload: group || null }),
 		},
 	},
 })
 
-const getCurrentGroup = (state: RootState) => state
+const getCurrentGroup = (state: RootState) => state.group.group
 
 export const { setGroup } = groupSlice.actions
 export { getCurrentGroup }
