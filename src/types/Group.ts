@@ -6,7 +6,7 @@ export type Group = {
 	name: string
 	type: string
 	shareCode: string
-	membres: User[]
+	members: User[]
 }
 
 export type GroupCreate = {

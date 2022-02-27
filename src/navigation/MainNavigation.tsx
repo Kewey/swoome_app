@@ -31,7 +31,7 @@ const MainNavigation = (): ReactElement => {
 						title: 'Accueil',
 						headerShown: false,
 						tabBarIcon: ({ color }) => {
-							console.log('color', color)
+							// console.log('color', color)
 							return <Home color={color} />
 						},
 					}}

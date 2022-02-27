@@ -27,7 +27,7 @@ API.interceptors.request.use(
 API.interceptors.response.use(
 	(res) => res,
 	async ({ config, response }: any) => {
-		console.log('error request')
+		console.log('error request :', response.data)
 		if (config.url !== '/auth/login' && response) {
 			// Access Token was expired
 			if (response.status === 401 && !config._retry) {

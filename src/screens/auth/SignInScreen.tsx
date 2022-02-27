@@ -2,7 +2,7 @@ import { DarkGrey } from '@constants/Colors'
 import { AuthScreens } from '@navigation/Routes'
 import { setToken, setUser } from '@redux/user.reducer'
 import { API } from '@services/apiService'
-import { login } from '@services/userService'
+import { getUser, login } from '@services/userService'
 import { AuthNavigationProp } from '@types/routes'
 import { UserLogin } from '@types/user'
 import Button from '@ui/Button'
@@ -11,6 +11,7 @@ import Text from '@ui/Text'
 import TextInput from '@ui/TextInput'
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import * as SecureStore from 'expo-secure-store'
 import {
 	View,
 	TouchableOpacity,
@@ -35,10 +36,12 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 	const onSubmit = async ({ email, password }: UserLogin) => {
 		setIsLoading(true)
 		try {
-			const { access_token } = await login(email, password)
-			API.defaults.headers['Authorization'] = `Bearer ${access_token}`
-			dispatch(setToken(access_token))
-			// dispatch(setUser())
+			const { token, refresh_token } = await login(email, password)
+			API.defaults.headers['Authorization'] = `Bearer ${token}`
+			await SecureStore.setItemAsync('refresh_token', refresh_token)
+			const user = await getUser()
+			dispatch(setUser(user))
+			dispatch(setToken(token))
 		} catch (error) {
 			console.log('LOGIN |', error)
 		}

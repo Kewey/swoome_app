@@ -1,11 +1,15 @@
-import React, { ReactElement } from 'react'
-import { Provider, useSelector } from 'react-redux'
+import React, { ReactElement, useEffect, useState } from 'react'
+import { Provider, useDispatch, useSelector } from 'react-redux'
 import { StatusBar } from 'expo-status-bar'
 import useColorScheme from '@hooks/useColorScheme'
 import AuthNavigation from '@navigation/AuthNavigation'
 import GroupNavigation from '@navigation/GroupNavigation'
 import MainNavigation from '@navigation/MainNavigation'
-import userReducer, { getToken, getUserGroups } from '@redux/user.reducer'
+import userReducer, {
+	getToken,
+	getUserGroups,
+	setUser,
+} from '@redux/user.reducer'
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useFonts } from 'expo-font'
@@ -27,6 +31,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import persistReducer from 'redux-persist/es/persistReducer'
 import { combineReducers } from 'redux'
 import groupReducer, { getCurrentGroup } from '@redux/group.reducer'
+import { getUser } from '@services/userService'
+import { User } from '@types/user'
+import { API } from '@services/apiService'
 
 const persistConfig = {
 	key: 'root',
@@ -57,17 +64,30 @@ export type RootState = ReturnType<typeof store.getState>
 
 export function App(): ReactElement {
 	const colorScheme = useColorScheme()
+	const [currentUser, setCurrentUser] = useState<User>(null)
+	const dispatch = useDispatch()
 	const [loaded] = useFonts({
 		[FONTS.FREDOKAONE]: require('./src/assets/fonts/FredokaOne-Regular.ttf'),
 		[FONTS.MONTSERRAT_REGULAR]: require('./src/assets/fonts/Montserrat-Regular.ttf'),
 		[FONTS.MONTSERRAT_BOLD]: require('./src/assets/fonts/Montserrat-Bold.ttf'),
 		[FONTS.MONTSERRAT_LIGHT]: require('./src/assets/fonts/Montserrat-Light.ttf'),
 	})
-
 	const token = useSelector(getToken)
+	API.defaults.headers['Authorization'] = `Bearer ${token}`
+
+	useEffect(() => {
+		getUser().then((res) => {
+			if (!res) {
+				return
+			}
+			setCurrentUser(res)
+			dispatch(setUser(res))
+		})
+	}, [])
+
 	const selectedGroup = useSelector(getCurrentGroup)
 
-	if (!loaded) {
+	if (!loaded && !currentUser) {
 		return (
 			<View>
 				<Text>Chargement</Text>

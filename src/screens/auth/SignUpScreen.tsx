@@ -70,19 +70,10 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 	const onSubmit = async ({ email, username, password }: UserSignUp) => {
 		try {
 			setLoading(true)
-			const { user, token } = await createUser(username, email, password)
-			dispatch(setUser(user))
-			dispatch(setToken(token))
+			const user = await createUser(username, email, password)
 		} catch (error) {}
 		setLoading(false)
 	}
-
-	// function goPrevStep() {
-	// 	if (currentStep === 0) {
-	// 		return navigation.goBack()
-	// 	}
-	// 	setCurrentStep(currentStep - 1)
-	// }
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
