@@ -1,17 +1,22 @@
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { LineChart, Grid } from 'react-native-svg-charts'
+import { AreaChart, Grid } from 'react-native-svg-charts'
+import * as shape from 'd3-shape'
+import { Blue, Light } from '@constants/Colors'
 
 const HomeGraph = () => {
 	const { colors } = useTheme()
-	const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80]
+	// TODO BACK : RECAP USER DEPENSE
+	const data = [34, 56, 59, 120, 112, 260, 109, 30, -20, -60, 58]
 	return (
-		<LineChart
+		<AreaChart
 			style={{ height: 250 }}
 			data={data}
-			svg={{ stroke: colors.primary, strokeWidth: 2 }}
+			svg={{ stroke: Blue, strokeWidth: 2 }}
 			contentInset={{ top: 20, bottom: 20 }}
-		></LineChart>
+			curve={shape.curveNatural}
+			start={0}
+		></AreaChart>
 	)
 }
 

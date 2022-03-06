@@ -1,9 +1,9 @@
 import { DarkBlue, DarkGrey, White } from '@constants/Colors'
 import { useNavigation, useTheme } from '@react-navigation/native'
 import { getCurrentUser } from '@redux/user.reducer'
-import Expenses from '@screens/tabs/Expenses'
+import Expenses from '@screens/expenses'
 import HomeScreen from '@screens/tabs/HomeScreen'
-import { theme } from '@styles/theme'
+import ProfileScreen from '@screens/tabs/ProfileScreen'
 import CircleButton from '@ui/CircleButton'
 import Text from '@ui/Text'
 import {
@@ -103,7 +103,7 @@ const TabNavigation = (): ReactElement => {
 			/>
 			<TabStack.Screen
 				name={TabScreens.Profile}
-				component={HomeScreen}
+				component={ProfileScreen}
 				options={{
 					title: 'Profil',
 					tabBarIcon: ({ color }) => (

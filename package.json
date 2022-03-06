@@ -14,6 +14,8 @@
 		"preset": "jest-expo"
 	},
 	"dependencies": {
+		"@expo-google-fonts/fredoka-one": "^0.2.2",
+		"@expo-google-fonts/montserrat": "^0.2.2",
 		"@expo/vector-icons": "^12.0.0",
 		"@react-native-async-storage/async-storage": "~1.15.0",
 		"@react-navigation/bottom-tabs": "^6.0.5",
@@ -22,7 +24,9 @@
 		"@react-navigation/stack": "^6.0.11",
 		"@reduxjs/toolkit": "^1.7.1",
 		"axios": "^0.24.0",
+		"d3-scale": "^4.0.2",
 		"expo": "^44.0.0",
+		"expo-app-loading": "~1.3.0",
 		"expo-asset": "~8.4.6",
 		"expo-constants": "~13.0.1",
 		"expo-font": "~10.0.4",
@@ -55,6 +59,7 @@
 		"@testing-library/react-native": "^8.0.0",
 		"@types/react": "~17.0.21",
 		"@types/react-native": "~0.64.12",
+		"@types/react-native-svg-charts": "^5.0.12",
 		"@types/react-redux": "^7.1.22",
 		"jest-expo": "^44.0.0",
 		"redux-devtools-extension": "^2.13.9",

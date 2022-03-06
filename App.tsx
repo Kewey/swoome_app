@@ -22,6 +22,12 @@ import { getUser } from '@services/userService'
 import { User } from '@types/user'
 import { API } from '@services/apiService'
 import MainNavigation from '@navigation/MainNavigation'
+import { FredokaOne_400Regular } from '@expo-google-fonts/fredoka-one'
+import {
+	Montserrat_300Light,
+	Montserrat_400Regular,
+	Montserrat_700Bold,
+} from '@expo-google-fonts/montserrat'
 
 const persistConfig = {
 	key: 'root',
@@ -55,10 +61,10 @@ export function App(): ReactElement {
 	const [currentUser, setCurrentUser] = useState<User>(null)
 	const dispatch = useDispatch()
 	const [loaded] = useFonts({
-		[FONTS.FREDOKAONE]: require('./src/assets/fonts/FredokaOne-Regular.ttf'),
-		[FONTS.MONTSERRAT_REGULAR]: require('./src/assets/fonts/Montserrat-Regular.ttf'),
-		[FONTS.MONTSERRAT_BOLD]: require('./src/assets/fonts/Montserrat-Bold.ttf'),
-		[FONTS.MONTSERRAT_LIGHT]: require('./src/assets/fonts/Montserrat-Light.ttf'),
+		FredokaOne_400Regular,
+		Montserrat_400Regular,
+		Montserrat_700Bold,
+		Montserrat_300Light,
 	})
 	const token = useSelector(getToken)
 	API.defaults.headers['Authorization'] = `Bearer ${token}`
