@@ -57,7 +57,7 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 				<FredokaText
 					style={{ fontSize: 30, textAlign: 'center', marginBottom: 15 }}
 				>
-					Hello {currentUser?.firstname} 👋
+					Hello {currentUser?.username} 👋
 				</FredokaText>
 				<Text
 					style={{
@@ -81,8 +81,7 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 							id: 'test',
 							name: 'Test',
 							type: 'test',
-							shareCode: '0000',
-							membres: [currentUser],
+							members: [currentUser],
 						})
 					)
 				}}

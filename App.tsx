@@ -4,12 +4,7 @@ import { StatusBar } from 'expo-status-bar'
 import useColorScheme from '@hooks/useColorScheme'
 import AuthNavigation from '@navigation/AuthNavigation'
 import GroupNavigation from '@navigation/GroupNavigation'
-import MainNavigation from '@navigation/MainNavigation'
-import userReducer, {
-	getToken,
-	getUserGroups,
-	setUser,
-} from '@redux/user.reducer'
+import userReducer, { getToken, setUser } from '@redux/user.reducer'
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useFonts } from 'expo-font'
@@ -17,15 +12,7 @@ import { View } from 'react-native'
 import { FONTS } from '@types/Fonts'
 import Text from '@ui/Text'
 import { White } from '@constants/Colors'
-import {
-	FLUSH,
-	REHYDRATE,
-	PAUSE,
-	PERSIST,
-	PURGE,
-	REGISTER,
-	persistStore,
-} from 'redux-persist'
+import { persistStore } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import persistReducer from 'redux-persist/es/persistReducer'
@@ -34,6 +21,7 @@ import groupReducer, { getCurrentGroup } from '@redux/group.reducer'
 import { getUser } from '@services/userService'
 import { User } from '@types/user'
 import { API } from '@services/apiService'
+import MainNavigation from '@navigation/MainNavigation'
 
 const persistConfig = {
 	key: 'root',

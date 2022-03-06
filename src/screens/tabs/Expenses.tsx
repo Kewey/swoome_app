@@ -8,9 +8,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import CircleButton from '@ui/CircleButton'
 import Text from '@ui/Text'
 import { useTheme } from '@react-navigation/native'
-import HomeGraph from './components/HomeGraph'
 
-const HomeScreen = () => {
+const Expenses = () => {
 	const dispatch = useDispatch()
 	const user = useSelector(getCurrentUser)
 	const group = useSelector(getCurrentGroup)
@@ -19,28 +18,11 @@ const HomeScreen = () => {
 
 	return (
 		<ScrollView contentContainerStyle={layout.container}>
-			<FredokaText style={{ fontSize: 20 }}>
-				{group?.name} en despi 📝
-			</FredokaText>
-			<Text>Le récap du mois</Text>
-
-			<HomeGraph />
-
-			<View
-				style={[
-					layout.rowSBCenter,
-					{
-						marginTop: 25,
-						marginBottom: 15,
-					},
-				]}
-			>
+			<View style={{ marginBottom: 25 }}>
 				<FredokaText style={{ fontSize: 20 }}>
-					Dernières transactions
+					Vos dernires dépenses
 				</FredokaText>
-				<TouchableOpacity>
-					<Text>Voir tous</Text>
-				</TouchableOpacity>
+				<Text>Sur ce mois</Text>
 			</View>
 
 			<View
@@ -94,10 +76,8 @@ const HomeScreen = () => {
 					</View>
 				</View>
 			</View>
-
-			<Button title='logout' onPress={() => dispatch(setToken(''))} />
 		</ScrollView>
 	)
 }
 
-export default HomeScreen
+export default Expenses

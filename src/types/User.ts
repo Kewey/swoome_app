@@ -2,7 +2,7 @@ import { Group } from './Group'
 
 export type User = {
 	id: string
-	firstname: string
+	username: string
 	email: string
 	groups: string[]
 	createdAt?: string

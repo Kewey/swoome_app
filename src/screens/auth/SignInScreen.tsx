@@ -37,6 +37,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 		setIsLoading(true)
 		try {
 			const { token, refresh_token } = await login(email, password)
+			// @ts-ignore
 			API.defaults.headers['Authorization'] = `Bearer ${token}`
 			await SecureStore.setItemAsync('refresh_token', refresh_token)
 			const user = await getUser()

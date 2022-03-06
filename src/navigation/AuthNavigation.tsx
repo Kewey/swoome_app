@@ -1,19 +1,14 @@
 import { White } from '@constants/Colors'
-import {
-	NavigationContainer,
-	useNavigation,
-	useTheme,
-} from '@react-navigation/native'
+import { NavigationContainer, useTheme } from '@react-navigation/native'
 import AuthScreen from '@screens/auth'
 import ForgetPassword from '@screens/auth/ForgetPassword'
 import SignInScreen from '@screens/auth/SignInScreen'
 import SignUpScreen from '@screens/auth/SignUpScreen'
 import { theme } from '@styles/theme'
 import CircleButton from '@ui/CircleButton'
-import Text from '@ui/Text'
 import { NavArrowLeft } from 'iconoir-react-native'
 import React, { ReactElement } from 'react'
-import { TouchableOpacity, View } from 'react-native'
+import { View } from 'react-native'
 import { AuthStack, AuthScreens } from './Routes'
 
 const AuthNavigation = (): ReactElement => {

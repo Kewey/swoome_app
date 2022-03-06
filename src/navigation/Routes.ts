@@ -13,10 +13,16 @@ export enum GroupScreens {
 	Create = 'GroupCreateScreen',
 }
 
-export enum MainScreens {
-	Home = 'HomeScreen',
+export enum TabScreens {
+	Home = 'HomeTabScreen',
 	Expense = 'ExpenseScreen',
 	Profile = 'ProfileScreen',
+}
+
+export enum MainScreens {
+	Home = 'HomeScreen',
+	GroupParams = 'GroupParamsScreen',
+	AddExpense = 'AddExpenseScreen',
 }
 
 export type AuthStackParamList = {
@@ -31,12 +37,19 @@ export type GroupStackParamList = {
 	[GroupScreens.Create]: undefined
 }
 
+export type TabStackParamList = {
+	[TabScreens.Home]: { groupId: string }
+	[TabScreens.Expense]: undefined
+	[TabScreens.Profile]: { userId: string }
+}
+
 export type MainStackParamList = {
-	[MainScreens.Home]: { groupId: string } | undefined
-	[MainScreens.Expense]: undefined
-	[MainScreens.Profile]: { userId: string } | undefined
+	[MainScreens.Home]: undefined
+	[MainScreens.GroupParams]: undefined
+	[MainScreens.AddExpense]: undefined
 }
 
 export const AuthStack = createStackNavigator<AuthStackParamList>()
 export const GroupStack = createStackNavigator<GroupStackParamList>()
-export const MainStack = createBottomTabNavigator<MainStackParamList>()
+export const TabStack = createBottomTabNavigator<TabStackParamList>()
+export const MainStack = createStackNavigator<MainStackParamList>()

@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { API_URL } from '@env'
 import * as SecureStore from 'expo-secure-store'
-import { FetchResult } from 'react-native'
 import { setToken } from '@redux/user.reducer'
 
 export const API = axios.create({
@@ -34,7 +33,7 @@ API.interceptors.response.use(
 				config._retry = true
 				try {
 					const refreshToken = await SecureStore.getItemAsync('refreshToken')
-					const { data } = await API.post('/refresh', { refreshToken })
+					const { data } = await API.post('auth/refresh', { refreshToken })
 					setToken(data.access_token)
 					return API(config)
 				} catch (_error) {

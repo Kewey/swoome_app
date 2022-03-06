@@ -5,7 +5,6 @@ export type Group = {
 	id: string
 	name: string
 	type: string
-	shareCode: string
 	members: User[]
 }
 
