@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
 import React from 'react'
 import Text from '@ui/Text'
 import CircleButton from '@ui/CircleButton'
@@ -17,7 +17,7 @@ interface ExpenseItemProps {
 const ExpenseItem = ({ label, price, author, date }: ExpenseItemProps) => {
 	const { colors } = useTheme()
 	return (
-		<View
+		<Pressable
 			style={{
 				flexDirection: 'row',
 				alignItems: 'center',
@@ -40,7 +40,7 @@ const ExpenseItem = ({ label, price, author, date }: ExpenseItemProps) => {
 					<Text style={{ color: colors.border }}>{date}</Text>
 				</View>
 			</View>
-		</View>
+		</Pressable>
 	)
 }
 

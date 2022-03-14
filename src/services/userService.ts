@@ -53,12 +53,13 @@ export async function createUser(
 	return user
 }
 
-export async function getUserGroups(userId: string): Promise<Group[]> {
+export async function getUserGroups(
+	userId: string
+): Promise<{ groups: Group[]; totalItems: number }> {
 	const {
-		// data: { user, token },
-		data: groups,
+		data: { 'hydra:member': groups, 'hydra:totalItems': totalItems },
 	} = await API.get(`/users/${userId}/groups`)
-	return groups
+	return { groups, totalItems }
 }
 
 export async function logout() {}

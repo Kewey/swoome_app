@@ -1,14 +1,19 @@
 import { SelectButton } from '@screens/group/CreateGroupScreen'
+import { APIHydraType } from '@services/apiService'
 import { User } from './user'
 
-export type Group = {
-	id: string
+export interface Group extends APIHydraType {
 	name: string
 	type: string
 	members: User[]
 }
 
+export interface GroupType extends APIHydraType {
+	name: string
+	emoji: string
+}
+
 export type GroupCreate = {
-	type: SelectButton
+	typeIri: string
 	name: string
 }

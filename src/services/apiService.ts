@@ -1,7 +1,21 @@
 import axios from 'axios'
 import { API_URL } from '@env'
 import * as SecureStore from 'expo-secure-store'
-import { setToken } from '@redux/user.reducer'
+import { EnhancedStore } from '@reduxjs/toolkit'
+import { RootState } from '../../App'
+import { setToken, setUser } from '@redux/user.reducer'
+
+let store: EnhancedStore<RootState>
+
+export type APIHydraType = {
+	'@id': string
+	'@type': string
+	id: number
+}
+
+export const injectStore = (_store: EnhancedStore) => {
+	store = _store
+}
 
 export const API = axios.create({
 	baseURL: API_URL,
@@ -28,15 +42,35 @@ API.interceptors.response.use(
 	async ({ config, response }: any) => {
 		console.log('error request :', response.data)
 		if (config.url !== '/auth/login' && response) {
+			console.log('token expired', response.config.url)
+
 			// Access Token was expired
 			if (response.status === 401 && !config._retry) {
 				config._retry = true
 				try {
-					const refreshToken = await SecureStore.getItemAsync('refreshToken')
-					const { data } = await API.post('auth/refresh', { refreshToken })
-					setToken(data.access_token)
-					return API(config)
+					const refresh_token = await SecureStore.getItemAsync('refresh_token')
+					const {
+						data: { token },
+					} = await API.post('/auth/refresh', { refresh_token })
+
+					store.dispatch(setToken(token))
+					// @ts-ignore
+					API.defaults.headers['Authorization'] = `Bearer ${token}`
+					const prevCall = {
+						...config,
+						headers: {
+							...config.headers,
+							Authorization: `Bearer ${token}`,
+						},
+					}
+
+					return API(prevCall)
 				} catch (_error) {
+					// @ts-ignore
+					API.defaults.headers['Authorization'] = null
+
+					store.dispatch(setToken(''))
+					store.dispatch(setUser(null))
 					return Promise.reject(_error)
 				}
 			}

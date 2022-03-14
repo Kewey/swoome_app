@@ -4,12 +4,12 @@ import {
 	TouchableWithoutFeedback,
 	View,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GroupNavigationProp } from '@types/routes'
 import { GroupScreens } from '@navigation/Routes'
 import { useTheme } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
-import { GroupCreate } from '@types/Group'
+import { Group, GroupCreate, GroupType } from '@types/Group'
 import { Controller, useForm } from 'react-hook-form'
 import CircleButton from '@ui/CircleButton'
 import { NavArrowLeft } from 'iconoir-react-native'
@@ -18,11 +18,11 @@ import Text from '@ui/Text'
 import FredokaText from '@ui/FredokaText'
 import TextInput from '@ui/TextInput'
 import Button from '@ui/Button'
-import { Cyan, LightGrey, White } from '@constants/Colors'
+import { Blue, Cyan, Light, LightGrey, White } from '@constants/Colors'
 import { borderRadius } from '@styles/layout'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { setGroup } from '@redux/group.reducer'
-import { createGroup } from '@services/groupService'
+import { createGroup, getGroupType } from '@services/groupService'
 
 type GroupCreateProps = {
 	navigation: GroupNavigationProp<GroupScreens.Create>
@@ -35,43 +35,10 @@ export interface SelectButton {
 	selected: boolean
 }
 
-// Pass to API
-const DATA: SelectButton[] = [
-	{
-		id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba1',
-		title: 'Colacation',
-		icon: '🏠',
-		selected: false,
-	},
-	{
-		id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba2',
-		title: 'Vie en couple',
-		icon: '❤️',
-		selected: false,
-	},
-	{
-		id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba3',
-		title: 'Voyage',
-		icon: '✈️',
-		selected: false,
-	},
-	{
-		id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba4',
-		title: 'Projet',
-		icon: '💎',
-		selected: false,
-	},
-	{
-		id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba5',
-		title: 'Evenement',
-		icon: '🎊',
-		selected: false,
-	},
-]
-
 export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 	const [currentStep, setCurrentStep] = useState<number>(0)
 	const [isLoading, setLoading] = useState(false)
+	const [groupsType, setGroupsType] = useState<GroupType[]>([])
 	const { colors } = useTheme()
 	const dispatch = useDispatch()
 
@@ -95,23 +62,23 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 
 	const { control, setValue, getValues, handleSubmit } = useForm<GroupCreate>()
 
-	const onSubmit = async ({ name, type }: GroupCreate) => {
+	useEffect(() => {
+		getGroupType().then(({ groupsType }) => setGroupsType(groupsType))
+	}, [])
+
+	const onSubmit = async ({ name, typeIri }: GroupCreate) => {
 		setLoading(true)
 		try {
-			const res = await createGroup(name)
-			dispatch(setGroup(res))
+			const newGroup = await createGroup(name, typeIri)
+			dispatch(setGroup(newGroup))
 		} catch (error) {}
 		setLoading(false)
-		// TODO create group + add to user
-
-		// dispatch(setToken('TODO'))
 	}
 
 	return (
 		<SafeAreaView
 			style={{
 				flex: 1,
-				paddingBottom: 30,
 			}}
 		>
 			{currentStep === 0 && (
@@ -133,14 +100,51 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 						une maison.
 					</Text>
 
-					<Button
-						size='large'
-						style={{ paddingHorizontal: 30 }}
-						// disabled={}
-						onPress={() => setCurrentStep(currentStep + 1)}
+					<FlatList
+						style={{ padding: 20, flex: 1 }}
+						contentContainerStyle={{ paddingBottom: 120 }}
+						renderItem={({ item }) => {
+							return (
+								<TouchableOpacity
+									style={{
+										flexDirection: 'row',
+										alignItems: 'center',
+										padding: 15,
+										marginBottom: 10,
+										backgroundColor:
+											getValues('typeIri') === item['@id'] ? Blue : Light,
+										borderRadius: 8,
+									}}
+									onPress={() => setValue('typeIri', item['@id'])}
+								>
+									<CircleButton
+										style={{ marginRight: 10 }}
+										backgroundColor={White}
+									>
+										<Text>🚧{item.emoji}</Text>
+									</CircleButton>
+									<FredokaText>{item.name}</FredokaText>
+								</TouchableOpacity>
+							)
+						}}
+						data={groupsType}
+					/>
+
+					<View
+						style={{
+							position: 'absolute',
+							bottom: 30,
+							left: 20,
+							right: 20,
+						}}
 					>
-						Continuer
-					</Button>
+						<Button
+							size='large'
+							onPress={() => setCurrentStep(currentStep + 1)}
+						>
+							Continuer
+						</Button>
+					</View>
 				</View>
 			)}
 

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { FlatList, TouchableOpacity, View } from 'react-native'
 import { GroupScreens } from '@navigation/Routes'
 import { GroupNavigationProp } from '@types/routes'
 import Text from '@ui/Text'
@@ -10,6 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import FredokaText from '@ui/FredokaText'
 import Button from '@ui/Button'
 import { setGroup } from '@redux/group.reducer'
+import { getUserGroups } from '@services/userService'
 
 type GroupIndexProps = {
 	navigation: GroupNavigationProp<GroupScreens.Index>
@@ -19,7 +20,6 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 	const currentUser = useSelector(getCurrentUser)
 	const [groups, setGroups] = useState<Group[]>([])
 	const dispatch = useDispatch()
-	console.log('user.groups', currentUser?.groups)
 
 	navigation.setOptions({
 		headerRight: () => (
@@ -36,14 +36,14 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 		),
 	})
 
-	// useFocusEffect(() => {
-	// 	if (user) {
-	// 		getUserGroups(user.id).then((res) => {
-	// 			console.log('res', res)
-	// 			setGroups(res)
-	// 		})
-	// 	}
-	// })
+	useEffect(() => {
+		if (!currentUser) return
+
+		getUserGroups(currentUser.id).then(({ groups: group, totalItems }) => {
+			setGroups(groups)
+		})
+	}, [])
+	console.log('groups', groups)
 
 	return (
 		<SafeAreaView
@@ -71,25 +71,26 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 					les membres de ton foyer.
 				</Text>
 			</View>
-			<Button
-				block
-				size='large'
-				variant='secondary'
-				onPress={() => {
-					dispatch(
-						setGroup({
-							id: 'test',
-							name: 'Test',
-							type: 'test',
-							members: [currentUser],
-						})
+			<FlatList
+				style={{ flex: 1 }}
+				renderItem={(data) => {
+					console.log('data', data)
+					return (
+						<View>
+							<Text>test</Text>
+						</View>
 					)
 				}}
+				data={groups}
+			/>
+			<View
+				style={{
+					position: 'absolute',
+					bottom: 20,
+					left: 20,
+					right: 20,
+				}}
 			>
-				test group
-			</Button>
-			{/* <FlatList renderItem={() => <Text>test</Text>} data={groups} /> */}
-			<View>
 				<Button
 					block
 					size='large'

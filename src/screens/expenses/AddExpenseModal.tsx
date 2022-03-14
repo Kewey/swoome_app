@@ -6,17 +6,15 @@ import { View, ScrollView, TouchableOpacity } from 'react-native'
 import { layout } from '@styles/layout'
 import { useDispatch, useSelector } from 'react-redux'
 import Text from '@ui/Text'
-import { useNavigation, useTheme } from '@react-navigation/native'
+import { useTheme } from '@react-navigation/native'
 import ExpenseItem from './components/ExpenseItem'
 import { User } from '@types/user'
 import Button from '@ui/Button'
-import { MainScreens } from '@navigation/Routes'
 
-const Expenses = () => {
+const AddExpenseModal = () => {
 	const dispatch = useDispatch()
 	const user = useSelector(getCurrentUser)
 	const group = useSelector(getCurrentGroup)
-	const navigation = useNavigation()
 
 	const { colors } = useTheme()
 
@@ -71,24 +69,11 @@ const Expenses = () => {
 					/>
 				</View>
 			</ScrollView>
-			<View
-				style={{
-					position: 'absolute',
-					bottom: 10,
-					left: 20,
-					right: 20,
-				}}
-			>
-				<Button
-					onPress={() => {
-						navigation.navigate(MainScreens.Home, {})
-					}}
-				>
-					Ajouter une dépense
-				</Button>
+			<View>
+				<Button>Ajouter une dépense</Button>
 			</View>
 		</>
 	)
 }
 
-export default Expenses
+export default AddExpenseModal

@@ -71,6 +71,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 		try {
 			setLoading(true)
 			const user = await createUser(username, email, password)
+			console.log('user', user)
 		} catch (error) {}
 		setLoading(false)
 	}

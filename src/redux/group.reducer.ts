@@ -15,10 +15,10 @@ const groupSlice = createSlice({
 	initialState: initialState,
 	reducers: {
 		setGroup: {
-			reducer: (state, action: PayloadAction<Group>) => {
+			reducer: (state, action: PayloadAction<Group | null>) => {
 				state.group = action.payload
 			},
-			prepare: (group: Group) => ({ payload: group || null }),
+			prepare: (group: Group | null) => ({ payload: group || null }),
 		},
 	},
 })

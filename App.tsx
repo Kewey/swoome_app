@@ -20,7 +20,7 @@ import { combineReducers } from 'redux'
 import groupReducer, { getCurrentGroup } from '@redux/group.reducer'
 import { getUser } from '@services/userService'
 import { User } from '@types/user'
-import { API } from '@services/apiService'
+import { API, injectStore } from '@services/apiService'
 import MainNavigation from '@navigation/MainNavigation'
 import { FredokaOne_400Regular } from '@expo-google-fonts/fredoka-one'
 import {
@@ -53,6 +53,8 @@ const store = configureStore({
 })
 
 let persistor = persistStore(store)
+
+injectStore(store)
 
 export type RootState = ReturnType<typeof store.getState>
 

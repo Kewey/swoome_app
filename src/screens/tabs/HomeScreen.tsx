@@ -21,13 +21,13 @@ const HomeScreen = () => {
 				<Text>Le récap du mois</Text>
 				<View style={[layout.rowSBCenter, { marginTop: 20 }]}>
 					<Text style={{ color: DarkGrey }}>
-						Dépenses total :{' '}
+						Total :{' '}
 						<Text weight='bold' style={{ color: Blue }}>
 							760,65 €
 						</Text>
 					</Text>
 					<Text style={{ color: DarkGrey }}>
-						Mes dépenses :{' '}
+						Dépenses :{' '}
 						<Text weight='bold' style={{ color: '#51A53F' }}>
 							437,65 €
 						</Text>
@@ -35,9 +35,7 @@ const HomeScreen = () => {
 				</View>
 			</View>
 
-			<View style={{ marginRight: 20 }}>
-				<HomeGraph />
-			</View>
+			<HomeGraph />
 
 			<View style={{ marginHorizontal: 20 }}>
 				<View
@@ -53,7 +51,7 @@ const HomeScreen = () => {
 						Dernières transactions
 					</FredokaText>
 					<TouchableOpacity>
-						<Text weight='bold'>Voir tous</Text>
+						<Text weight='bold'>Voir toutes</Text>
 					</TouchableOpacity>
 				</View>
 			</View>

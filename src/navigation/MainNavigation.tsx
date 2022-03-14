@@ -5,6 +5,7 @@ import {
 	useTheme,
 } from '@react-navigation/native'
 import { getCurrentGroup } from '@redux/group.reducer'
+import AddExpenseModal from '@screens/expenses/AddExpenseModal'
 import GroupParamsScreen from '@screens/group/GroupParamsScreen'
 import { theme } from '@styles/theme'
 import CircleButton from '@ui/CircleButton'
@@ -53,7 +54,7 @@ const MainNavigation = (): ReactElement => {
 				<MainStack.Group screenOptions={{ presentation: 'modal' }}>
 					<MainStack.Screen
 						name={MainScreens.AddExpense}
-						component={GroupParamsScreen}
+						component={AddExpenseModal}
 					/>
 				</MainStack.Group>
 			</MainStack.Navigator>

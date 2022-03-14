@@ -9,6 +9,7 @@ import Text from '@ui/Text'
 import { Light, White } from '@constants/Colors'
 import CardWithIcon from '@ui/CardWithIcon'
 import FredokaText from '@ui/FredokaText'
+import { setGroup } from '@redux/group.reducer'
 
 const ProfileScreen = () => {
 	const user = useSelector(getCurrentUser)
@@ -41,6 +42,7 @@ const ProfileScreen = () => {
 				style={{ marginTop: 20, marginHorizontal: 20 }}
 				onPress={() => {
 					dispatch(setUser(null))
+					dispatch(setGroup(null))
 					dispatch(setToken(''))
 				}}
 			>
