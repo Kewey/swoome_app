@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar'
 import useColorScheme from '@hooks/useColorScheme'
 import AuthNavigation from '@navigation/AuthNavigation'
 import GroupNavigation from '@navigation/GroupNavigation'
-import userReducer, { getToken, setUser } from '@redux/user.reducer'
+import userReducer, { getTheme, getToken, setUser } from '@redux/user.reducer'
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useFonts } from 'expo-font'
@@ -28,6 +28,7 @@ import {
 	Montserrat_400Regular,
 	Montserrat_700Bold,
 } from '@expo-google-fonts/montserrat'
+import { useTheme } from '@react-navigation/native'
 
 const persistConfig = {
 	key: 'root',
@@ -59,7 +60,8 @@ injectStore(store)
 export type RootState = ReturnType<typeof store.getState>
 
 export function App(): ReactElement {
-	const colorScheme = useColorScheme()
+	const isDarkTheme = useSelector(getTheme)
+	const { colors } = useTheme()
 	const [currentUser, setCurrentUser] = useState<User>(null)
 	const dispatch = useDispatch()
 	const [loaded] = useFonts({
@@ -92,8 +94,8 @@ export function App(): ReactElement {
 	}
 
 	return (
-		<SafeAreaProvider style={{ backgroundColor: White }}>
-			<StatusBar style={colorScheme === 'light' ? 'dark' : 'light'} />
+		<SafeAreaProvider style={{ backgroundColor: colors.background }}>
+			<StatusBar style={isDarkTheme ? 'light' : 'dark'} />
 			{!token ? (
 				<AuthNavigation />
 			) : !selectedGroup ? (

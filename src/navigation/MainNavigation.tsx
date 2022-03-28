@@ -1,10 +1,12 @@
 import { White } from '@constants/Colors'
 import {
+	DarkTheme,
 	NavigationContainer,
 	useNavigation,
 	useTheme,
 } from '@react-navigation/native'
 import { getCurrentGroup } from '@redux/group.reducer'
+import { getTheme } from '@redux/user.reducer'
 import AddExpenseModal from '@screens/expenses/AddExpenseModal'
 import GroupParamsScreen from '@screens/group/GroupParamsScreen'
 import { theme } from '@styles/theme'
@@ -18,12 +20,15 @@ import { MainStack, MainScreens } from './Routes'
 import TabNavigation from './TabNavigation'
 
 const MainNavigation = (): ReactElement => {
+	const isDarkTheme = useSelector(getTheme)
+	const { colors } = useTheme()
+
 	return (
-		<NavigationContainer theme={theme}>
+		<NavigationContainer theme={isDarkTheme ? DarkTheme : theme}>
 			<MainStack.Navigator
 				initialRouteName={MainScreens.Home}
 				screenOptions={{
-					headerStyle: { backgroundColor: White },
+					headerStyle: { backgroundColor: colors.background },
 					headerLeft: () => {
 						const { colors } = useTheme()
 						const navigation = useNavigation()

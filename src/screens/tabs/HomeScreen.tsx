@@ -9,11 +9,19 @@ import HomeGraph from './components/HomeGraph'
 import { Blue, DarkGrey } from '@constants/Colors'
 import ExpenseItem from '@screens/expenses/components/ExpenseItem'
 import { User } from '@types/user'
+import { useTheme } from '@react-navigation/native'
 
 const HomeScreen = () => {
 	const group = useSelector(getCurrentGroup)
+	const { colors } = useTheme()
+
 	return (
-		<ScrollView style={[layout.container, { paddingVertical: 25 }]}>
+		<ScrollView
+			style={[
+				layout.container,
+				{ paddingVertical: 25, backgroundColor: colors.background },
+			]}
+		>
 			<View style={{ marginHorizontal: 20 }}>
 				<FredokaText style={{ fontSize: 20 }}>
 					{group?.name} en despi 📝

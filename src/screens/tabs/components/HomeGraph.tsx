@@ -12,11 +12,11 @@ const HomeGraph = () => {
 		<LineChart
 			style={{ height: 250 }}
 			data={data}
-			svg={{ stroke: Blue, strokeWidth: 3 }}
+			svg={{ stroke: colors.primary, strokeWidth: 3 }}
 			contentInset={{ top: 20, bottom: 20, right: 20 }}
 			curve={shape.curveNatural}
 		>
-			<Grid />
+			<Grid svg={{ stroke: colors.border }} />
 		</LineChart>
 	)
 }

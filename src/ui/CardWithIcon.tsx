@@ -4,6 +4,7 @@ import CircleButton from './CircleButton'
 import { Light, White } from '@constants/Colors'
 import Text from './Text'
 import { layout } from '@styles/layout'
+import { useTheme } from '@react-navigation/native'
 
 interface CardWithIconProps {
 	icon: string
@@ -12,13 +13,15 @@ interface CardWithIconProps {
 }
 
 const CardWithIcon = ({ icon, label, sublabel }: CardWithIconProps) => {
+	const { colors } = useTheme()
+
 	return (
 		<View
 			style={[
 				layout.rowSBCenter,
 				{
 					padding: 15,
-					backgroundColor: Light,
+					backgroundColor: colors.card,
 					borderRadius: 12,
 				},
 			]}
@@ -26,7 +29,7 @@ const CardWithIcon = ({ icon, label, sublabel }: CardWithIconProps) => {
 			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 				<CircleButton
 					size={40}
-					backgroundColor={White}
+					backgroundColor={colors.background}
 					style={{ marginRight: 10 }}
 				>
 					<Text>{icon}</Text>

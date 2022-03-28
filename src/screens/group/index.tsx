@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { FlatList, TouchableOpacity, View } from 'react-native'
+import {
+	FlatList,
+	ListRenderItem,
+	ListRenderItemInfo,
+	TouchableOpacity,
+	View,
+} from 'react-native'
 import { GroupScreens } from '@navigation/Routes'
 import { GroupNavigationProp } from '@types/routes'
 import Text from '@ui/Text'
@@ -11,6 +17,7 @@ import FredokaText from '@ui/FredokaText'
 import Button from '@ui/Button'
 import { setGroup } from '@redux/group.reducer'
 import { getUserGroups } from '@services/userService'
+import GroupItem from './components/GroupItem'
 
 type GroupIndexProps = {
 	navigation: GroupNavigationProp<GroupScreens.Index>
@@ -39,17 +46,19 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 	useEffect(() => {
 		if (!currentUser) return
 
-		getUserGroups(currentUser.id).then(({ groups: group, totalItems }) => {
+		getUserGroups(currentUser.id).then(({ groups, totalItems }) => {
+			if (groups.length === 1) {
+				dispatch(setGroup(groups[0]))
+			}
 			setGroups(groups)
 		})
 	}, [])
-	console.log('groups', groups)
 
 	return (
 		<SafeAreaView
 			style={{
 				flex: 1,
-				paddingHorizontal: 30,
+				paddingHorizontal: 20,
 				paddingBottom: 30,
 			}}
 		>
@@ -73,12 +82,14 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 			</View>
 			<FlatList
 				style={{ flex: 1 }}
-				renderItem={(data) => {
-					console.log('data', data)
+				renderItem={({ item: group }: ListRenderItemInfo<Group>) => {
 					return (
-						<View>
-							<Text>test</Text>
-						</View>
+						<GroupItem
+							label={group.name}
+							icon={group.type.emoji}
+							groupName={group.type.name}
+							onPress={() => dispatch(setGroup(group))}
+						/>
 					)
 				}}
 				data={groups}

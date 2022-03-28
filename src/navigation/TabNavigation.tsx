@@ -19,26 +19,21 @@ import { useSelector } from 'react-redux'
 import { TabStack, TabScreens, MainScreens } from './Routes'
 
 const TabNavigation = (): ReactElement => {
+	const { colors } = useTheme()
 	return (
 		<TabStack.Navigator
 			initialRouteName={TabScreens.Home}
 			screenOptions={{
-				headerStyle: { backgroundColor: White },
-				tabBarInactiveTintColor: DarkGrey,
-				tabBarActiveTintColor: DarkBlue,
-				tabBarStyle: {
-					height: 60,
-					paddingTop: 10,
-					paddingBottom: 10,
-					backgroundColor: White,
-				},
+				headerStyle: { backgroundColor: colors.background },
+				tabBarInactiveTintColor: colors.text,
+				tabBarActiveTintColor: colors.primary,
 				headerRight: () => {
 					const { colors } = useTheme()
 					const navigation = useNavigation()
 					return (
 						<View style={{ marginRight: 20, flexDirection: 'row' }}>
 							<CircleButton
-								backgroundColor={colors.card}
+								backgroundColor={colors.border}
 								style={{ marginRight: 10 }}
 								onPress={() =>
 									navigation.getParent()?.navigate(MainScreens.AddExpense)
@@ -52,7 +47,7 @@ const TabNavigation = (): ReactElement => {
 								/>
 							</CircleButton>
 							<CircleButton
-								backgroundColor={colors.card}
+								backgroundColor={colors.border}
 								onPress={() =>
 									navigation.getParent()?.navigate(MainScreens.GroupParams)
 								}
