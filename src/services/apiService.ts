@@ -11,6 +11,7 @@ export type APIHydraType = {
 	'@id': string
 	'@type': string
 	id: string
+	createdAt: Date
 }
 
 export const injectStore = (_store: EnhancedStore) => {

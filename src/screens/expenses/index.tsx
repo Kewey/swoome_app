@@ -16,6 +16,7 @@ import { Expense } from '@types/Expense'
 import { getGroupExpenses } from '@services/expenseService'
 import { useSelector } from 'react-redux'
 import { getCurrentGroup } from '@redux/group.reducer'
+import dayjs from 'dayjs'
 
 const Expenses = () => {
 	const navigation = useNavigation()
@@ -46,13 +47,13 @@ const Expenses = () => {
 					<Text>Sur ce mois</Text>
 				</View>
 
-				{expenses.map(({ name, price, madeBy }) => (
-					<View style={{ marginHorizontal: 20, marginBottom: 30 }}>
+				{expenses.map(({ name, price, madeBy, createdAt, id }) => (
+					<View style={{ marginHorizontal: 20, marginBottom: 30 }} key={id}>
 						<ExpenseItem
 							label={name}
 							price={price.toString()}
 							author={madeBy}
-							date={'29/08/1997'}
+							date={dayjs(createdAt).format('DD/MM/YYYY')}
 						/>
 					</View>
 				))}

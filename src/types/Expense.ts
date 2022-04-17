@@ -11,8 +11,8 @@ export interface Expense extends APIHydraType {
 
 export interface ExpenseForm {
 	name: string
-	description: string
-	price: number
-	madeBy?: string | null
+	price: string
 	participants: string[]
+	description?: string
+	madeBy?: string | null
 }

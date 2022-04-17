@@ -17,9 +17,9 @@ import { User } from '@types/user'
 
 const AddExpenseModal = () => {
 	const dispatch = useDispatch()
-	const user = useSelector(getCurrentUser)
-	const group = useSelector(getCurrentGroup)
-	const members: User[] = group?.members || []
+	const currentUser = useSelector(getCurrentUser)
+	const currentGroup = useSelector(getCurrentGroup)
+	const members: User[] = currentGroup?.members || []
 	const navigation = useNavigation()
 	const [loading, setLoading] = useState(false)
 
@@ -28,27 +28,29 @@ const AddExpenseModal = () => {
 		setValue,
 		handleSubmit,
 		formState: { errors, isDirty, isValid },
-	} = useForm<ExpenseForm>()
+	} = useForm<ExpenseForm>({
+		defaultValues: { madeBy: currentUser?.id, participants: [] },
+	})
 
 	const onSubmit = async ({
 		name,
 		description,
 		price,
-		made_by,
+		madeBy,
 		participants,
 	}: ExpenseForm) => {
 		setLoading(true)
 		try {
-			if (!group?.id) return
+			console.log('currentGroup', currentGroup)
+			if (!currentGroup?.id) return
 			const newExpense = await addExpense(
-				group.id,
+				currentGroup['@id'],
 				name,
-				description,
 				price,
 				participants,
-				made_by || undefined
+				description,
+				madeBy
 			)
-			console.log(newExpense)
 
 			setLoading(false)
 			navigation.goBack()
@@ -96,9 +98,6 @@ const AddExpenseModal = () => {
 							</FredokaText>
 							<Controller
 								control={control}
-								rules={{
-									required: true,
-								}}
 								render={({ field: { onChange, onBlur, value } }) => (
 									<TextInput
 										style={{
@@ -145,12 +144,73 @@ const AddExpenseModal = () => {
 								rules={{
 									required: true,
 								}}
-								render={({ field: { value } }) => (
+								render={({ field: { value: madeBy } }) => (
 									<View>
 										{members.map((member) => (
-											<Pressable onPress={() => setValue('madeBy', member?.id)}>
+											<Pressable
+												onPress={() => setValue('madeBy', member['@id'])}
+											>
 												<View>
-													<Text>{member?.username}</Text>
+													<Text>
+														{madeBy === member['@id'] ? '✅ ' : ' '}
+														{member?.username}
+													</Text>
+												</View>
+											</Pressable>
+										))}
+									</View>
+								)}
+								name='madeBy'
+							/>
+							{errors.madeBy && <Text>This is required.</Text>}
+						</View>
+						<View style={{ marginBottom: 15 }}>
+							<FredokaText style={{ marginBottom: 5 }}>
+								Qui a payé ?
+							</FredokaText>
+							<Controller
+								control={control}
+								rules={{
+									required: true,
+								}}
+								render={({ field: { value: selectedParticipants } }) => (
+									<View>
+										{members.map((member) => (
+											<Pressable
+												onPress={() => {
+													if (!member['@id']) return
+
+													if (
+														selectedParticipants?.find(
+															(selectedParticipant) =>
+																selectedParticipant === member['@id']
+														)
+													) {
+														const removeMember = selectedParticipants.filter(
+															(selectedParticipant) =>
+																selectedParticipant !== member['@id']
+														)
+
+														setValue('participants', removeMember)
+														return
+													}
+
+													setValue('participants', [
+														...selectedParticipants,
+														member['@id'],
+													])
+												}}
+											>
+												<View>
+													<Text>
+														{selectedParticipants?.find(
+															(selectedParticipant) =>
+																selectedParticipant === member['@id']
+														)
+															? '✅ '
+															: ' '}
+														{member?.username}
+													</Text>
 												</View>
 											</Pressable>
 										))}
