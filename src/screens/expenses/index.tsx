@@ -1,22 +1,39 @@
-import React from 'react'
-import { getCurrentGroup } from '@redux/group.reducer'
-import { getCurrentUser, setToken, setUser } from '@redux/user.reducer'
+import React, { useCallback, useState } from 'react'
 import FredokaText from '@ui/FredokaText'
-import { View, ScrollView, TouchableOpacity } from 'react-native'
+import { View, ScrollView } from 'react-native'
 import { layout } from '@styles/layout'
-import { useDispatch, useSelector } from 'react-redux'
 import Text from '@ui/Text'
-import { useNavigation, useTheme } from '@react-navigation/native'
+import {
+	useFocusEffect,
+	useNavigation,
+	useTheme,
+} from '@react-navigation/native'
 import ExpenseItem from './components/ExpenseItem'
 import { User } from '@types/user'
 import Button from '@ui/Button'
 import { MainScreens } from '@navigation/Routes'
+import { Expense } from '@types/Expense'
+import { getGroupExpenses } from '@services/expenseService'
+import { useSelector } from 'react-redux'
+import { getCurrentGroup } from '@redux/group.reducer'
+import dayjs from 'dayjs'
 
 const Expenses = () => {
-	const dispatch = useDispatch()
-	const user = useSelector(getCurrentUser)
-	const group = useSelector(getCurrentGroup)
 	const navigation = useNavigation()
+	const group = useSelector(getCurrentGroup)
+	const [expenses, setExpenses] = useState<Expense[]>([])
+
+	useFocusEffect(
+		useCallback(() => {
+			getExpenses()
+		}, [])
+	)
+
+	const getExpenses = async () => {
+		if (!group?.id) return
+		const { expenses } = await getGroupExpenses(group.id)
+		setExpenses(expenses)
+	}
 
 	const { colors } = useTheme()
 
@@ -30,46 +47,16 @@ const Expenses = () => {
 					<Text>Sur ce mois</Text>
 				</View>
 
-				<View style={{ marginHorizontal: 20, marginBottom: 30 }}>
-					<ExpenseItem
-						label='Titre de la transaction'
-						price='-25,60'
-						author={{ username: 'tet' } as User}
-						date={'29/08/1997'}
-					/>
-				</View>
-				<View style={{ marginHorizontal: 20, marginBottom: 30 }}>
-					<ExpenseItem
-						label='Titre de la transaction'
-						price='-25,60'
-						author={{ username: 'Jojo' } as User}
-						date={'29/08/1997'}
-					/>
-				</View>
-				<View style={{ marginHorizontal: 20, marginBottom: 30 }}>
-					<ExpenseItem
-						label='Titre de la transaction'
-						price='-25,60'
-						author={{ username: 'Jojo' } as User}
-						date={'29/08/1997'}
-					/>
-				</View>
-				<View style={{ marginHorizontal: 20, marginBottom: 30 }}>
-					<ExpenseItem
-						label='Titre de la transaction'
-						price='-25,60'
-						author={{ username: 'Jojo' } as User}
-						date={'29/08/1997'}
-					/>
-				</View>
-				<View style={{ marginHorizontal: 20, marginBottom: 30 }}>
-					<ExpenseItem
-						label='Titre de la transaction'
-						price='-25,60'
-						author={{ username: 'Jojo' } as User}
-						date={'29/08/1997'}
-					/>
-				</View>
+				{expenses.map(({ name, price, madeBy, createdAt, id }) => (
+					<View style={{ marginHorizontal: 20, marginBottom: 30 }} key={id}>
+						<ExpenseItem
+							label={name}
+							price={price.toString()}
+							author={madeBy}
+							date={dayjs(createdAt).format('DD/MM/YYYY')}
+						/>
+					</View>
+				))}
 			</ScrollView>
 			<View
 				style={{
@@ -81,7 +68,7 @@ const Expenses = () => {
 			>
 				<Button
 					onPress={() => {
-						navigation.navigate(MainScreens.Home, {})
+						navigation.navigate(MainScreens.AddExpense)
 					}}
 				>
 					Ajouter une dépense

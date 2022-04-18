@@ -14,8 +14,6 @@ import Text from '@ui/Text'
 import CircleButton from '@ui/CircleButton'
 import { MoreHoriz, Plus, Trash } from 'iconoir-react-native'
 import { useTheme } from '@react-navigation/native'
-import { User } from '@types/user'
-import Button from '@ui/Button'
 
 const GroupParamsScreen = () => {
 	const group = useSelector(getCurrentGroup)
@@ -34,7 +32,7 @@ const GroupParamsScreen = () => {
 					</View>
 					<View>
 						<FredokaText style={{ fontSize: 14 }}>Type du groupe</FredokaText>
-						<Text>{group?.type}</Text>
+						<Text>{group?.type.name}</Text>
 					</View>
 				</View>
 

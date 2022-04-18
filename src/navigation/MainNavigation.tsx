@@ -57,6 +57,7 @@ const MainNavigation = (): ReactElement => {
 					<MainStack.Screen
 						name={MainScreens.AddExpense}
 						component={AddExpenseModal}
+						options={{ title: 'Ajoute une dépense' }}
 					/>
 				</MainStack.Group>
 			</MainStack.Navigator>

@@ -86,18 +86,14 @@ const TabNavigation = (): ReactElement => {
 				options={{
 					title: 'Accueil',
 					headerTitle: '',
-					tabBarIcon: ({ color }) => {
-						return <HomeAlt height={20} width={20} color={color} />
-					},
-					headerLeft: () => {
-						const { username } = useSelector(getCurrentUser)
+					tabBarIcon: ({ color, focused }) => {
 						return (
-							<View style={{ marginLeft: 20 }}>
-								<Text>Bien le bonjour</Text>
-								<Text weight='bold' style={{ fontSize: 20 }}>
-									{username}
-								</Text>
-							</View>
+							<HomeAlt
+								height={20}
+								width={20}
+								color={color}
+								fill={focused ? color : undefined}
+							/>
 						)
 					},
 				}}
@@ -107,8 +103,13 @@ const TabNavigation = (): ReactElement => {
 				component={Expenses}
 				options={{
 					title: 'Dépenses',
-					tabBarIcon: ({ color }) => (
-						<LotOfCash height={20} width={20} color={color} />
+					tabBarIcon: ({ color, focused }) => (
+						<LotOfCash
+							height={20}
+							width={20}
+							color={color}
+							fill={focused ? color : undefined}
+						/>
 					),
 				}}
 			/>
@@ -117,8 +118,13 @@ const TabNavigation = (): ReactElement => {
 				component={ProfileScreen}
 				options={{
 					title: 'Profil',
-					tabBarIcon: ({ color }) => (
-						<ProfileCircled height={20} width={20} color={color} />
+					tabBarIcon: ({ color, focused }) => (
+						<ProfileCircled
+							height={20}
+							width={20}
+							color={focused ? colors.background : color}
+							fill={focused ? color : undefined}
+						/>
 					),
 				}}
 			/>

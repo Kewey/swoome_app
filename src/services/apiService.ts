@@ -10,7 +10,8 @@ let store: EnhancedStore<RootState>
 export type APIHydraType = {
 	'@id': string
 	'@type': string
-	id: number
+	id: string
+	createdAt: Date
 }
 
 export const injectStore = (_store: EnhancedStore) => {

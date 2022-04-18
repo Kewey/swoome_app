@@ -1,4 +1,5 @@
 import { API } from '@services/apiService'
+import { Expense } from '@types/Expense'
 import { Group, GroupType } from '@types/Group'
 
 export async function createGroup(

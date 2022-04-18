@@ -1,13 +1,14 @@
+import { APIHydraType } from '@services/apiService'
 import { Group } from './Group'
 
-export type User = {
+export interface User extends APIHydraType {
 	id: string
 	username: string
 	email: string
 	groups: string[]
 	createdAt?: string
 	updatedAt?: string
-} | null
+}
 
 export type UserLogin = {
 	email: string
