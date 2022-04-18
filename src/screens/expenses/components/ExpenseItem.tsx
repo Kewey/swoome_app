@@ -23,7 +23,11 @@ const ExpenseItem = ({ label, price, author, date }: ExpenseItemProps) => {
 				alignItems: 'center',
 			}}
 		>
-			<CircleButton size={40} style={{ marginRight: 10 }}>
+			<CircleButton
+				size={40}
+				style={{ marginRight: 10 }}
+				backgroundColor={colors.card}
+			>
 				<Text>🏠</Text>
 			</CircleButton>
 			<View

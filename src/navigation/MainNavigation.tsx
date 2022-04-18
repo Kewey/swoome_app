@@ -1,18 +1,15 @@
-import { White } from '@constants/Colors'
 import {
 	DarkTheme,
 	NavigationContainer,
 	useNavigation,
 	useTheme,
 } from '@react-navigation/native'
-import { getCurrentGroup } from '@redux/group.reducer'
 import { getTheme } from '@redux/user.reducer'
 import AddExpenseModal from '@screens/expenses/AddExpenseModal'
 import GroupParamsScreen from '@screens/group/GroupParamsScreen'
 import { theme } from '@styles/theme'
 import CircleButton from '@ui/CircleButton'
-import Text from '@ui/Text'
-import { NavArrowLeft, Settings, ViewGrid } from 'iconoir-react-native'
+import { NavArrowLeft } from 'iconoir-react-native'
 import React, { ReactElement } from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'

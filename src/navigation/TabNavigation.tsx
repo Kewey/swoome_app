@@ -4,6 +4,7 @@ import { getCurrentUser } from '@redux/user.reducer'
 import Expenses from '@screens/expenses'
 import HomeScreen from '@screens/tabs/HomeScreen'
 import ProfileScreen from '@screens/tabs/ProfileScreen'
+import { borderRadius } from '@styles/layout'
 import CircleButton from '@ui/CircleButton'
 import Text from '@ui/Text'
 import {
@@ -22,9 +23,24 @@ const TabNavigation = (): ReactElement => {
 	const { colors } = useTheme()
 	return (
 		<TabStack.Navigator
+			sceneContainerStyle={{
+				paddingBottom: 40,
+			}}
 			initialRouteName={TabScreens.Home}
 			screenOptions={{
-				headerStyle: { backgroundColor: colors.background },
+				headerStyle: {
+					backgroundColor: colors.background,
+				},
+				headerShadowVisible: false,
+
+				tabBarStyle: {
+					backgroundColor: colors.background,
+					position: 'absolute',
+					borderTopLeftRadius: borderRadius * 2,
+					borderTopRightRadius: borderRadius * 2,
+					elevation: 0,
+					shadowOpacity: 0,
+				},
 				tabBarInactiveTintColor: colors.text,
 				tabBarActiveTintColor: colors.primary,
 				headerRight: () => {
