@@ -60,7 +60,7 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 		),
 	})
 
-	const { control, setValue, getValues, handleSubmit } = useForm<GroupCreate>()
+	const { control, setValue, handleSubmit } = useForm<GroupCreate>()
 
 	useEffect(() => {
 		getGroupType().then(({ groupsType }) => setGroupsType(groupsType))
@@ -100,35 +100,53 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 						une maison.
 					</Text>
 
-					<FlatList
-						style={{ padding: 20, flex: 1 }}
-						contentContainerStyle={{ paddingBottom: 120 }}
-						renderItem={({ item }) => {
-							return (
-								<TouchableOpacity
-									style={{
-										flexDirection: 'row',
-										alignItems: 'center',
-										padding: 15,
-										marginBottom: 10,
-										backgroundColor:
-											getValues('typeIri') === item['@id'] ? Blue : Light,
-										borderRadius: 8,
-									}}
-									onPress={() => setValue('typeIri', item['@id'])}
-								>
-									<CircleButton
-										style={{ marginRight: 10 }}
-										backgroundColor={White}
-									>
-										<Text>🚧{item.emoji}</Text>
-									</CircleButton>
-									<FredokaText>{item.name}</FredokaText>
-								</TouchableOpacity>
-							)
-						}}
-						data={groupsType}
-					/>
+					<View style={{ paddingHorizontal: 20 }}>
+						<Controller
+							control={control}
+							rules={{
+								required: true,
+							}}
+							render={({ field: { value: selectedType } }) => (
+								<View>
+									{groupsType.map((groupType) => (
+										<TouchableOpacity
+											key={groupType.id}
+											style={{
+												flexDirection: 'row',
+												alignItems: 'center',
+												padding: 15,
+												marginBottom: 10,
+												backgroundColor:
+													selectedType === groupType['@id']
+														? colors.primary
+														: colors.card,
+												borderRadius: 8,
+											}}
+											onPress={() => setValue('typeIri', groupType['@id'])}
+										>
+											<CircleButton
+												style={{ marginRight: 10 }}
+												backgroundColor={colors.background}
+											>
+												<Text>🚧{groupType.emoji}</Text>
+											</CircleButton>
+											<FredokaText
+												style={{
+													color:
+														selectedType === groupType['@id']
+															? colors.background
+															: colors.text,
+												}}
+											>
+												{groupType.name}
+											</FredokaText>
+										</TouchableOpacity>
+									))}
+								</View>
+							)}
+							name='typeIri'
+						/>
+					</View>
 
 					<View
 						style={{

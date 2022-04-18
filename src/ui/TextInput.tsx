@@ -1,4 +1,5 @@
 import { White } from '@constants/Colors'
+import { useTheme } from '@react-navigation/native'
 import { borderRadius } from '@styles/layout'
 import React from 'react'
 import { TextInput as NativeTextInput, TextInputProps } from 'react-native'
@@ -6,6 +7,8 @@ import { TextInput as NativeTextInput, TextInputProps } from 'react-native'
 interface TextInputProp extends TextInputProps {}
 
 const TextInput = ({ ...props }: TextInputProp) => {
+	const { colors } = useTheme()
+
 	return (
 		<NativeTextInput
 			{...props}
@@ -13,11 +16,12 @@ const TextInput = ({ ...props }: TextInputProp) => {
 				{
 					borderWidth: 1,
 					borderStyle: 'solid',
-					borderColor: '#ddd',
 					borderRadius: borderRadius,
 					paddingHorizontal: 16,
 					paddingVertical: 12,
-					backgroundColor: White,
+					backgroundColor: colors.card,
+					borderColor: colors.border,
+					color: colors.text,
 				},
 				props.style,
 			]}

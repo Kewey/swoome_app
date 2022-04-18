@@ -1,48 +1,43 @@
-import { DarkBlue, DarkGrey, White } from '@constants/Colors'
+import { sideMargin } from '@constants/Layout'
 import { useNavigation, useTheme } from '@react-navigation/native'
-import { getCurrentUser } from '@redux/user.reducer'
 import Expenses from '@screens/expenses'
 import HomeScreen from '@screens/tabs/HomeScreen'
 import ProfileScreen from '@screens/tabs/ProfileScreen'
 import { borderRadius } from '@styles/layout'
 import CircleButton from '@ui/CircleButton'
-import Text from '@ui/Text'
 import {
-	HomeAlt,
-	LotOfCash,
+	DataTransferBoth,
+	HomeSimple,
 	ProfileCircled,
 	Settings,
 	ViewGrid,
 } from 'iconoir-react-native'
 import React, { ReactElement } from 'react'
 import { View } from 'react-native'
-import { useSelector } from 'react-redux'
 import { TabStack, TabScreens, MainScreens } from './Routes'
 
 const TabNavigation = (): ReactElement => {
 	const { colors } = useTheme()
 	return (
 		<TabStack.Navigator
-			sceneContainerStyle={{
-				paddingBottom: 40,
-			}}
 			initialRouteName={TabScreens.Home}
 			screenOptions={{
-				headerStyle: {
-					backgroundColor: colors.background,
-				},
 				headerShadowVisible: false,
-
+				tabBarShowLabel: false,
+				tabBarInactiveTintColor: colors.border,
+				tabBarActiveTintColor: colors.text,
 				tabBarStyle: {
-					backgroundColor: colors.background,
+					backgroundColor: colors.card,
+					height: 60,
 					position: 'absolute',
-					borderTopLeftRadius: borderRadius * 2,
-					borderTopRightRadius: borderRadius * 2,
+					bottom: 10,
+					left: sideMargin,
+					right: sideMargin,
+					borderRadius: borderRadius * 2,
+					borderTopWidth: 0,
 					elevation: 0,
 					shadowOpacity: 0,
 				},
-				tabBarInactiveTintColor: colors.text,
-				tabBarActiveTintColor: colors.primary,
 				headerRight: () => {
 					const { colors } = useTheme()
 					const navigation = useNavigation()
@@ -84,17 +79,8 @@ const TabNavigation = (): ReactElement => {
 				name={TabScreens.Home}
 				component={HomeScreen}
 				options={{
-					title: 'Accueil',
-					headerTitle: '',
-					tabBarIcon: ({ color, focused }) => {
-						return (
-							<HomeAlt
-								height={20}
-								width={20}
-								color={color}
-								fill={focused ? color : undefined}
-							/>
-						)
+					tabBarIcon: ({ color }) => {
+						return <HomeSimple height={20} width={20} color={color} />
 					},
 				}}
 			/>
@@ -102,14 +88,8 @@ const TabNavigation = (): ReactElement => {
 				name={TabScreens.Expense}
 				component={Expenses}
 				options={{
-					title: 'Dépenses',
-					tabBarIcon: ({ color, focused }) => (
-						<LotOfCash
-							height={20}
-							width={20}
-							color={color}
-							fill={focused ? color : undefined}
-						/>
+					tabBarIcon: ({ color }) => (
+						<DataTransferBoth height={20} width={20} color={color} />
 					),
 				}}
 			/>
@@ -117,14 +97,9 @@ const TabNavigation = (): ReactElement => {
 				name={TabScreens.Profile}
 				component={ProfileScreen}
 				options={{
-					title: 'Profil',
-					tabBarIcon: ({ color, focused }) => (
-						<ProfileCircled
-							height={20}
-							width={20}
-							color={focused ? colors.background : color}
-							fill={focused ? color : undefined}
-						/>
+					tabBarAccessibilityLabel: 'Profile',
+					tabBarIcon: ({ color }) => (
+						<ProfileCircled height={20} width={20} color={color} />
 					),
 				}}
 			/>

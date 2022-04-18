@@ -10,7 +10,7 @@ import { Blue, DarkGrey } from '@constants/Colors'
 import ExpenseItem from '@screens/expenses/components/ExpenseItem'
 import { User } from '@types/user'
 import { useFocusEffect, useTheme } from '@react-navigation/native'
-import { getGroupExpenses } from '@services/expenseService'
+import { deleteExpense, getGroupExpenses } from '@services/expenseService'
 import { Expense } from '@types/Expense'
 import dayjs from 'dayjs'
 import { getCurrentUser } from '@redux/user.reducer'
@@ -31,6 +31,18 @@ const HomeScreen = () => {
 		if (!currentGroup?.id) return
 		const { expenses } = await getGroupExpenses(currentGroup.id, 3)
 		setExpenses(expenses)
+	}
+
+	const updateExpense = async (expense: Expense) => {
+		try {
+			console.log(expense)
+		} catch (error) {}
+	}
+
+	const removeExpense = async (expenseId: string) => {
+		try {
+			await deleteExpense(expenseId)
+		} catch (error) {}
 	}
 
 	return (
@@ -82,13 +94,15 @@ const HomeScreen = () => {
 				</View>
 			</View>
 
-			{expenses.map(({ name, price, madeBy, createdAt, id }) => (
-				<View style={{ marginHorizontal: 20, marginBottom: 30 }} key={id}>
+			{expenses.map((expense) => (
+				<View
+					style={{ marginHorizontal: 20, marginBottom: 30 }}
+					key={expense.id}
+				>
 					<ExpenseItem
-						label={name}
-						price={price.toString()}
-						author={madeBy}
-						date={dayjs(createdAt).format('DD/MM/YYYY')}
+						expense={expense}
+						updateExpense={updateExpense}
+						removeExpense={removeExpense}
 					/>
 				</View>
 			))}

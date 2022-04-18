@@ -82,6 +82,7 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 			</View>
 			<FlatList
 				style={{ flex: 1 }}
+				ItemSeparatorComponent={() => <View style={{ height: 15 }} />}
 				renderItem={({ item: group }: ListRenderItemInfo<Group>) => {
 					return (
 						<GroupItem

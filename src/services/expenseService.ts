@@ -3,7 +3,7 @@ import { API } from './apiService'
 
 export async function getGroupExpenses(
 	groupId: string,
-	limit: number
+	limit?: number
 ): Promise<{
 	expenses: Expense[]
 	totalItems: number
@@ -22,7 +22,6 @@ export async function addExpense(
 	description?: string,
 	madeById?: string | null
 ): Promise<Expense> {
-	console.log('description', description)
 	const { data: expense } = await API.post(`/expenses`, {
 		name,
 		description,
@@ -32,4 +31,8 @@ export async function addExpense(
 		participants,
 	})
 	return expense
+}
+
+export async function deleteExpense(expenseId: string) {
+	await API.delete(`/expenses`, { params: { id: expenseId } })
 }
