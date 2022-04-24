@@ -10,14 +10,17 @@ import FredokaText from '@ui/FredokaText'
 import Text from '@ui/Text'
 import TextInput from '@ui/TextInput'
 import { NavArrowLeft } from 'iconoir-react-native'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { TouchableOpacity, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useDispatch } from 'react-redux'
+// import * as MediaLibrary from 'expo-media-library'
+import * as ImagePicker from 'expo-image-picker'
+import { File } from '@types/Media'
+import { addMedia } from '@services/mediaService'
 
-const NB_STEPS = 3
+const NB_STEPS = 4
 
 type SignUpScreenProps = {
 	navigation: AuthNavigationProp<AuthScreens.SignIn>
@@ -26,10 +29,20 @@ type SignUpScreenProps = {
 const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 	const [isLoading, setLoading] = useState(false)
 	const { colors } = useTheme()
-	const dispatch = useDispatch()
+
+	const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions()
 
 	const [currentStep, setCurrentStep] = useState<number>(0)
+	const [avatar, setAvatar] = useState<File | null>(null)
 	const width = (145 / (NB_STEPS - 1)) * currentStep
+
+	useEffect(() => {
+		if (currentStep !== 3) return
+
+		if (!status) return
+
+		requestPermission()
+	}, [currentStep])
 
 	navigation.setOptions({
 		headerLeft: () => (
@@ -64,6 +77,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 			username: '',
 			email: '',
 			password: '',
+			avatar: '',
 		},
 	})
 
@@ -74,6 +88,23 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 			console.log('user', user)
 		} catch (error) {}
 		setLoading(false)
+	}
+
+	const onPressSelectMedia = async () => {
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+			allowsEditing: true,
+			aspect: [1, 1],
+			quality: 1,
+		})
+
+		const image = result as File
+		const response = await fetch(image.uri)
+		const blob = await response.blob()
+
+		console.log(blob)
+
+		addMedia('avatar', blob)
 	}
 
 	return (
@@ -300,13 +331,72 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 												<Button
 													size='large'
 													disabled={!isDirty || invalid || isLoading}
-													onPress={handleSubmit(onSubmit)}
+													onPress={() => setCurrentStep(currentStep + 1)}
 												>
-													{isLoading ? 'Chargement' : "M'inscrire"}
+													Continuer
 												</Button>
 											</>
 										)}
 										name='password'
+									/>
+								</View>
+							</View>
+						</View>
+					</>
+				)}
+
+				{currentStep === 3 && (
+					<>
+						<View style={{ flex: 1, justifyContent: 'center' }}>
+							<View style={{ marginBottom: 50 }}>
+								<FredokaText
+									style={{
+										fontSize: 30,
+										textAlign: 'center',
+										marginBottom: 20,
+									}}
+								>
+									A quoi tu ressembles ?
+								</FredokaText>
+								<Text
+									style={{ textAlign: 'center', opacity: 0.55, fontSize: 13 }}
+								>
+									Envoie ton plus beau sourire mon gros BG.
+								</Text>
+							</View>
+							<View style={{ flex: 1 }}>
+								<View style={{ marginBottom: 15, flex: 1 }}>
+									<Controller
+										control={control}
+										rules={{
+											required: true,
+											pattern: {
+												value:
+													/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+												message: 'Ca ne ressemble pas à un mail 😳',
+											},
+										}}
+										render={({
+											field: { onChange, onBlur, value },
+											fieldState: { isDirty, invalid, error },
+										}) => (
+											<View style={{ flex: 1 }}>
+												<View style={{ flex: 1 }}>
+													<Button onPress={onPressSelectMedia}>
+														Choisir une image
+													</Button>
+												</View>
+
+												<Button
+													size='large'
+													disabled={!isDirty || invalid || isLoading}
+													onPress={handleSubmit(onSubmit)}
+												>
+													{isLoading ? 'Chargement' : "M'inscrire"}
+												</Button>
+											</View>
+										)}
+										name='avatar'
 									/>
 								</View>
 							</View>

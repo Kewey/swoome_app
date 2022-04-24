@@ -46,6 +46,10 @@ const Expenses = () => {
 	const removeExpense = async (expenseId: string) => {
 		try {
 			await deleteExpense(expenseId)
+			const filteredExpenses = expenses.filter(
+				(expense) => expense.id !== expenseId
+			)
+			setExpenses(filteredExpenses)
 		} catch (error) {}
 	}
 

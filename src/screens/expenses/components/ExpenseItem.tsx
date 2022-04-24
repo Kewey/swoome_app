@@ -43,10 +43,13 @@ const ExpenseItem = ({
 	}
 
 	const onPressDelete = async () => {
+		console.log(id)
 		try {
 			removeExpense(id)
-			setShowModal(true)
-		} catch (error) {}
+			setShowModal(false)
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	const onPressEdit = () => {
@@ -70,6 +73,7 @@ const ExpenseItem = ({
 				>
 					<Text>🏠</Text>
 				</CircleButton>
+
 				<View
 					style={{
 						flex: 1,
@@ -83,6 +87,9 @@ const ExpenseItem = ({
 						<Text style={{ color: colors.border }}>Par {madeBy?.username}</Text>
 						{/* <Text style={{ color: colors.border }}>{date}</Text> */}
 					</View>
+					<Button onPress={onLongPress}>
+						<Text>Open modal</Text>
+					</Button>
 				</View>
 			</Pressable>
 			<Modal visible={showModal} animationType={'slide'} transparent>
@@ -128,7 +135,7 @@ const ExpenseItem = ({
 					>
 						Modifier la dépense
 					</Button>
-					<Button variant='danger' onPress={onPressDelete}>
+					<Button variant='danger' onPress={() => onPressDelete()}>
 						Supprimer la dépense
 					</Button>
 				</View>

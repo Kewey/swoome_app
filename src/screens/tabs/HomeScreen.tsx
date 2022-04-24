@@ -49,8 +49,12 @@ const HomeScreen = () => {
 		<ScrollView
 			style={[
 				layout.container,
-				{ paddingVertical: 25, backgroundColor: colors.background },
+				{
+					paddingVertical: 25,
+					backgroundColor: colors.background,
+				},
 			]}
+			contentContainerStyle={{ paddingBottom: 90 }}
 		>
 			<View style={{ marginHorizontal: 20 }}>
 				<FredokaText style={{ fontSize: 20 }}>

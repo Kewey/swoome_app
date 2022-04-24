@@ -180,6 +180,7 @@ const AddExpenseModal = () => {
 									<View>
 										{members.map((member) => (
 											<Pressable
+												key={member.id}
 												onPress={() => {
 													if (!member['@id']) return
 

@@ -41,17 +41,25 @@ API.interceptors.request.use(
 API.interceptors.response.use(
 	(res) => res,
 	async ({ config, response }: any) => {
-		console.log('error request :', response.data)
-		if (config.url !== '/auth/login' && response) {
+		console.log('** error request **', response.data)
+		if (response.data?.message === 'JWT Refresh Token Not Found') {
 			console.log('token expired', response.config.url)
+			// @ts-ignore
+			API.defaults.headers['Authorization'] = null
 
+			store.dispatch(setToken(''))
+			store.dispatch(setUser(null))
+			return
+		}
+
+		if (config.url !== '/auth/login' && response) {
 			// Access Token was expired
 			if (response.status === 401 && !config._retry) {
 				config._retry = true
+				const refresh_token = await SecureStore.getItemAsync('refresh_token')
 				try {
-					const refresh_token = await SecureStore.getItemAsync('refresh_token')
 					const {
-						data: { token },
+						data: { token, ...othersData },
 					} = await API.post('/auth/refresh', { refresh_token })
 
 					store.dispatch(setToken(token))
@@ -67,6 +75,8 @@ API.interceptors.response.use(
 
 					return API(prevCall)
 				} catch (_error) {
+					console.log('token expired', response.config.url)
+
 					// @ts-ignore
 					API.defaults.headers['Authorization'] = null
 
