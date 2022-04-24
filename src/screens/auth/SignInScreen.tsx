@@ -19,6 +19,7 @@ import {
 	ScrollView,
 } from 'react-native'
 import { useDispatch } from 'react-redux'
+import { sideMargin } from '@constants/Layout'
 
 type SignInScreenProps = {
 	navigation: AuthNavigationProp<AuthScreens.SignIn>
@@ -56,7 +57,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 			}}
 		>
 			<ScrollView
-				style={{ flex: 1, padding: 30 }}
+				style={{ flex: 1, padding: sideMargin }}
 				contentContainerStyle={{ justifyContent: 'center', flexGrow: 1 }}
 			>
 				<View style={{ flex: 1, justifyContent: 'center' }}>

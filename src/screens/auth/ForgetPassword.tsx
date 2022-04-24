@@ -1,4 +1,5 @@
 import { DarkGrey } from '@constants/Colors'
+import { sideMargin } from '@constants/Layout'
 import { AuthScreens } from '@navigation/Routes'
 import { setToken } from '@redux/user.reducer'
 import { AuthNavigationProp } from '@types/routes'
@@ -40,12 +41,13 @@ const ForgetPassword = ({ navigation }: ForgetPasswordProps) => {
 				flex: 1,
 			}}
 		>
-			<View>
-				<CircleButton onPress={() => navigation.goBack()}>
-					<NavArrowLeft height={25} width={25} color={DarkGrey} />
-				</CircleButton>
-			</View>
-			<View style={{ flex: 1, justifyContent: 'center' }}>
+			<View
+				style={{
+					flex: 1,
+					justifyContent: 'center',
+					paddingHorizontal: sideMargin,
+				}}
+			>
 				<View style={{ marginBottom: 50 }}>
 					<FredokaText
 						style={{ fontSize: 30, textAlign: 'center', marginBottom: 20 }}

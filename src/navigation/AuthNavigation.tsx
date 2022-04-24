@@ -1,4 +1,5 @@
 import { White } from '@constants/Colors'
+import { sideMargin } from '@constants/Layout'
 import { NavigationContainer, useTheme } from '@react-navigation/native'
 import AuthScreen from '@screens/auth'
 import ForgetPassword from '@screens/auth/ForgetPassword'
@@ -24,7 +25,7 @@ const AuthNavigation = (): ReactElement => {
 					headerLeft: () => {
 						const { colors } = useTheme()
 						return (
-							<View style={{ marginLeft: 30 }}>
+							<View style={{ marginLeft: sideMargin }}>
 								<CircleButton
 									backgroundColor={colors.card}
 									onPress={() => navigation.goBack()}

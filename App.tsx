@@ -29,6 +29,7 @@ import {
 	Montserrat_700Bold,
 } from '@expo-google-fonts/montserrat'
 import { useTheme } from '@react-navigation/native'
+import Toast from 'react-native-toast-message'
 
 const persistConfig = {
 	key: 'root',
@@ -71,6 +72,7 @@ export function App(): ReactElement {
 		Montserrat_300Light,
 	})
 	const token = useSelector(getToken)
+	// @ts-ignore
 	API.defaults.headers['Authorization'] = `Bearer ${token}`
 
 	useEffect(() => {
@@ -109,10 +111,13 @@ export function App(): ReactElement {
 
 export default function AppWrapper(): ReactElement {
 	return (
-		<Provider store={store}>
-			<PersistGate loading={null} persistor={persistor}>
-				<App />
-			</PersistGate>
-		</Provider>
+		<>
+			<Provider store={store}>
+				<PersistGate loading={null} persistor={persistor}>
+					<App />
+				</PersistGate>
+			</Provider>
+			<Toast position='bottom' />
+		</>
 	)
 }

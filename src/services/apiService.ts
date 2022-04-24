@@ -4,6 +4,7 @@ import * as SecureStore from 'expo-secure-store'
 import { EnhancedStore } from '@reduxjs/toolkit'
 import { RootState } from '../../App'
 import { setToken, setUser } from '@redux/user.reducer'
+import { HydraError } from '@types/Utils'
 
 let store: EnhancedStore<RootState>
 
@@ -43,7 +44,6 @@ API.interceptors.response.use(
 	async ({ config, response }: any) => {
 		console.log('** error request **', response.data)
 		if (response.data?.message === 'JWT Refresh Token Not Found') {
-			console.log('token expired', response.config.url)
 			// @ts-ignore
 			API.defaults.headers['Authorization'] = null
 
@@ -75,8 +75,6 @@ API.interceptors.response.use(
 
 					return API(prevCall)
 				} catch (_error) {
-					console.log('token expired', response.config.url)
-
 					// @ts-ignore
 					API.defaults.headers['Authorization'] = null
 
@@ -86,5 +84,7 @@ API.interceptors.response.use(
 				}
 			}
 		}
+
+		return Promise.reject<HydraError>(response.data)
 	}
 )

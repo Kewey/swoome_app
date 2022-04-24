@@ -1,19 +1,23 @@
 import { Media } from '@types/Media'
 import { API } from './apiService'
 
-export async function addMedia(name: string, image: Blob): Promise<Media> {
-	const formData = new FormData()
-	formData.append(name, image)
+export async function addMedia(name: string, image: File): Promise<Media> {
+	const FormData = global.FormData
 
-	console.log('formData', formData)
+	const formData = new FormData()
+	formData.append('name', name)
+	formData.append('file', image)
+
 	const { data: expense } = await API.post(
-		`/media_object`,
-		{
-			formData,
-		},
+		`/media_objects`,
+		{ file: formData },
 		{
 			headers: {
 				'Content-Type': 'multipart/form-data',
+			},
+			responseType: 'json',
+			transformRequest: (__, _) => {
+				return formData
 			},
 		}
 	)

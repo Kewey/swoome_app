@@ -6,6 +6,7 @@ import { View } from 'react-native'
 import Text from '@ui/Text'
 import FredokaText from '@ui/FredokaText'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { sideMargin } from '@constants/Layout'
 
 type AuthScreenProps = {
 	navigation: AuthNavigationProp<AuthScreens.Auth>
@@ -16,7 +17,7 @@ export default function AuthScreen({ navigation }: AuthScreenProps) {
 		<SafeAreaView
 			style={{
 				flex: 1,
-				paddingHorizontal: 30,
+				paddingHorizontal: sideMargin,
 				paddingBottom: 30,
 			}}
 		>

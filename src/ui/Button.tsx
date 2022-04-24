@@ -1,13 +1,12 @@
 import { ReactElement } from 'react'
 import { Blue, Cyan, DarkGrey, Grey, White } from '@constants/Colors'
 import { borderRadius } from '@styles/layout'
-import { FONTS } from '@types/Fonts'
 import { View, Pressable, PressableProps, StyleSheet } from 'react-native'
 import FredokaText from './FredokaText'
 import { theme } from '@styles/theme'
 
 interface ButtonProps extends PressableProps {
-	variant?: 'primary' | 'secondary' | 'danger' | 'neutral'
+	variant?: 'primary' | 'secondary' | 'danger' | 'neutral' | 'transparent'
 	block?: boolean
 	size?: 'large' | 'medium' | 'small'
 }
@@ -64,6 +63,11 @@ const ButtonStyle = StyleSheet.create({
 
 	neutral: {
 		backgroundColor: theme.colors.border,
+		color: DarkGrey,
+	},
+
+	transparent: {
+		backgroundColor: White,
 		color: DarkGrey,
 	},
 

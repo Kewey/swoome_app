@@ -40,15 +40,14 @@ export async function login(email: string, password: string): Promise<any> {
 export async function createUser(
 	username: string,
 	email: string,
-	password: string
+	password: string,
+	avatar: string
 ): Promise<User> {
-	const {
-		// data: { user, token },
-		data: user,
-	} = await API.post(`/auth/register`, {
+	const { data: user } = await API.post(`/auth/register`, {
 		username,
 		email,
 		password,
+		avatar,
 	})
 	return user
 }

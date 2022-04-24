@@ -1,6 +1,5 @@
 import { AuthScreens } from '@navigation/Routes'
 import { useTheme } from '@react-navigation/native'
-import { setToken, setUser } from '@redux/user.reducer'
 import { createUser } from '@services/userService'
 import { AuthNavigationProp } from '@types/routes'
 import { UserSignUp } from '@types/user'
@@ -12,13 +11,15 @@ import TextInput from '@ui/TextInput'
 import { NavArrowLeft } from 'iconoir-react-native'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { TouchableOpacity, View } from 'react-native'
+import { Image, Pressable, TouchableOpacity, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
 // import * as MediaLibrary from 'expo-media-library'
 import * as ImagePicker from 'expo-image-picker'
-import { File } from '@types/Media'
 import { addMedia } from '@services/mediaService'
+import Toast from 'react-native-toast-message'
+import { HydraError } from '@types/Utils'
+import { sideMargin } from '@constants/Layout'
 
 const NB_STEPS = 4
 
@@ -30,23 +31,26 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 	const [isLoading, setLoading] = useState(false)
 	const { colors } = useTheme()
 
-	const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions()
+	const [mediaStatus, mediaRequestPermission] =
+		ImagePicker.useMediaLibraryPermissions()
+	const [cameraStatus, cameraRequestPermission] =
+		ImagePicker.useCameraPermissions()
 
 	const [currentStep, setCurrentStep] = useState<number>(0)
-	const [avatar, setAvatar] = useState<File | null>(null)
 	const width = (145 / (NB_STEPS - 1)) * currentStep
 
 	useEffect(() => {
 		if (currentStep !== 3) return
 
-		if (!status) return
+		if (!mediaStatus || !cameraStatus) return
 
-		requestPermission()
+		mediaRequestPermission()
+		cameraRequestPermission()
 	}, [currentStep])
 
 	navigation.setOptions({
 		headerLeft: () => (
-			<View style={{ marginLeft: 30 }}>
+			<View style={{ marginLeft: sideMargin }}>
 				<CircleButton
 					backgroundColor={colors.card}
 					onPress={() => {
@@ -61,7 +65,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 			</View>
 		),
 		headerRight: () => (
-			<View style={{ marginRight: 30 }}>
+			<View style={{ marginRight: sideMargin }}>
 				<TouchableOpacity
 					onPress={() => navigation.navigate(AuthScreens.SignIn)}
 				>
@@ -81,30 +85,51 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 		},
 	})
 
-	const onSubmit = async ({ email, username, password }: UserSignUp) => {
+	const onSubmit = async ({
+		email,
+		username,
+		password,
+		avatar,
+	}: UserSignUp) => {
 		try {
 			setLoading(true)
-			const user = await createUser(username, email, password)
+			const user = await createUser(username, email, password, avatar)
 			console.log('user', user)
 		} catch (error) {}
 		setLoading(false)
 	}
 
-	const onPressSelectMedia = async () => {
-		let result = await ImagePicker.launchImageLibraryAsync({
+	const onPressOpenMedia = async () => {
+		let result: File = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
 			allowsEditing: true,
 			aspect: [1, 1],
 			quality: 1,
 		})
 
-		const image = result as File
-		const response = await fetch(image.uri)
-		const blob = await response.blob()
+		try {
+			await addMedia('avatar', result)
+		} catch (error: any) {
+			Toast.show({
+				type: 'error',
+				text1: "Oups une erreur s'est produite",
+				text2: error?.['hydra:description'],
+			})
+		}
+	}
 
-		console.log(blob)
+	const onPressOpenCamera = async () => {
+		let result = await ImagePicker.launchCameraAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+			allowsEditing: true,
+			aspect: [1, 1],
+			quality: 1,
+		})
+		console.log(result)
 
-		addMedia('avatar', blob)
+		// const image = result as File
+
+		addMedia('avatar', result)
 	}
 
 	return (
@@ -112,7 +137,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 			<KeyboardAwareScrollView
 				contentContainerStyle={{
 					flex: 1,
-					paddingHorizontal: 30,
+					paddingHorizontal: sideMargin,
 					paddingBottom: 15,
 				}}
 			>
@@ -184,6 +209,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 													onBlur={onBlur}
 													onChangeText={onChange}
 													value={value}
+													returnKeyType='next'
 													autoFocus
 												/>
 												<Button
@@ -256,6 +282,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 													onChangeText={onChange}
 													value={value}
 													keyboardType='email-address'
+													returnKeyType='next'
 													autoFocus
 												/>
 												<Button
@@ -326,6 +353,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 													onChangeText={onChange}
 													value={value}
 													secureTextEntry
+													returnKeyType='next'
 													autoFocus
 												/>
 												<Button
@@ -361,7 +389,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 								<Text
 									style={{ textAlign: 'center', opacity: 0.55, fontSize: 13 }}
 								>
-									Envoie ton plus beau sourire mon gros BG.
+									Envoie ton plus beau sourire BG.
 								</Text>
 							</View>
 							<View style={{ flex: 1 }}>
@@ -382,18 +410,46 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 										}) => (
 											<View style={{ flex: 1 }}>
 												<View style={{ flex: 1 }}>
-													<Button onPress={onPressSelectMedia}>
-														Choisir une image
-													</Button>
+													<View style={{ alignItems: 'center' }}>
+														{!value ? (
+															<Pressable onPress={onPressOpenMedia}>
+																<View
+																	style={{
+																		height: 200,
+																		width: 200,
+																		borderRadius: 100,
+																		backgroundColor: colors.card,
+																		justifyContent: 'center',
+																		alignItems: 'center',
+																	}}
+																>
+																	<Text style={{ fontSize: 50 }}>📷</Text>
+																	<View style={{ height: 10 }} />
+																</View>
+															</Pressable>
+														) : (
+															<Image
+																style={{
+																	height: 200,
+																	width: 200,
+																	borderRadius: 100,
+																	backgroundColor: colors.card,
+																}}
+																source={{ uri: value }}
+															/>
+														)}
+													</View>
 												</View>
 
-												<Button
-													size='large'
-													disabled={!isDirty || invalid || isLoading}
-													onPress={handleSubmit(onSubmit)}
-												>
-													{isLoading ? 'Chargement' : "M'inscrire"}
-												</Button>
+												<View>
+													<Button
+														size='large'
+														disabled={!isDirty || invalid || isLoading}
+														onPress={handleSubmit(onSubmit)}
+													>
+														{isLoading ? 'Chargement' : "M'inscrire"}
+													</Button>
+												</View>
 											</View>
 										)}
 										name='avatar'

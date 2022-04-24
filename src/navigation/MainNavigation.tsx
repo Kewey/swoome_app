@@ -1,3 +1,4 @@
+import { sideMargin } from '@constants/Layout'
 import {
 	DarkTheme,
 	NavigationContainer,
@@ -30,7 +31,7 @@ const MainNavigation = (): ReactElement => {
 						const { colors } = useTheme()
 						const navigation = useNavigation()
 						return (
-							<View style={{ marginLeft: 30 }}>
+							<View style={{ marginLeft: sideMargin }}>
 								<CircleButton
 									backgroundColor={colors.card}
 									onPress={() => navigation.goBack()}
