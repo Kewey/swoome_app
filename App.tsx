@@ -1,72 +1,123 @@
-import React, { createContext, useEffect, useMemo } from 'react'
-import * as SecureStore from 'expo-secure-store'
+import React, { ReactElement, useEffect, useState } from 'react'
+import { Provider, useDispatch, useSelector } from 'react-redux'
 import { StatusBar } from 'expo-status-bar'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-
-import useCachedResources from '@hooks/useCachedResources'
 import useColorScheme from '@hooks/useColorScheme'
-import Navigation from '@navigation/index'
-import { Text, View } from '@components/Themed'
-import useAuth from '@hooks/useAuth'
-import { UserCreation, UserLogin } from '@services/userService'
+import AuthNavigation from '@navigation/AuthNavigation'
+import GroupNavigation from '@navigation/GroupNavigation'
+import userReducer, { getTheme, getToken, setUser } from '@redux/user.reducer'
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { useFonts } from 'expo-font'
+import { View } from 'react-native'
+import { FONTS } from '@types/Fonts'
+import Text from '@ui/Text'
+import { White } from '@constants/Colors'
+import { persistStore } from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import persistReducer from 'redux-persist/es/persistReducer'
+import { combineReducers } from 'redux'
+import groupReducer, { getCurrentGroup } from '@redux/group.reducer'
+import { getUser } from '@services/userService'
+import { User } from '@types/user'
+import { API, injectStore } from '@services/apiService'
+import MainNavigation from '@navigation/MainNavigation'
+import { FredokaOne_400Regular } from '@expo-google-fonts/fredoka-one'
+import {
+	Montserrat_300Light,
+	Montserrat_400Regular,
+	Montserrat_700Bold,
+} from '@expo-google-fonts/montserrat'
+import { useTheme } from '@react-navigation/native'
+import Toast from 'react-native-toast-message'
 
-const AuthContext = createContext(null)
+const persistConfig = {
+	key: 'root',
+	version: 1,
+	storage: AsyncStorage,
+}
 
-export default function App() {
-	const [state, dispatch] = useAuth()
-	const isLoadingComplete = useCachedResources()
-	const colorScheme = useColorScheme()
+const rootReducer = combineReducers({
+	user: userReducer,
+	group: groupReducer,
+})
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
-	useEffect(() => {
-		// Fetch the token from storage then navigate to our appropriate place
-		const refreshUserToken = async () => {
-			let userToken
-
-			try {
-				userToken = await SecureStore.getItemAsync('userToken')
-			} catch (e) {
-				// Restoring token failed
-			}
-
-			// After restoring token, we may need to validate it in production apps
-
-			// This will switch to the App screen or Auth screen and this loading
-			// screen will be unmounted and thrown away.
-			dispatch({ type: 'RESTORE_TOKEN', token: userToken })
-		}
-
-		refreshUserToken()
-	}, [])
-
-	const authContext = useMemo(
-		() => ({
-			signIn: async (data: UserLogin) => {
-				// TODO : log user
-				dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' })
-			},
-			signOut: () => dispatch({ type: 'SIGN_OUT' }),
-			signUp: async (data: UserCreation) => {
-				// TODO : signup user
-				dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' })
+const store = configureStore({
+	reducer: persistedReducer,
+	devTools: process.env.NODE_ENV !== 'production',
+	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware({
+			serializableCheck: {
+				ignoredActions: ['persist/PERSIST'],
 			},
 		}),
-		[]
-	)
+})
 
-	if (!isLoadingComplete) {
+let persistor = persistStore(store)
+
+injectStore(store)
+
+export type RootState = ReturnType<typeof store.getState>
+
+export function App(): ReactElement {
+	const isDarkTheme = useSelector(getTheme)
+	const { colors } = useTheme()
+	const [currentUser, setCurrentUser] = useState<User>(null)
+	const dispatch = useDispatch()
+	const [loaded] = useFonts({
+		FredokaOne_400Regular,
+		Montserrat_400Regular,
+		Montserrat_700Bold,
+		Montserrat_300Light,
+	})
+	const token = useSelector(getToken)
+	// @ts-ignore
+	API.defaults.headers['Authorization'] = `Bearer ${token}`
+
+	useEffect(() => {
+		getUser().then((res) => {
+			if (!res) {
+				return
+			}
+			setCurrentUser(res)
+			dispatch(setUser(res))
+		})
+	}, [])
+
+	const selectedGroup = useSelector(getCurrentGroup)
+
+	if (!loaded && !currentUser) {
 		return (
 			<View>
 				<Text>Chargement</Text>
 			</View>
 		)
-	} else {
-		return (
-			<SafeAreaProvider>
-				<AuthContext.Provider value={authContext}>
-					<Navigation colorScheme={colorScheme} />
-				</AuthContext.Provider>
-				<StatusBar style={colorScheme === 'light' ? 'dark' : 'light'} />
-			</SafeAreaProvider>
-		)
 	}
+
+	return (
+		<SafeAreaProvider style={{ backgroundColor: colors.background }}>
+			<StatusBar style={isDarkTheme ? 'light' : 'dark'} />
+			{!token ? (
+				<AuthNavigation />
+			) : !selectedGroup ? (
+				<GroupNavigation />
+			) : (
+				<MainNavigation />
+			)}
+		</SafeAreaProvider>
+	)
+}
+
+export default function AppWrapper(): ReactElement {
+	return (
+		<>
+			<Provider store={store}>
+				<PersistGate loading={null} persistor={persistor}>
+					<App />
+				</PersistGate>
+			</Provider>
+			<Toast position='bottom' />
+		</>
+	)
 }

@@ -2,13 +2,14 @@
 	"expo": {
 		"name": "Swoome",
 		"slug": "swoome",
+		"owner": "Kewey65",
 		"version": "1.0.0",
 		"orientation": "portrait",
-		"icon": "./assets/images/icon.png",
+		"icon": "./src/assets/images/icon.png",
 		"scheme": "myapp",
 		"userInterfaceStyle": "automatic",
 		"splash": {
-			"image": "./assets/images/splash.png",
+			"image": "./src/assets/images/splash.png",
 			"resizeMode": "cover",
 			"backgroundColor": "#090954"
 		},
@@ -21,12 +22,28 @@
 		},
 		"android": {
 			"adaptiveIcon": {
-				"foregroundImage": "./assets/images/adaptive-icon.png",
+				"foregroundImage": "./src/assets/images/adaptive-icon.png",
 				"backgroundColor": "#090954"
 			}
 		},
 		"web": {
-			"favicon": "./assets/images/favicon.png"
-		}
+			"favicon": "./src/assets/images/favicon.png"
+		},
+		"plugins": [
+			[
+				"expo-image-picker",
+				{
+					"photosPermission": "Permettre à $(PRODUCT_NAME) d'accéder à vos photos."
+				}
+			],
+			[
+				"expo-media-library",
+				{
+					"photosPermission": "Permettre à $(PRODUCT_NAME) d'accéder à vos photos.",
+					"savePhotosPermission": "Permettre à $(PRODUCT_NAME) de sauvegarder des photos",
+					"isAccessMediaLocationEnabled": true
+				}
+			]
+		]
 	}
 }
