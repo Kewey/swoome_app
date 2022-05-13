@@ -1,4 +1,4 @@
-import { Blue, DarkerBlue, Light, White } from '@constants/Colors'
+import { Blue, Cyan, DarkerBlue, Light, White } from '@constants/Colors'
 import { DefaultTheme } from '@react-navigation/native'
 
 export const theme = {
@@ -6,6 +6,7 @@ export const theme = {
 	colors: {
 		...DefaultTheme.colors,
 		background: White,
+		secondary: Cyan,
 		primary: Blue,
 		card: Light,
 		text: DarkerBlue,

@@ -18,6 +18,7 @@ import Button from '@ui/Button'
 import { setGroup } from '@redux/group.reducer'
 import { getUserGroups } from '@services/userService'
 import GroupItem from './components/GroupItem'
+import { sideMargin } from '@constants/Layout'
 
 type GroupIndexProps = {
 	navigation: GroupNavigationProp<GroupScreens.Index>
@@ -46,10 +47,7 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 	useEffect(() => {
 		if (!currentUser) return
 
-		getUserGroups(currentUser.id).then(({ groups, totalItems }) => {
-			if (groups.length === 1) {
-				dispatch(setGroup(groups[0]))
-			}
+		getUserGroups(currentUser.id).then(({ groups }) => {
 			setGroups(groups)
 		})
 	}, [])
@@ -58,7 +56,7 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 		<SafeAreaView
 			style={{
 				flex: 1,
-				paddingHorizontal: 20,
+				paddingHorizontal: sideMargin,
 				paddingBottom: 30,
 			}}
 		>
@@ -106,10 +104,19 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 				<Button
 					block
 					size='large'
+					variant='transparent'
+					style={{ marginBottom: 10 }}
+					onPress={() => navigation.navigate(GroupScreens.JoinGroup)}
+				>
+					Rejoindre un groupe
+				</Button>
+				<Button
+					block
+					size='large'
 					variant='primary'
 					onPress={() => navigation.navigate(GroupScreens.Create)}
 				>
-					Créer ma maison
+					Créer un groupe
 				</Button>
 			</View>
 		</SafeAreaView>

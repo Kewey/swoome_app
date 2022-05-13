@@ -5,6 +5,7 @@ import { EnhancedStore } from '@reduxjs/toolkit'
 import { RootState } from '../../App'
 import { setToken, setUser } from '@redux/user.reducer'
 import { HydraError } from '@types/Utils'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
 
 let store: EnhancedStore<RootState>
 
@@ -84,6 +85,12 @@ API.interceptors.response.use(
 				}
 			}
 		}
+
+		Toast.show({
+			type: 'error',
+			text1: response.data['hydra:title'],
+			text2: response.data['hydra:description'],
+		})
 
 		return Promise.reject<HydraError>(response.data)
 	}

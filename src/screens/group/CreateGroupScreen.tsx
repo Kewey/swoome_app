@@ -1,6 +1,7 @@
 import {
 	FlatList,
 	KeyboardAvoidingView,
+	Pressable,
 	TouchableWithoutFeedback,
 	View,
 } from 'react-native'
@@ -13,7 +14,7 @@ import { Group, GroupCreate, GroupType } from '@types/Group'
 import { Controller, useForm } from 'react-hook-form'
 import CircleButton from '@ui/CircleButton'
 import { NavArrowLeft } from 'iconoir-react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
 import Text from '@ui/Text'
 import FredokaText from '@ui/FredokaText'
 import TextInput from '@ui/TextInput'
@@ -23,6 +24,7 @@ import { borderRadius } from '@styles/layout'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { setGroup } from '@redux/group.reducer'
 import { createGroup, getGroupType } from '@services/groupService'
+import { sideMargin } from '@constants/Layout'
 
 type GroupCreateProps = {
 	navigation: GroupNavigationProp<GroupScreens.Create>
@@ -82,25 +84,34 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 			}}
 		>
 			{currentStep === 0 && (
-				<View style={{ flex: 1 }}>
-					<FredokaText
-						style={{ fontSize: 30, textAlign: 'center', marginBottom: 20 }}
-					>
-						Pour quelle occasion souhaites-tu créer un groupe ?
-					</FredokaText>
-					<Text
+				<>
+					<View style={{ paddingHorizontal: sideMargin }}>
+						<FredokaText
+							style={{ fontSize: 30, textAlign: 'center', marginBottom: 20 }}
+						>
+							Pour quelle occasion souhaites-tu créer un groupe ?
+						</FredokaText>
+						<Text
+							style={{
+								textAlign: 'center',
+								opacity: 0.55,
+								fontSize: 13,
+								marginBottom: 30,
+							}}
+						>
+							Pour commencer à utiliser l’application, tu dois créer ou
+							rejoindre une maison.
+						</Text>
+					</View>
+
+					<ScrollView
 						style={{
-							textAlign: 'center',
-							opacity: 0.55,
-							fontSize: 13,
-							marginBottom: 30,
+							paddingHorizontal: sideMargin,
+						}}
+						contentContainerStyle={{
+							paddingBottom: 100,
 						}}
 					>
-						Pour commencer à utiliser l’application, tu dois créer ou rejoindre
-						une maison.
-					</Text>
-
-					<View style={{ paddingHorizontal: 20 }}>
 						<Controller
 							control={control}
 							rules={{
@@ -109,7 +120,7 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 							render={({ field: { value: selectedType } }) => (
 								<View>
 									{groupsType.map((groupType) => (
-										<TouchableOpacity
+										<Pressable
 											key={groupType.id}
 											style={{
 												flexDirection: 'row',
@@ -118,7 +129,7 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 												marginBottom: 10,
 												backgroundColor:
 													selectedType === groupType['@id']
-														? colors.primary
+														? colors.secondary
 														: colors.card,
 												borderRadius: 8,
 											}}
@@ -140,20 +151,20 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 											>
 												{groupType.name}
 											</FredokaText>
-										</TouchableOpacity>
+										</Pressable>
 									))}
 								</View>
 							)}
 							name='typeIri'
 						/>
-					</View>
+					</ScrollView>
 
 					<View
 						style={{
 							position: 'absolute',
 							bottom: 30,
-							left: 20,
-							right: 20,
+							left: sideMargin,
+							right: sideMargin,
 						}}
 					>
 						<Button
@@ -163,12 +174,16 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 							Continuer
 						</Button>
 					</View>
-				</View>
+				</>
 			)}
 
 			{currentStep === 1 && (
 				<View
-					style={{ flex: 1, justifyContent: 'center', paddingHorizontal: 30 }}
+					style={{
+						flex: 1,
+						justifyContent: 'center',
+						paddingHorizontal: sideMargin,
+					}}
 				>
 					<View style={{ flex: 1, marginBottom: 50 }}>
 						<FredokaText
@@ -182,7 +197,7 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 						</Text>
 					</View>
 					<View>
-						<View style={{ marginBottom: 15 }}>
+						<View style={{ marginBottom: 30 }}>
 							<Controller
 								control={control}
 								rules={{

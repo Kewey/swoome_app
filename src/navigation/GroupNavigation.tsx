@@ -2,6 +2,7 @@ import { White } from '@constants/Colors'
 import { NavigationContainer, useTheme } from '@react-navigation/native'
 import GroupIndexScreen from '@screens/group'
 import GroupCreateScreen from '@screens/group/CreateGroupScreen'
+import JoinGroupScreen from '@screens/group/JoinGroupScreen'
 import { theme } from '@styles/theme'
 import CircleButton from '@ui/CircleButton'
 import { NavArrowLeft } from 'iconoir-react-native'
@@ -42,6 +43,10 @@ const GroupNavigation = (): ReactElement => {
 				<GroupStack.Screen
 					name={GroupScreens.Create}
 					component={GroupCreateScreen}
+				/>
+				<GroupStack.Screen
+					name={GroupScreens.JoinGroup}
+					component={JoinGroupScreen}
 				/>
 			</GroupStack.Navigator>
 		</NavigationContainer>

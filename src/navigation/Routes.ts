@@ -11,12 +11,15 @@ export enum AuthScreens {
 export enum GroupScreens {
 	Index = 'GroupIndexScreen',
 	Create = 'GroupCreateScreen',
+	JoinGroup = 'GroupJoinScreen',
 }
 
 export enum TabScreens {
 	Home = 'HomeTabScreen',
 	Expense = 'ExpenseScreen',
 	Profile = 'ProfileScreen',
+	Refunds = 'RefundsScreen',
+	AddExpense = 'AddExpenseScreen',
 }
 
 export enum MainScreens {
@@ -35,11 +38,14 @@ export type AuthStackParamList = {
 export type GroupStackParamList = {
 	[GroupScreens.Index]: undefined
 	[GroupScreens.Create]: undefined
+	[GroupScreens.JoinGroup]: undefined
 }
 
 export type TabStackParamList = {
 	[TabScreens.Home]: { groupId: string }
 	[TabScreens.Expense]: undefined
+	[TabScreens.Refunds]: { userId: string }
+	[TabScreens.AddExpense]: undefined
 	[TabScreens.Profile]: { userId: string }
 }
 

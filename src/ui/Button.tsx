@@ -1,5 +1,12 @@
 import { ReactElement } from 'react'
-import { Blue, Cyan, DarkGrey, Grey, White } from '@constants/Colors'
+import {
+	Blue,
+	Cyan,
+	DarkerBlue,
+	DarkGrey,
+	Grey,
+	White,
+} from '@constants/Colors'
 import { borderRadius } from '@styles/layout'
 import { View, Pressable, PressableProps, StyleSheet } from 'react-native'
 import FredokaText from './FredokaText'
@@ -30,8 +37,8 @@ const Button = ({
 				<FredokaText
 					style={[
 						LabelStyle[size],
+						ButtonStyle[variant],
 						{
-							color: '#fff',
 							textAlign: 'center',
 						},
 					]}
@@ -68,7 +75,7 @@ const ButtonStyle = StyleSheet.create({
 
 	transparent: {
 		backgroundColor: White,
-		color: DarkGrey,
+		color: DarkerBlue,
 	},
 
 	default: {
