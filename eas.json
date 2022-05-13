@@ -1,0 +1,22 @@
+{
+	"cli": {
+		"version": ">= 0.52.0"
+	},
+	"build": {
+		"development": {
+			"developmentClient": true,
+			"distribution": "internal"
+		},
+		"preview": {
+			"distribution": "internal"
+		},
+		"production": {
+			"env": {
+				"API_URL": "https://swoome-api.herokuapp.com/api"
+			}
+		}
+	},
+	"submit": {
+		"production": {}
+	}
+}

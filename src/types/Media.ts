@@ -1,6 +1,7 @@
-export interface Media {
-	name: string
-	url: string
+import { APIHydraType } from '@services/apiService'
+
+export interface Media extends APIHydraType {
+	contentUrl: string
 }
 
 export interface File {

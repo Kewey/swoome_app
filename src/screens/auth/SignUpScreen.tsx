@@ -11,17 +11,14 @@ import TextInput from '@ui/TextInput'
 import { NavArrowLeft } from 'iconoir-react-native'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { Image, Pressable, TouchableOpacity, View } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
-// import * as MediaLibrary from 'expo-media-library'
 import * as ImagePicker from 'expo-image-picker'
-import { addMedia } from '@services/mediaService'
-import Toast from 'react-native-toast-message'
-import { HydraError } from '@types/Utils'
 import { sideMargin } from '@constants/Layout'
+import Toast from 'react-native-toast-message'
 
-const NB_STEPS = 4
+const NB_STEPS = 3
 
 type SignUpScreenProps = {
 	navigation: AuthNavigationProp<AuthScreens.SignIn>
@@ -89,48 +86,62 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 		email,
 		username,
 		password,
-		avatar,
+		avatar = null,
 	}: UserSignUp) => {
 		try {
 			setLoading(true)
 			const user = await createUser(username, email, password, avatar)
-			console.log('user', user)
+			navigation.navigate(AuthScreens.Auth)
+			Toast.show({
+				text1: `Bienvenue ${username}`,
+				text2: `Connectes toi pour commencer à utiliser Swooome`,
+			})
 		} catch (error) {}
 		setLoading(false)
 	}
 
-	const onPressOpenMedia = async () => {
-		let result: File = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.Images,
-			allowsEditing: true,
-			aspect: [1, 1],
-			quality: 1,
-		})
+	// const onPressOpenMedia = async () => {
+	// 	let selectedAvatar = await ImagePicker.launchImageLibraryAsync({
+	// 		mediaTypes: ImagePicker.MediaTypeOptions.Images,
+	// 		allowsEditing: true,
+	// 		aspect: [1, 1],
+	// 		quality: 1,
+	// 	})
 
-		try {
-			await addMedia('avatar', result)
-		} catch (error: any) {
-			Toast.show({
-				type: 'error',
-				text1: "Oups une erreur s'est produite",
-				text2: error?.['hydra:description'],
-			})
-		}
-	}
+	// 	if (selectedAvatar.cancelled) {
+	// 		return
+	// 	}
 
-	const onPressOpenCamera = async () => {
-		let result = await ImagePicker.launchCameraAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.Images,
-			allowsEditing: true,
-			aspect: [1, 1],
-			quality: 1,
-		})
-		console.log(result)
+	// 	console.log('avatar', selectedAvatar)
 
-		// const image = result as File
+	// 	try {
+	// 		await addMedia('avatar', {
+	// 			uri: selectedAvatar.base64 || selectedAvatar.uri,
+	// 			type: selectedAvatar.type || 'image',
+	// 			name: 'avatar',
+	// 		})
+	// 	} catch (error: any) {
+	// 		Toast.show({
+	// 			type: 'error',
+	// 			text1: "Oups une erreur s'est produite",
+	// 			text2: error?.['hydra:description'],
+	// 		})
+	// 	}
+	// }
 
-		addMedia('avatar', result)
-	}
+	// const onPressOpenCamera = async () => {
+	// 	let result = await ImagePicker.launchCameraAsync({
+	// 		mediaTypes: ImagePicker.MediaTypeOptions.Images,
+	// 		allowsEditing: true,
+	// 		aspect: [1, 1],
+	// 		quality: 1,
+	// 	})
+	// 	console.log(result)
+
+	// 	// const image = result as File
+
+	// 	addMedia('avatar', result)
+	// }
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
@@ -356,13 +367,15 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 													returnKeyType='next'
 													autoFocus
 												/>
-												<Button
-													size='large'
-													disabled={!isDirty || invalid || isLoading}
-													onPress={() => setCurrentStep(currentStep + 1)}
-												>
-													Continuer
-												</Button>
+												<View>
+													<Button
+														size='large'
+														disabled={!isDirty || invalid || isLoading}
+														onPress={handleSubmit(onSubmit)}
+													>
+														{isLoading ? 'Chargement' : "M'inscrire"}
+													</Button>
+												</View>
 											</>
 										)}
 										name='password'
@@ -373,7 +386,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 					</>
 				)}
 
-				{currentStep === 3 && (
+				{/* {currentStep === 3 && (
 					<>
 						<View style={{ flex: 1, justifyContent: 'center' }}>
 							<View style={{ marginBottom: 50 }}>
@@ -458,7 +471,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 							</View>
 						</View>
 					</>
-				)}
+				)} */}
 			</KeyboardAwareScrollView>
 		</SafeAreaView>
 	)
