@@ -8,7 +8,12 @@
 			"distribution": "internal"
 		},
 		"preview": {
-			"distribution": "internal"
+			"android": {
+				"buildType": "apk"
+			},
+			"env": {
+				"API_URL": "https://swoome-api.herokuapp.com/api"
+			}
 		},
 		"production": {
 			"env": {
