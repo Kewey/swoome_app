@@ -1,28 +1,77 @@
 import {
 	Image,
+	Pressable,
 	ScrollView,
-	StyleSheet,
 	TouchableOpacity,
 	View,
 } from 'react-native'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { getCurrentGroup } from '@redux/group.reducer'
-import { layout } from '@styles/layout'
+import { borderRadius, layout } from '@styles/layout'
 import FredokaText from '@ui/FredokaText'
 import Text from '@ui/Text'
 import CircleButton from '@ui/CircleButton'
-import { MoreHoriz, Plus, Trash } from 'iconoir-react-native'
+import { MoreHoriz, Trash } from 'iconoir-react-native'
 import { useTheme } from '@react-navigation/native'
+import Button from '@ui/Button'
+import * as Clipboard from 'expo-clipboard'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
 
 const GroupParamsScreen = () => {
 	const group = useSelector(getCurrentGroup)
-	console.log('group', group)
 	const { colors } = useTheme()
 	return (
 		<>
 			<ScrollView style={layout.container}>
 				<View style={{ paddingTop: 25, paddingHorizontal: 20 }}>
+					<View
+						style={{
+							backgroundColor: colors.card,
+							borderRadius,
+							paddingTop: 25,
+							paddingBottom: 5,
+							paddingHorizontal: 20,
+							marginBottom: 25,
+						}}
+					>
+						<Pressable
+							onPress={() => {
+								try {
+									Clipboard.setString(group?.code || '')
+									Toast.show({
+										type: 'success',
+										text1: 'Code copié',
+									})
+								} catch (error) {
+									Toast.show({
+										type: 'error',
+										text1: 'Aie',
+										text2: 'Impossible de copier le code',
+									})
+								}
+							}}
+						>
+							<FredokaText
+								style={{ fontSize: 40, letterSpacing: 20, textAlign: 'center' }}
+							>
+								{group?.code}
+							</FredokaText>
+						</Pressable>
+						<View
+							style={{
+								height: 1,
+								width: '100%',
+								backgroundColor: colors.border,
+								marginTop: 20,
+								marginBottom: 5,
+							}}
+						/>
+						<View>
+							<Button variant='transparent'>Partager le code</Button>
+						</View>
+					</View>
+
 					<View style={{ marginBottom: 10 }}>
 						<FredokaText style={{ fontSize: 20 }}>Informations</FredokaText>
 					</View>
@@ -43,6 +92,7 @@ const GroupParamsScreen = () => {
 
 					{group?.members?.map((membre) => (
 						<View
+							key={membre.id}
 							style={{
 								flexDirection: 'row',
 								alignItems: 'center',
@@ -66,51 +116,25 @@ const GroupParamsScreen = () => {
 								</FredokaText>
 								<Text style={{ fontSize: 14 }}>Administrateur</Text>
 							</View>
-							<CircleButton>
+							<CircleButton backgroundColor={colors.card}>
 								<MoreHoriz
 									height={20}
 									width={20}
-									strokeWidth={3}
 									color={colors.text}
 									fill={colors.text}
 								/>
 							</CircleButton>
 						</View>
 					))}
-
-					<View
-						style={{
-							flexDirection: 'row',
-							alignItems: 'center',
-						}}
-					>
-						<CircleButton size={50}>
-							<Plus
-								height={30}
-								width={30}
-								strokeWidth={2.5}
-								color={colors.text}
-							/>
-						</CircleButton>
-
-						<View style={{ marginLeft: 15, flex: 1 }}>
-							<FredokaText style={{ fontSize: 16 }}>
-								Intégrer un membre
-							</FredokaText>
-						</View>
-					</View>
 				</View>
 
-				<View style={{ paddingTop: 25, paddingHorizontal: 20 }}>
-					<View style={{ marginBottom: 15, marginTop: 30 }}>
-						<FredokaText style={{ fontSize: 20 }}>Zone de danger</FredokaText>
-					</View>
-
-					<TouchableOpacity style={layout.rowSBCenter}>
+				<View style={{ paddingTop: 15, paddingHorizontal: 20 }}>
+					<FredokaText style={{ fontSize: 20 }}>Zone de danger</FredokaText>
+					<TouchableOpacity style={[layout.rowSBCenter, { marginTop: 10 }]}>
 						<Text weight='bold' style={{ color: 'red' }}>
 							Supprimer le groupe
 						</Text>
-						<CircleButton>
+						<CircleButton backgroundColor={colors.card}>
 							<Trash height={15} width={15} color={'red'} />
 						</CircleButton>
 					</TouchableOpacity>
@@ -121,5 +145,3 @@ const GroupParamsScreen = () => {
 }
 
 export default GroupParamsScreen
-
-const styles = StyleSheet.create({})

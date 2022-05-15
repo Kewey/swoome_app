@@ -4,7 +4,7 @@ import { getCurrentUser } from '@redux/user.reducer'
 import FredokaText from '@ui/FredokaText'
 import { Pressable, View } from 'react-native'
 import { layout } from '@styles/layout'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Text from '@ui/Text'
 import { useNavigation, useTheme } from '@react-navigation/native'
 import Button from '@ui/Button'
@@ -30,7 +30,7 @@ const AddExpenseModal = () => {
 		handleSubmit,
 		formState: { errors, isDirty, isValid },
 	} = useForm<ExpenseForm>({
-		defaultValues: { madeBy: currentUser?.id, participants: [] },
+		defaultValues: { madeBy: currentUser?.['@id'], participants: [] },
 	})
 
 	const onSubmit = async ({
@@ -63,7 +63,9 @@ const AddExpenseModal = () => {
 
 	return (
 		<>
-			<KeyboardAwareScrollView style={[layout.container]}>
+			<KeyboardAwareScrollView
+				style={[layout.container, { paddingVertical: sideMargin }]}
+			>
 				<View>
 					<View>
 						<View style={{ marginBottom: 15, paddingHorizontal: sideMargin }}>
@@ -83,7 +85,6 @@ const AddExpenseModal = () => {
 										onBlur={onBlur}
 										onChangeText={onChange}
 										value={value?.toString()}
-										autoFocus={true}
 										keyboardType={'decimal-pad'}
 									/>
 								)}
@@ -146,15 +147,29 @@ const AddExpenseModal = () => {
 									required: true,
 								}}
 								render={({ field: { value: madeBy } }) => (
-									<View>
+									<View style={{ paddingHorizontal: sideMargin }}>
 										{members.map((member) => (
 											<Pressable
+												key={member.id + 'made'}
 												onPress={() => setValue('madeBy', member['@id'])}
 											>
-												<View>
-													<Text>
-														{madeBy === member['@id'] ? '✅ ' : ' '}
-														{member?.username}
+												<View
+													style={{
+														height: 80,
+														width: 80,
+														backgroundColor: colors.card,
+														borderRadius: 40,
+														alignItems: 'center',
+														justifyContent: 'center',
+														borderWidth: 3,
+														borderColor:
+															madeBy === member['@id']
+																? colors.primary
+																: colors.card,
+													}}
+												>
+													<Text weight='bold' style={{ fontSize: 30 }}>
+														{member.username[0].toUpperCase()}
 													</Text>
 												</View>
 											</Pressable>
@@ -177,7 +192,7 @@ const AddExpenseModal = () => {
 									required: true,
 								}}
 								render={({ field: { value: selectedParticipants } }) => (
-									<View>
+									<View style={{ paddingHorizontal: sideMargin }}>
 										{members.map((member) => (
 											<Pressable
 												key={member.id}
@@ -205,15 +220,25 @@ const AddExpenseModal = () => {
 													])
 												}}
 											>
-												<View>
-													<Text>
-														{selectedParticipants?.find(
+												<View
+													style={{
+														height: 80,
+														width: 80,
+														backgroundColor: colors.card,
+														borderRadius: 40,
+														alignItems: 'center',
+														justifyContent: 'center',
+														borderWidth: 3,
+														borderColor: selectedParticipants?.find(
 															(selectedParticipant) =>
 																selectedParticipant === member['@id']
 														)
-															? '✅ '
-															: ' '}
-														{member?.username}
+															? colors.primary
+															: colors.card,
+													}}
+												>
+													<Text weight='bold' style={{ fontSize: 30 }}>
+														{member.username[0].toUpperCase()}
 													</Text>
 												</View>
 											</Pressable>

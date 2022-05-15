@@ -74,7 +74,7 @@ const ButtonStyle = StyleSheet.create({
 	},
 
 	transparent: {
-		backgroundColor: White,
+		backgroundColor: 'transparent',
 		color: DarkerBlue,
 	},
 

@@ -1,7 +1,5 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { ScrollView } from 'react-native-gesture-handler'
-import { layout } from '@styles/layout'
 import { useDispatch, useSelector } from 'react-redux'
 import {
 	getCurrentUser,
@@ -13,22 +11,20 @@ import {
 import CardWithIcon from '@ui/CardWithIcon'
 import FredokaText from '@ui/FredokaText'
 import { setGroup } from '@redux/group.reducer'
-import { useTheme } from '@react-navigation/native'
+import Layout from '@styles/components/Layout'
 
 const ProfileScreen = () => {
-	const { colors } = useTheme()
 	const user = useSelector(getCurrentUser)
 	const isDarkTheme = useSelector(getTheme)
 	const dispatch = useDispatch()
 	return (
-		<ScrollView
-			contentContainerStyle={[
-				layout.container,
-				{ paddingVertical: 25, backgroundColor: colors.background },
-			]}
-		>
+		<Layout>
 			<TouchableOpacity style={{ marginBottom: 10, marginHorizontal: 20 }}>
-				<CardWithIcon icon='🙄' sublabel='Surnom' label={user?.username} />
+				<CardWithIcon
+					icon='🙄'
+					sublabel='Surnom'
+					label={user?.username || 'oups'}
+				/>
 			</TouchableOpacity>
 			<TouchableOpacity style={{ marginBottom: 10, marginHorizontal: 20 }}>
 				<CardWithIcon icon='📷' sublabel='Photo de profil' label='A définir' />
@@ -64,10 +60,8 @@ const ProfileScreen = () => {
 			>
 				<CardWithIcon icon='🚪' label='Déconnexion' />
 			</TouchableOpacity>
-		</ScrollView>
+		</Layout>
 	)
 }
 
 export default ProfileScreen
-
-const styles = StyleSheet.create({})

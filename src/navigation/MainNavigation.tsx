@@ -5,9 +5,10 @@ import {
 	useNavigation,
 	useTheme,
 } from '@react-navigation/native'
+import { CardStyleInterpolators } from '@react-navigation/stack'
 import { getTheme } from '@redux/user.reducer'
 import AddExpenseModal from '@screens/expenses/AddExpenseModal'
-import GroupParamsScreen from '@screens/group/GroupParamsScreen'
+import ProfileScreen from '@screens/profile/ProfileScreen'
 import { theme } from '@styles/theme'
 import CircleButton from '@ui/CircleButton'
 import { NavArrowLeft } from 'iconoir-react-native'
@@ -19,14 +20,12 @@ import TabNavigation from './TabNavigation'
 
 const MainNavigation = (): ReactElement => {
 	const isDarkTheme = useSelector(getTheme)
-	const { colors } = useTheme()
 
 	return (
 		<NavigationContainer theme={isDarkTheme ? DarkTheme : theme}>
 			<MainStack.Navigator
 				initialRouteName={MainScreens.Home}
 				screenOptions={{
-					headerStyle: { backgroundColor: colors.background },
 					headerLeft: () => {
 						const { colors } = useTheme()
 						const navigation = useNavigation()
@@ -50,15 +49,22 @@ const MainNavigation = (): ReactElement => {
 						options={{ headerShown: false }}
 					/>
 					<MainStack.Screen
-						name={MainScreens.GroupParams}
-						component={GroupParamsScreen}
+						name={MainScreens.Profile}
+						component={ProfileScreen}
 					/>
 				</MainStack.Group>
-				<MainStack.Group screenOptions={{ presentation: 'modal' }}>
+				<MainStack.Group
+					screenOptions={{
+						presentation: 'modal',
+						headerShown: false,
+						gestureEnabled: true,
+						cardStyleInterpolator:
+							CardStyleInterpolators.forModalPresentationIOS,
+					}}
+				>
 					<MainStack.Screen
 						name={MainScreens.AddExpense}
 						component={AddExpenseModal}
-						options={{ title: 'Ajoute une dépense' }}
 					/>
 				</MainStack.Group>
 			</MainStack.Navigator>

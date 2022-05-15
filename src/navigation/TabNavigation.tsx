@@ -1,35 +1,41 @@
 import { Blue, White } from '@constants/Colors'
 import { sideMargin } from '@constants/Layout'
 import { useNavigation, useTheme } from '@react-navigation/native'
-import { setGroup } from '@redux/group.reducer'
+import { getCurrentGroup, setGroup } from '@redux/group.reducer'
 import Expenses from '@screens/expenses'
+import GroupParamsScreen from '@screens/tabs/GroupParamsScreen'
 import HomeScreen from '@screens/tabs/HomeScreen'
-import ProfileScreen from '@screens/tabs/ProfileScreen'
+import RefundsScreen from '@screens/tabs/RefundsScreen'
+import ReportScreen from '@screens/tabs/ReportScreen'
 import { borderRadius } from '@styles/layout'
 import CircleButton from '@ui/CircleButton'
 import {
 	DataTransferBoth,
 	HomeSimple,
 	Plus,
-	ProfileCircled,
+	Reports,
 	Settings,
+	User,
 	ViewGrid,
 } from 'iconoir-react-native'
 import React, { ReactElement } from 'react'
-import { View } from 'react-native'
-import { useDispatch } from 'react-redux'
+import { Image, View } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 import { TabStack, TabScreens, MainScreens } from './Routes'
 
 const TabNavigation = (): ReactElement => {
 	const { colors } = useTheme()
+	const group = useSelector(getCurrentGroup)
+	const dispatch = useDispatch()
+
 	return (
 		<TabStack.Navigator
 			initialRouteName={TabScreens.Home}
 			screenOptions={{
 				headerShadowVisible: false,
 				tabBarShowLabel: false,
-				tabBarInactiveTintColor: colors.border,
-				tabBarActiveTintColor: colors.text,
+				tabBarInactiveTintColor: colors.text,
+				tabBarActiveTintColor: colors.primary,
 				tabBarStyle: {
 					backgroundColor: colors.card,
 					height: 60,
@@ -42,35 +48,33 @@ const TabNavigation = (): ReactElement => {
 					elevation: 0,
 					shadowOpacity: 0,
 				},
+				headerTitle: group?.name,
 				headerRight: () => {
-					const { colors } = useTheme()
 					const navigation = useNavigation()
-					const dispatch = useDispatch()
 					return (
 						<View style={{ marginRight: 20, flexDirection: 'row' }}>
 							<CircleButton
-								backgroundColor={colors.border}
+								backgroundColor={colors.card}
 								style={{ marginRight: 10 }}
 								onPress={() => dispatch(setGroup(null))}
 							>
-								<ViewGrid
-									height={20}
-									width={20}
-									color={colors.text}
-									fill={colors.text}
-								/>
+								<ViewGrid height={20} width={20} color={colors.text} />
 							</CircleButton>
 							<CircleButton
-								backgroundColor={colors.border}
+								backgroundColor={colors.background}
 								onPress={() =>
-									navigation.getParent()?.navigate(MainScreens.GroupParams)
+									navigation.getParent()?.navigate(MainScreens.Profile)
 								}
 							>
-								<Settings
-									height={20}
-									width={20}
-									color={colors.text}
-									fill={colors.text}
+								<Image
+									source={{ uri: 'https://i.pravatar.cc/50' }}
+									height={30}
+									width={30}
+									style={{
+										height: 30,
+										width: 30,
+										borderRadius: 15,
+									}}
 								/>
 							</CircleButton>
 						</View>
@@ -89,16 +93,11 @@ const TabNavigation = (): ReactElement => {
 			/>
 
 			<TabStack.Screen
-				name={TabScreens.Expense}
-				component={Expenses}
+				name={TabScreens.Report}
+				component={ReportScreen}
 				options={{
 					tabBarIcon: ({ color }) => (
-						<DataTransferBoth
-							height={20}
-							width={20}
-							color={color}
-							rotation={90}
-						/>
+						<Reports height={20} width={20} color={color} />
 					),
 				}}
 			/>
@@ -132,7 +131,7 @@ const TabNavigation = (): ReactElement => {
 
 			<TabStack.Screen
 				name={TabScreens.Refunds}
-				component={Expenses}
+				component={RefundsScreen}
 				options={{
 					tabBarIcon: ({ color }) => (
 						<DataTransferBoth
@@ -146,12 +145,12 @@ const TabNavigation = (): ReactElement => {
 			/>
 
 			<TabStack.Screen
-				name={TabScreens.Profile}
-				component={ProfileScreen}
+				name={TabScreens.GroupParams}
+				component={GroupParamsScreen}
 				options={{
 					tabBarAccessibilityLabel: 'Profile',
 					tabBarIcon: ({ color }) => (
-						<ProfileCircled height={20} width={20} color={color} />
+						<Settings height={20} width={20} color={color} />
 					),
 				}}
 			/>

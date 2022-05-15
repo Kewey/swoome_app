@@ -1,25 +1,29 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { getCurrentGroup } from '@redux/group.reducer'
 import FredokaText from '@ui/FredokaText'
-import { View, ScrollView, TouchableOpacity } from 'react-native'
-import { layout } from '@styles/layout'
+import { View } from 'react-native'
 import { useSelector } from 'react-redux'
-import Text from '@ui/Text'
-import HomeGraph from './components/HomeGraph'
-import { Blue, DarkGrey } from '@constants/Colors'
 import ExpenseItem from '@screens/expenses/components/ExpenseItem'
-import { User } from '@types/user'
-import { useFocusEffect, useTheme } from '@react-navigation/native'
+import {
+	useFocusEffect,
+	useNavigation,
+	useTheme,
+} from '@react-navigation/native'
 import { deleteExpense, getGroupExpenses } from '@services/expenseService'
 import { Expense } from '@types/Expense'
-import dayjs from 'dayjs'
 import { getCurrentUser } from '@redux/user.reducer'
+import { sideMargin } from '@constants/Layout'
+import Layout from '@styles/components/Layout'
+import Text from '@ui/Text'
+import { paddingHorizontal } from '@styles/layout'
+import Button from '@ui/Button'
+import { MainScreens } from '@navigation/Routes'
 
 const HomeScreen = () => {
 	const currentGroup = useSelector(getCurrentGroup)
-	const currentUser = useSelector(getCurrentUser)
-	const { colors } = useTheme()
 	const [expenses, setExpenses] = useState<Expense[]>([])
+	const [isLoading, setIsLoading] = useState(false)
+	const navigation = useNavigation()
 
 	useFocusEffect(
 		useCallback(() => {
@@ -29,8 +33,10 @@ const HomeScreen = () => {
 
 	const updateExpenses = async () => {
 		if (!currentGroup?.id) return
+		setIsLoading(true)
 		const { expenses } = await getGroupExpenses(currentGroup.id, 3)
 		setExpenses(expenses)
+		setIsLoading(false)
 	}
 
 	const updateExpense = async (expense: Expense) => {
@@ -46,57 +52,25 @@ const HomeScreen = () => {
 	}
 
 	return (
-		<ScrollView
-			style={[
-				layout.container,
-				{
-					paddingVertical: 25,
-					backgroundColor: colors.background,
-				},
-			]}
-			contentContainerStyle={{ paddingBottom: 90 }}
-		>
-			<View style={{ marginHorizontal: 20 }}>
-				<FredokaText style={{ fontSize: 20 }}>
-					{currentGroup?.name} en despi 📝
-				</FredokaText>
-				<Text>Le récap du mois</Text>
-				<View style={[layout.rowSBCenter, { marginTop: 20 }]}>
-					<Text style={{ color: DarkGrey }}>
-						Total :{' '}
-						<Text weight='bold' style={{ color: Blue }}>
-							760,65 €
-						</Text>
-					</Text>
-					<Text style={{ color: DarkGrey }}>
-						Dépenses :{' '}
-						<Text weight='bold' style={{ color: '#51A53F' }}>
-							437,65 €
-						</Text>
-					</Text>
-				</View>
-			</View>
+		<Layout>
+			<FredokaText style={{ fontSize: 32, paddingHorizontal: sideMargin }}>
+				Dernières activités
+			</FredokaText>
 
-			<HomeGraph />
-
-			<View style={{ marginHorizontal: 20 }}>
-				<View
-					style={[
-						layout.rowSBCenter,
-						{
-							marginTop: 25,
-							marginBottom: 25,
-						},
-					]}
-				>
-					<FredokaText style={{ fontSize: 20 }}>
-						Dernières transactions
-					</FredokaText>
-					<TouchableOpacity>
-						<Text weight='bold'>Voir toutes</Text>
-					</TouchableOpacity>
+			{!isLoading && expenses.length === 0 && (
+				<View style={{ paddingHorizontal: sideMargin, flex: 1 }}>
+					<Text style={{ textAlign: 'center', marginBottom: 10 }}>
+						Oula c'est vide ici !
+					</Text>
+					<Text style={{ textAlign: 'center', marginBottom: 10 }}>
+						Cliques sur le bouton au milieu en bas de ton écran pour ajouter une
+						dépense ou cliques sur le bouton ci dessous
+					</Text>
+					<Button onPress={() => navigation.navigate(MainScreens.AddExpense)}>
+						Ajouter une premiere dépense
+					</Button>
 				</View>
-			</View>
+			)}
 
 			{expenses.map((expense) => (
 				<View
@@ -110,7 +84,9 @@ const HomeScreen = () => {
 					/>
 				</View>
 			))}
-		</ScrollView>
+
+			<Text>{isLoading ? 'load' : 'done'}</Text>
+		</Layout>
 	)
 }
 

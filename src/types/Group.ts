@@ -5,6 +5,7 @@ import { User } from './user'
 export interface Group extends APIHydraType {
 	name: string
 	type: GroupType
+	code: string
 	members: User[]
 }
 

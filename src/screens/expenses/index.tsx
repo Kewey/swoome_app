@@ -54,45 +54,27 @@ const Expenses = () => {
 	}
 
 	return (
-		<>
-			<ScrollView style={[layout.container, { paddingVertical: sideMargin }]}>
-				<View style={{ marginHorizontal: 20, marginBottom: 25 }}>
-					<FredokaText style={{ fontSize: 20 }}>
-						Vos dernières dépenses
-					</FredokaText>
-					<Text>Sur ce mois</Text>
-				</View>
-
-				{expenses.map((expense) => (
-					<View
-						style={{ marginHorizontal: 20, marginBottom: 30 }}
-						key={expense.id}
-					>
-						<ExpenseItem
-							expense={expense}
-							updateExpense={updateExpense}
-							removeExpense={removeExpense}
-						/>
-					</View>
-				))}
-			</ScrollView>
-			<View
-				style={{
-					position: 'absolute',
-					bottom: tabbarHeight,
-					left: 20,
-					right: 20,
-				}}
-			>
-				<Button
-					onPress={() => {
-						navigation.navigate(MainScreens.AddExpense)
-					}}
-				>
-					Ajouter une dépense
-				</Button>
+		<ScrollView style={[layout.container, { paddingVertical: sideMargin }]}>
+			<View style={{ marginHorizontal: 20, marginBottom: 25 }}>
+				<FredokaText style={{ fontSize: 20 }}>
+					Vos dernières dépenses
+				</FredokaText>
+				<Text>Sur ce mois</Text>
 			</View>
-		</>
+
+			{expenses.map((expense) => (
+				<View
+					style={{ marginHorizontal: 20, marginBottom: 30 }}
+					key={expense.id}
+				>
+					<ExpenseItem
+						expense={expense}
+						updateExpense={updateExpense}
+						removeExpense={removeExpense}
+					/>
+				</View>
+			))}
+		</ScrollView>
 	)
 }
 

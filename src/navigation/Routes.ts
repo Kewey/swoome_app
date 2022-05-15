@@ -16,15 +16,15 @@ export enum GroupScreens {
 
 export enum TabScreens {
 	Home = 'HomeTabScreen',
-	Expense = 'ExpenseScreen',
-	Profile = 'ProfileScreen',
+	Report = 'ReportScreen',
 	Refunds = 'RefundsScreen',
-	AddExpense = 'AddExpenseScreen',
+	AddExpense = 'AddExpenseModalScreen',
+	GroupParams = 'GroupParamsScreen',
 }
 
 export enum MainScreens {
 	Home = 'HomeScreen',
-	GroupParams = 'GroupParamsScreen',
+	Profile = 'ProfileScreen',
 	AddExpense = 'AddExpenseScreen',
 }
 
@@ -43,15 +43,15 @@ export type GroupStackParamList = {
 
 export type TabStackParamList = {
 	[TabScreens.Home]: { groupId: string }
-	[TabScreens.Expense]: undefined
+	[TabScreens.Report]: undefined
 	[TabScreens.Refunds]: { userId: string }
 	[TabScreens.AddExpense]: undefined
-	[TabScreens.Profile]: { userId: string }
+	[TabScreens.GroupParams]: undefined
 }
 
 export type MainStackParamList = {
 	[MainScreens.Home]: undefined
-	[MainScreens.GroupParams]: undefined
+	[MainScreens.Profile]: { userId: string }
 	[MainScreens.AddExpense]: undefined
 }
 
