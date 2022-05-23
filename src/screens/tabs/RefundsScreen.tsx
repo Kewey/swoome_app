@@ -1,18 +1,18 @@
 import { View } from 'react-native'
 import React from 'react'
-import Layout from '@styles/components/Layout'
+import Layout from '@ui/Layout'
 import { DarkGrey, Blue } from '@constants/Colors'
 import { layout } from '@styles/layout'
 import FredokaText from '@ui/FredokaText'
 import HomeGraph from './components/HomeGraph'
 import Text from '@ui/Text'
+import AnimatedHeaderLayout from '@ui/AnimatedHeaderLayout'
 
 const RefundsScreen = () => {
 	return (
-		<Layout>
+		<AnimatedHeaderLayout title='Balance'>
 			<View style={{ marginHorizontal: 20 }}>
-				<FredokaText style={{ fontSize: 32 }}>Balance</FredokaText>
-				<View style={[layout.rowSBCenter, { marginTop: 20 }]}>
+				<View style={[layout.rowSBCenter]}>
 					<Text style={{ color: DarkGrey }}>
 						Total :{' '}
 						<Text weight='bold' style={{ color: Blue }}>
@@ -27,7 +27,7 @@ const RefundsScreen = () => {
 					</Text>
 				</View>
 			</View>
-		</Layout>
+		</AnimatedHeaderLayout>
 	)
 }
 

@@ -11,7 +11,7 @@ import {
 import CardWithIcon from '@ui/CardWithIcon'
 import FredokaText from '@ui/FredokaText'
 import { setGroup } from '@redux/group.reducer'
-import Layout from '@styles/components/Layout'
+import Layout from '@ui/Layout'
 
 const ProfileScreen = () => {
 	const user = useSelector(getCurrentUser)

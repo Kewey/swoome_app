@@ -1,36 +1,72 @@
-import React, { useState } from 'react'
-import { getCurrentGroup } from '@redux/group.reducer'
+import React, { useCallback, useState } from 'react'
+import { getCurrentGroup, setGroup } from '@redux/group.reducer'
 import { getCurrentUser } from '@redux/user.reducer'
 import FredokaText from '@ui/FredokaText'
 import { Pressable, View } from 'react-native'
 import { layout } from '@styles/layout'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Text from '@ui/Text'
-import { useNavigation, useTheme } from '@react-navigation/native'
+import {
+	useFocusEffect,
+	useNavigation,
+	useTheme,
+} from '@react-navigation/native'
 import Button from '@ui/Button'
 import TextInput from '@ui/TextInput'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Controller, useForm } from 'react-hook-form'
-import { ExpenseForm } from '@types/Expense'
-import { addExpense } from '@services/expenseService'
+import { Expense, ExpenseForm } from '@types/Expense'
+import { addExpense, putExpense } from '@services/expenseService'
 import { User } from '@types/user'
 import { sideMargin } from '@constants/Layout'
 import { Asana } from 'iconoir-react-native'
+import { getSelectedGroup } from '@services/userService'
+import { ScrollView } from 'react-native-gesture-handler'
 
-const AddExpenseModal = () => {
+const AddExpenseModal = ({ route }) => {
+	const expense: Expense = route?.params?.expense
+
 	const currentUser = useSelector(getCurrentUser)
 	const currentGroup = useSelector(getCurrentGroup)
 	const members: User[] = currentGroup?.members || []
 	const navigation = useNavigation()
+	const dispatch = useDispatch()
 	const [isLoading, setIsLoading] = useState(false)
+
+	useFocusEffect(
+		useCallback(() => {
+			updateGroup()
+		}, [])
+	)
+
+	const updateGroup = async () => {
+		const reloadGroup = await getSelectedGroup(currentGroup.id)
+		dispatch(setGroup(reloadGroup))
+	}
 
 	const {
 		control,
 		setValue,
+		getValues,
 		handleSubmit,
 		formState: { errors, isDirty, isValid },
 	} = useForm<ExpenseForm>({
-		defaultValues: { madeBy: currentUser?.['@id'], participants: [] },
+		// @ts-ignore
+		defaultValues: expense
+			? {
+					name: expense.name,
+					price: expense.price,
+					description: expense.description,
+					expenseAt: expense.expenseAt,
+					madeBy: expense.madeBy['@id'],
+					participants: expense.participants?.map(
+						(participant) => participant['@id']
+					),
+			  }
+			: {
+					madeBy: currentUser?.['@id'],
+					participants: members.map((member) => member?.['@id']),
+			  },
 	})
 
 	const onSubmit = async ({
@@ -38,25 +74,71 @@ const AddExpenseModal = () => {
 		description,
 		price,
 		madeBy,
+		expenseAt,
 		participants,
 	}: ExpenseForm) => {
 		setIsLoading(true)
+
 		try {
 			if (!currentGroup?.id) return
-			const newExpense = await addExpense(
-				currentGroup['@id'],
-				name,
-				price,
-				participants,
-				description,
-				madeBy
-			)
+			expense
+				? await putExpense(
+						expense.id,
+						name,
+						price,
+						participants,
+						description,
+						expenseAt,
+						madeBy
+				  )
+				: await addExpense(
+						currentGroup['@id'],
+						name,
+						price,
+						participants,
+						description,
+						expenseAt,
+						madeBy
+				  )
 
 			setIsLoading(false)
 			navigation.goBack()
 		} catch (error) {
 			setIsLoading(false)
 		}
+	}
+
+	const addParticipant = (memberIri: string) => {
+		const selectedParticipants = getValues('participants')
+
+		const alreadySelectedUser = selectedParticipants?.find(
+			(selectedParticipant) => selectedParticipant === memberIri
+		)
+
+		if (alreadySelectedUser) {
+			const remainingMember = selectedParticipants.filter(
+				(selectedParticipant) => selectedParticipant !== memberIri
+			)
+
+			setValue('participants', remainingMember)
+			return
+		}
+
+		setValue('participants', [...selectedParticipants, memberIri])
+	}
+
+	const setMadeBy = (memberIri: string) => {
+		setValue('madeBy', memberIri)
+
+		const selectedParticipants = getValues('participants')
+
+		const alreadySelectedUser = selectedParticipants?.find(
+			(selectedParticipant) => selectedParticipant === memberIri
+		)
+
+		if (alreadySelectedUser) return
+
+		setValue('participants', [...selectedParticipants, memberIri])
 	}
 
 	const { colors } = useTheme()
@@ -67,7 +149,7 @@ const AddExpenseModal = () => {
 				style={[layout.container, { paddingVertical: sideMargin }]}
 			>
 				<View>
-					<View>
+					<ScrollView>
 						<View style={{ marginBottom: 15, paddingHorizontal: sideMargin }}>
 							<FredokaText style={{ marginBottom: 5 }}>
 								Montant de la dépense
@@ -147,34 +229,48 @@ const AddExpenseModal = () => {
 									required: true,
 								}}
 								render={({ field: { value: madeBy } }) => (
-									<View style={{ paddingHorizontal: sideMargin }}>
-										{members.map((member) => (
-											<Pressable
-												key={member.id + 'made'}
-												onPress={() => setValue('madeBy', member['@id'])}
-											>
-												<View
-													style={{
-														height: 80,
-														width: 80,
-														backgroundColor: colors.card,
-														borderRadius: 40,
-														alignItems: 'center',
-														justifyContent: 'center',
-														borderWidth: 3,
-														borderColor:
-															madeBy === member['@id']
-																? colors.primary
-																: colors.card,
+									<ScrollView
+										horizontal
+										style={{
+											paddingHorizontal: sideMargin,
+										}}
+									>
+										<View
+											style={{
+												flexDirection: 'row',
+											}}
+										>
+											{members.map((member) => (
+												<Pressable
+													style={{ marginRight: 20 }}
+													key={member.id + 'made'}
+													onPress={() => {
+														setMadeBy(member['@id'])
 													}}
 												>
-													<Text weight='bold' style={{ fontSize: 30 }}>
-														{member.username[0].toUpperCase()}
-													</Text>
-												</View>
-											</Pressable>
-										))}
-									</View>
+													<View
+														style={{
+															height: 80,
+															width: 80,
+															backgroundColor: colors.card,
+															borderRadius: 40,
+															alignItems: 'center',
+															justifyContent: 'center',
+															borderWidth: 3,
+															borderColor:
+																madeBy === member['@id']
+																	? colors.primary
+																	: colors.card,
+														}}
+													>
+														<Text weight='bold' style={{ fontSize: 30 }}>
+															{member.username[0].toUpperCase()}
+														</Text>
+													</View>
+												</Pressable>
+											))}
+										</View>
+									</ScrollView>
 								)}
 								name='madeBy'
 							/>
@@ -192,64 +288,52 @@ const AddExpenseModal = () => {
 									required: true,
 								}}
 								render={({ field: { value: selectedParticipants } }) => (
-									<View style={{ paddingHorizontal: sideMargin }}>
-										{members.map((member) => (
-											<Pressable
-												key={member.id}
-												onPress={() => {
-													if (!member['@id']) return
-
-													if (
-														selectedParticipants?.find(
-															(selectedParticipant) =>
-																selectedParticipant === member['@id']
-														)
-													) {
-														const removeMember = selectedParticipants.filter(
-															(selectedParticipant) =>
-																selectedParticipant !== member['@id']
-														)
-
-														setValue('participants', removeMember)
-														return
-													}
-
-													setValue('participants', [
-														...selectedParticipants,
-														member['@id'],
-													])
-												}}
-											>
-												<View
-													style={{
-														height: 80,
-														width: 80,
-														backgroundColor: colors.card,
-														borderRadius: 40,
-														alignItems: 'center',
-														justifyContent: 'center',
-														borderWidth: 3,
-														borderColor: selectedParticipants?.find(
-															(selectedParticipant) =>
-																selectedParticipant === member['@id']
-														)
-															? colors.primary
-															: colors.card,
-													}}
+									<ScrollView
+										horizontal
+										style={{ paddingHorizontal: sideMargin }}
+									>
+										<View
+											style={{
+												flexDirection: 'row',
+											}}
+										>
+											{members.map((member) => (
+												<Pressable
+													style={{ marginRight: 20 }}
+													key={member.id}
+													onPress={() => addParticipant(member['@id'])}
 												>
-													<Text weight='bold' style={{ fontSize: 30 }}>
-														{member.username[0].toUpperCase()}
-													</Text>
-												</View>
-											</Pressable>
-										))}
-									</View>
+													<View
+														style={{
+															height: 80,
+															width: 80,
+															backgroundColor: colors.card,
+															borderRadius: 40,
+															alignItems: 'center',
+															justifyContent: 'center',
+															borderWidth: 3,
+															borderColor: selectedParticipants?.find(
+																(selectedParticipant) =>
+																	selectedParticipant === member['@id']
+															)
+																? colors.primary
+																: colors.card,
+														}}
+													>
+														<Text weight='bold' style={{ fontSize: 30 }}>
+															{member.username[0].toUpperCase()}
+														</Text>
+													</View>
+												</Pressable>
+											))}
+										</View>
+									</ScrollView>
 								)}
 								name='participants'
 							/>
 							{errors.participants && <Text>This is required.</Text>}
 						</View>
-					</View>
+					</ScrollView>
 				</View>
 			</KeyboardAwareScrollView>
 			<View

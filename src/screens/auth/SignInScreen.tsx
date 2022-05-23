@@ -20,6 +20,7 @@ import {
 } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { sideMargin } from '@constants/Layout'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
 
 type SignInScreenProps = {
 	navigation: AuthNavigationProp<AuthScreens.SignIn>
@@ -44,8 +45,14 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 			const user = await getUser()
 			dispatch(setUser(user))
 			dispatch(setToken(token))
-		} catch (error) {
-			console.log('LOGIN |', error)
+		} catch (error: any) {
+			if (error?.code === 401) {
+				Toast.show({
+					type: 'error',
+					text1: "T'es sur de toi ?",
+					text2: 'On a rien trouvé avec les informations données 😕',
+				})
+			}
 		}
 		setIsLoading(false)
 	}
@@ -99,7 +106,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 								)}
 								name='email'
 							/>
-							{errors.email && <Text>This is required.</Text>}
+							{errors.email && <Text>{errors.email.message}</Text>}
 						</View>
 
 						<View style={{ marginBottom: 25 }}>
@@ -122,7 +129,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 								)}
 								name='password'
 							/>
-							{errors.password && <Text>This is required.</Text>}
+							{errors.password && <Text>{errors.password.message}</Text>}
 							<TouchableOpacity
 								onPress={() => navigation.navigate(AuthScreens.ForgetPassword)}
 							>

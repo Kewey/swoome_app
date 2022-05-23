@@ -5,13 +5,12 @@ import { layout } from '@styles/layout'
 import FredokaText from '@ui/FredokaText'
 import HomeGraph from './components/HomeGraph'
 import Text from '@ui/Text'
-import Layout from '@styles/components/Layout'
+import AnimatedHeaderLayout from '@ui/AnimatedHeaderLayout'
 
 const ReportScreen = () => {
 	return (
-		<Layout>
+		<AnimatedHeaderLayout title='Récap du mois'>
 			<View style={{ marginHorizontal: 20 }}>
-				<FredokaText style={{ fontSize: 32 }}>Récap du mois</FredokaText>
 				<View style={[layout.rowSBCenter, { marginTop: 20 }]}>
 					<Text style={{ color: DarkGrey }}>
 						Total :{' '}
@@ -29,7 +28,7 @@ const ReportScreen = () => {
 			</View>
 
 			<HomeGraph />
-		</Layout>
+		</AnimatedHeaderLayout>
 	)
 }
 

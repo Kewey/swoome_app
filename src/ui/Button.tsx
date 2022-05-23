@@ -28,9 +28,9 @@ const Button = ({
 		<Pressable {...props}>
 			<View
 				style={[
+					ButtonStyle.default,
 					ButtonStyle[variant],
 					ButtonStyle[size],
-					ButtonStyle.default,
 					props.disabled && { opacity: 0.5 },
 				]}
 			>
@@ -69,13 +69,13 @@ const ButtonStyle = StyleSheet.create({
 	},
 
 	neutral: {
-		backgroundColor: theme.colors.border,
-		color: DarkGrey,
+		backgroundColor: theme.colors.card,
+		color: theme.colors.text,
 	},
 
 	transparent: {
 		backgroundColor: 'transparent',
-		color: DarkerBlue,
+		color: theme.colors.primary,
 	},
 
 	default: {

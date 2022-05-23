@@ -3,13 +3,24 @@ import { Provider, useDispatch, useSelector } from 'react-redux'
 import { StatusBar } from 'expo-status-bar'
 import AuthNavigation from '@navigation/AuthNavigation'
 import GroupNavigation from '@navigation/GroupNavigation'
-import userReducer, { getTheme, getToken, setUser } from '@redux/user.reducer'
+import userReducer, {
+	getTheme,
+	getToken,
+	getCurrentUser,
+	setUser,
+} from '@redux/user.reducer'
 import { configureStore } from '@reduxjs/toolkit'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useFonts } from 'expo-font'
-import { View } from 'react-native'
-import Text from '@ui/Text'
-import { persistStore } from 'redux-persist'
+import {
+	FLUSH,
+	PAUSE,
+	PERSIST,
+	persistStore,
+	PURGE,
+	REGISTER,
+	REHYDRATE,
+} from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import persistReducer from 'redux-persist/es/persistReducer'
@@ -26,8 +37,15 @@ import {
 	Montserrat_400Regular,
 	Montserrat_700Bold,
 } from '@expo-google-fonts/montserrat'
-import { useTheme } from '@react-navigation/native'
+import {
+	DarkTheme,
+	NavigationContainer,
+	useTheme,
+} from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
+import { theme } from '@styles/theme'
+
+SplashScreen.preventAutoHideAsync().catch(() => {})
 
 const persistConfig = {
 	key: 'root',
@@ -47,7 +65,7 @@ const store = configureStore({
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({
 			serializableCheck: {
-				ignoredActions: ['persist/PERSIST'],
+				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
 			},
 		}),
 })
@@ -59,14 +77,11 @@ injectStore(store)
 export type RootState = ReturnType<typeof store.getState>
 
 export function App() {
-	const [isReady, setIsReady] = useState(false)
-	const isDarkTheme = useSelector(getTheme)
-	const { colors } = useTheme()
-	const [currentUser, setCurrentUser] = useState<User>(null)
 	const dispatch = useDispatch()
 	const token = useSelector(getToken)
-	// @ts-ignore
-	API.defaults.headers['Authorization'] = `Bearer ${token}`
+	const isDarkTheme = useSelector(getTheme)
+	const currentUser = useSelector(getCurrentUser)
+	const { colors } = useTheme()
 
 	const [fontLoaded] = useFonts({
 		FredokaOne_400Regular,
@@ -79,55 +94,50 @@ export function App() {
 		async function prepare() {
 			try {
 				// Keep the splash screen visible while we fetch resources
-				await SplashScreen.preventAutoHideAsync()
 				// Pre-load fonts, make any API calls you need to do here
 
+				if (!token) {
+					dispatch(setUser(null))
+					return
+				}
+
+				// @ts-ignore
+				API.defaults.headers['Authorization'] = `Bearer ${token}`
 				const user = await getUser()
+
 				if (user) {
-					setCurrentUser(user)
 					dispatch(setUser(user))
 				}
 			} catch (e) {
-				console.warn(e)
+				console.log(e)
 			} finally {
 				// Tell the application to render
-				setIsReady(true)
+				await SplashScreen.hideAsync()
 			}
 		}
 
 		prepare()
 	}, [])
 
-	const onLayoutRootView = useCallback(async () => {
-		if (isReady && fontLoaded) {
-			// This tells the splash screen to hide immediately! If we call this after
-			// `setAppIsReady`, then we may see a blank screen while the app is
-			// loading its initial state and rendering its first pixels. So instead,
-			// we hide the splash screen once we know the root view has already
-			// performed layout.
-			await SplashScreen.hideAsync()
-		}
-	}, [isReady])
-
 	const selectedGroup = useSelector(getCurrentGroup)
 
-	if (!isReady && !fontLoaded) {
+	if (!fontLoaded) {
 		return null
 	}
 
 	return (
-		<View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-			<SafeAreaProvider style={{ backgroundColor: colors.background }}>
-				<StatusBar style={isDarkTheme ? 'light' : 'dark'} />
-				{!token ? (
+		<SafeAreaProvider style={{ backgroundColor: colors.background }}>
+			<StatusBar style={isDarkTheme ? 'light' : 'dark'} />
+			<NavigationContainer theme={isDarkTheme ? DarkTheme : theme}>
+				{!currentUser ? (
 					<AuthNavigation />
 				) : !selectedGroup ? (
 					<GroupNavigation />
 				) : (
 					<MainNavigation />
 				)}
-			</SafeAreaProvider>
-		</View>
+			</NavigationContainer>
+		</SafeAreaProvider>
 	)
 }
 

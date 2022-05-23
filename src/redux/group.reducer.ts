@@ -18,7 +18,7 @@ const groupSlice = createSlice({
 			reducer: (state, action: PayloadAction<Group | null>) => {
 				state.group = action.payload
 			},
-			prepare: (group: Group | null) => ({ payload: group || null }),
+			prepare: (group?: Group) => ({ payload: group || null }),
 		},
 	},
 })

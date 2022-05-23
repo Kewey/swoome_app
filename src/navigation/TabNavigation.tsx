@@ -33,6 +33,7 @@ const TabNavigation = (): ReactElement => {
 			initialRouteName={TabScreens.Home}
 			screenOptions={{
 				headerShadowVisible: false,
+				headerTransparent: true,
 				tabBarShowLabel: false,
 				tabBarInactiveTintColor: colors.text,
 				tabBarActiveTintColor: colors.primary,
@@ -48,7 +49,7 @@ const TabNavigation = (): ReactElement => {
 					elevation: 0,
 					shadowOpacity: 0,
 				},
-				headerTitle: group?.name,
+				headerTitle: '',
 				headerRight: () => {
 					const navigation = useNavigation()
 					return (

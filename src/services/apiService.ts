@@ -27,23 +27,26 @@ export const API = axios.create({
 	},
 })
 
-API.interceptors.request.use(
-	async (config) => {
-		const token = await SecureStore.getItemAsync('token')
-		if (token && config.headers) {
-			config.headers['Authorization'] = `Bearer ${token}`
-		}
-		return config
-	},
-	(error) => {
-		return Promise.reject(error)
-	}
-)
+// API.interceptors.request.use(
+// 	async (config) => {
+// 		const token = await SecureStore.getItemAsync('token')
+// 		if (token && config.headers) {
+// 			config.headers['Authorization'] = `Bearer ${token}`
+// 		}
+// 		return config
+// 	},
+// 	(error) => {
+// 		return Promise.reject(error)
+// 	}
+// )
 
 API.interceptors.response.use(
 	(res) => res,
 	async ({ config, response }: any) => {
+		console.log('-------------------------')
+		// console.log(config)
 		console.log('** error request **', response.data)
+
 		if (response.data?.message === 'JWT Refresh Token Not Found') {
 			// @ts-ignore
 			API.defaults.headers['Authorization'] = null

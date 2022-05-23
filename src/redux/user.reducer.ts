@@ -3,7 +3,6 @@ import { User } from '@types/user'
 import { RootState } from '../../App'
 
 interface UserSlice {
-	isLoading: boolean
 	user: User | null
 	token: string | null
 	settings: {
@@ -12,7 +11,6 @@ interface UserSlice {
 }
 
 const initialState: UserSlice = {
-	isLoading: false,
 	user: null,
 	token: '',
 	settings: {
@@ -43,29 +41,14 @@ const userSlice = createSlice({
 			prepare: (isDarkTheme: boolean) => ({ payload: isDarkTheme }),
 		},
 	},
-	// extraReducers: {
-	// 	'signIn/fulfilled': (state, action) => {
-	// 		const { accessToken, user } = action.payload
-	// 		state.token = accessToken
-	// 		state.user = user
-	// 		state.isLoading = false
-	// 	},
-	// },
 })
 
 const getCurrentUser = (state: RootState) => state.user.user
 const getUserGroups = (state: RootState) => state.user.user?.groups
 const getToken = (state: RootState) => state.user.token
 const getTheme = (state: RootState) => state.user.settings?.isDarkTheme
-const isCurrentUserLoading = (state: RootState) => state.user.isLoading
 
 export const { setUser, setToken, setTheme } = userSlice.actions
-export {
-	getCurrentUser,
-	getToken,
-	isCurrentUserLoading,
-	getUserGroups,
-	getTheme,
-}
+export { getCurrentUser, getToken, getUserGroups, getTheme }
 
 export default userSlice.reducer

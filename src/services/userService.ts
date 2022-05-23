@@ -61,4 +61,9 @@ export async function getUserGroups(
 	return { groups, totalItems }
 }
 
+export async function getSelectedGroup(groupeId: string): Promise<Group> {
+	const { data } = await API.get(`/groups/${groupeId}`)
+	return data
+}
+
 export async function logout() {}

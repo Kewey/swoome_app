@@ -9,15 +9,11 @@ import {
 	useTheme,
 } from '@react-navigation/native'
 import ExpenseItem from './components/ExpenseItem'
-import { User } from '@types/user'
-import Button from '@ui/Button'
-import { MainScreens } from '@navigation/Routes'
 import { Expense } from '@types/Expense'
 import { deleteExpense, getGroupExpenses } from '@services/expenseService'
 import { useSelector } from 'react-redux'
 import { getCurrentGroup } from '@redux/group.reducer'
-import dayjs from 'dayjs'
-import { sideMargin, tabbarHeight } from '@constants/Layout'
+import { sideMargin } from '@constants/Layout'
 
 const Expenses = () => {
 	const { colors } = useTheme()

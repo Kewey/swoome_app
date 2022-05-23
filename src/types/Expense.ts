@@ -4,9 +4,10 @@ import { User } from './user'
 export interface Expense extends APIHydraType {
 	name: string
 	price: number
-	description: string
+	description?: string
 	madeBy: User
 	participants: User[]
+	expenseAt?: string
 }
 
 export interface ExpenseForm {
@@ -14,5 +15,6 @@ export interface ExpenseForm {
 	price: string
 	participants: string[]
 	description?: string
+	expenseAt?: string
 	madeBy?: string | null
 }

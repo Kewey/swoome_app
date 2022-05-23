@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
+import { Expense } from '@types/Expense'
 
 export enum AuthScreens {
 	Auth = 'AuthScreen',
@@ -52,7 +53,7 @@ export type TabStackParamList = {
 export type MainStackParamList = {
 	[MainScreens.Home]: undefined
 	[MainScreens.Profile]: { userId: string }
-	[MainScreens.AddExpense]: undefined
+	[MainScreens.AddExpense]: { expense: Expense }
 }
 
 export const AuthStack = createStackNavigator<AuthStackParamList>()
