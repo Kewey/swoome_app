@@ -1,8 +1,8 @@
-import React, { useCallback, useRef, useState } from 'react'
-import { getCurrentGroup } from '@redux/group.reducer'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { getCurrentGroup, setGroup } from '@redux/group.reducer'
 import FredokaText from '@ui/FredokaText'
-import { Animated, FlatList, Image, View } from 'react-native'
-import { useSelector } from 'react-redux'
+import { Animated, Image, View } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 import ExpenseItem from '@screens/expenses/components/ExpenseItem'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { deleteExpense, getGroupExpenses } from '@services/expenseService'
@@ -12,12 +12,26 @@ import Text from '@ui/Text'
 import Button from '@ui/Button'
 import { MainScreens } from '@navigation/Routes'
 import AnimatedHeaderLayout from '@ui/AnimatedHeaderLayout'
+import { getGroup } from '@services/groupService'
 
 const HomeScreen = () => {
 	const currentGroup = useSelector(getCurrentGroup)
 	const [expenses, setExpenses] = useState<Expense[]>([])
 	const [isLoading, setIsLoading] = useState(false)
 	const navigation = useNavigation()
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		async function updateGroup() {
+			if (!currentGroup?.id) {
+				return
+			}
+			const group = await getGroup(currentGroup.id)
+			dispatch(setGroup(group))
+		}
+
+		updateGroup()
+	}, [])
 
 	const updateExpenses = async () => {
 		setIsLoading(true)

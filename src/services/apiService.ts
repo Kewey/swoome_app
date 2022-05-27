@@ -7,8 +7,6 @@ import { setToken, setUser } from '@redux/user.reducer'
 import { HydraError } from '@types/Utils'
 import { Toast } from 'react-native-toast-message/lib/src/Toast'
 
-let store: EnhancedStore<RootState>
-
 export type APIHydraType = {
 	'@id': string
 	'@type': string
@@ -16,6 +14,7 @@ export type APIHydraType = {
 	createdAt: Date
 }
 
+let store: EnhancedStore<RootState>
 export const injectStore = (_store: EnhancedStore) => {
 	store = _store
 }

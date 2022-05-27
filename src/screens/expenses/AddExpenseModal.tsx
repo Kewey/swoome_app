@@ -64,7 +64,7 @@ const AddExpenseModal = ({ route }) => {
 			  }
 			: {
 					madeBy: currentUser?.['@id'],
-					participants: members.map((member) => member?.['@id']),
+					participants: members?.map((member) => member?.['@id']) || [],
 			  },
 	})
 
@@ -239,7 +239,7 @@ const AddExpenseModal = ({ route }) => {
 												flexDirection: 'row',
 											}}
 										>
-											{members.map((member) => (
+											{members?.map((member) => (
 												<Pressable
 													style={{ marginRight: 20 }}
 													key={member.id + 'made'}
@@ -296,7 +296,7 @@ const AddExpenseModal = ({ route }) => {
 												flexDirection: 'row',
 											}}
 										>
-											{members.map((member) => (
+											{members?.map((member) => (
 												<Pressable
 													style={{ marginRight: 20 }}
 													key={member.id}
