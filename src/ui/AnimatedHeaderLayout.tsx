@@ -1,29 +1,25 @@
-import { View, Text, Animated } from 'react-native'
-import React, { ReactElement, ReactNode, useRef } from 'react'
+import { Animated } from 'react-native'
+import React, { useRef, useState } from 'react'
 import { withAnchorPoint } from 'react-native-anchor-point'
-import Layout from '@ui/Layout'
 import { useTheme } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { sideMargin } from '@constants/Layout'
 import { FONTS } from '@types/Fonts'
-import FredokaText from './FredokaText'
 import { useSelector } from 'react-redux'
 import { getCurrentGroup } from '@redux/group.reducer'
 
 interface AnimatedHeaderLayoutProps {
-	children: ReactNode
 	title: string
+	scrollPositionValue: Animated.Value
 }
 
 const AnimatedHeaderLayout = ({
-	children,
 	title,
+	scrollPositionValue,
 }: AnimatedHeaderLayoutProps) => {
 	const currentGroup = useSelector(getCurrentGroup)
 	const { colors } = useTheme()
 	const { top } = useSafeAreaInsets()
-
-	const scrollPositionValue = useRef(new Animated.Value(0)).current
 
 	const animatedTitleSize = scrollPositionValue.interpolate({
 		inputRange: [0, 150],
@@ -61,38 +57,26 @@ const AnimatedHeaderLayout = ({
 		)
 	}
 
-	const transformTitle = () => {
+	const [textDimension, setTextDimension] = useState({ width: 0, height: 0 })
+
+	const transformTitle = (textDimension: { width: number; height: number }) => {
 		let transform = {
 			transform: [
 				{ scale: animatedTitleSize },
 				{ translateY: animatedTitleXPos },
 			],
 		}
+
 		return withAnchorPoint(
 			// @ts-ignore
 			transform,
-			{ x: 0.05, y: 0.5 },
-			{ height: 32, width: 320 }
+			{ x: 0.06, y: 0.5 },
+			textDimension
 		)
 	}
 
 	return (
-		<View style={{ flex: 1 }}>
-			<Layout
-				onScroll={Animated.event(
-					[
-						{
-							nativeEvent: {
-								contentOffset: { y: scrollPositionValue },
-							},
-						},
-					],
-					{ useNativeDriver: true }
-				)}
-			>
-				{children}
-			</Layout>
-
+		<>
 			<Animated.View
 				style={[
 					{
@@ -111,9 +95,10 @@ const AnimatedHeaderLayout = ({
 			></Animated.View>
 
 			<Animated.Text
-				// onLayout={(event) => {
-				// 	const { width, height } = event.nativeEvent.layout
-				// }}
+				onLayout={(event) => {
+					const { width, height } = event.nativeEvent.layout
+					setTextDimension({ width, height })
+				}}
 				style={[
 					{
 						position: 'absolute',
@@ -122,8 +107,9 @@ const AnimatedHeaderLayout = ({
 						fontSize: 32,
 						fontFamily: FONTS.FREDOKAONE,
 						color: colors.text,
+						includeFontPadding: false,
 					},
-					transformTitle(),
+					transformTitle(textDimension),
 				]}
 			>
 				{title}
@@ -144,7 +130,7 @@ const AnimatedHeaderLayout = ({
 			>
 				{currentGroup?.name}
 			</Animated.Text>
-		</View>
+		</>
 	)
 }
 

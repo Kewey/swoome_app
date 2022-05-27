@@ -77,9 +77,11 @@ const MainNavigation = (): ReactElement => {
 			>
 				<MainStack.Screen
 					name={MainScreens.AddExpense}
-					options={{
-						title: 'Ajouter une dépense',
-					}}
+					options={({ route }) => ({
+						title: !!route.params?.expense
+							? 'Modifier une dépense'
+							: 'Ajouter une dépense',
+					})}
 					component={AddExpenseModal}
 				/>
 			</MainStack.Group>

@@ -24,12 +24,11 @@ import { getSelectedGroup } from '@services/userService'
 import { ScrollView } from 'react-native-gesture-handler'
 
 const AddExpenseModal = ({ route }) => {
+	const navigation = useNavigation()
 	const expense: Expense = route?.params?.expense
-
 	const currentUser = useSelector(getCurrentUser)
 	const currentGroup = useSelector(getCurrentGroup)
 	const members: User[] = currentGroup?.members || []
-	const navigation = useNavigation()
 	const dispatch = useDispatch()
 	const [isLoading, setIsLoading] = useState(false)
 

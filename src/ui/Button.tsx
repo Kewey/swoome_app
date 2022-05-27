@@ -37,7 +37,7 @@ const Button = ({
 				<FredokaText
 					style={[
 						LabelStyle[size],
-						ButtonStyle[variant],
+						TextStyle[variant],
 						{
 							textAlign: 'center',
 						},
@@ -55,27 +55,22 @@ export default Button
 const ButtonStyle = StyleSheet.create({
 	primary: {
 		backgroundColor: Blue,
-		color: White,
 	},
 
 	secondary: {
 		backgroundColor: Cyan,
-		color: White,
 	},
 
 	danger: {
 		backgroundColor: 'red',
-		color: White,
 	},
 
 	neutral: {
 		backgroundColor: theme.colors.card,
-		color: theme.colors.text,
 	},
 
 	transparent: {
 		backgroundColor: 'transparent',
-		color: theme.colors.primary,
 	},
 
 	default: {
@@ -95,6 +90,28 @@ const ButtonStyle = StyleSheet.create({
 	small: {
 		paddingHorizontal: 16,
 		paddingVertical: 8,
+	},
+})
+
+const TextStyle = StyleSheet.create({
+	primary: {
+		color: White,
+	},
+
+	secondary: {
+		color: White,
+	},
+
+	danger: {
+		color: White,
+	},
+
+	neutral: {
+		color: theme.colors.text,
+	},
+
+	transparent: {
+		color: theme.colors.primary,
 	},
 })
 

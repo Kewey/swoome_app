@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { getCurrentGroup } from '@redux/group.reducer'
 import FredokaText from '@ui/FredokaText'
-import { FlatList, Image, View } from 'react-native'
+import { Animated, FlatList, Image, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import ExpenseItem from '@screens/expenses/components/ExpenseItem'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
@@ -26,6 +26,8 @@ const HomeScreen = () => {
 		setIsLoading(false)
 	}
 
+	const scrollPositionValue = useRef(new Animated.Value(0)).current
+
 	useFocusEffect(
 		useCallback(() => {
 			updateExpenses()
@@ -45,56 +47,76 @@ const HomeScreen = () => {
 	}
 
 	return (
-		<AnimatedHeaderLayout title='Dernières activités'>
-			{!isLoading && expenses.length === 0 ? (
-				<View
-					style={{
-						flex: 1,
-						paddingHorizontal: sideMargin,
-						justifyContent: 'center',
-					}}
-				>
+		<>
+			<Animated.FlatList
+				data={expenses}
+				showsVerticalScrollIndicator={false}
+				contentContainerStyle={{
+					paddingBottom: 90,
+					paddingTop: 150,
+				}}
+				onScroll={Animated.event(
+					[
+						{
+							nativeEvent: {
+								contentOffset: { y: scrollPositionValue },
+							},
+						},
+					],
+					{ useNativeDriver: true }
+				)}
+				ListEmptyComponent={
 					<View
 						style={{
-							alignItems: 'center',
-							marginBottom: 20,
+							flex: 1,
+							paddingHorizontal: sideMargin,
+							justifyContent: 'center',
 						}}
 					>
-						<Image
-							source={require('@assets/empty/empty-expenses.png')}
+						<View
 							style={{
-								width: 320,
-								height: 118,
+								alignItems: 'center',
+								marginBottom: 20,
 							}}
-							resizeMode='contain'
-						/>
+						>
+							<Image
+								source={require('@assets/empty/empty-expenses.png')}
+								style={{
+									width: 320,
+									height: 118,
+								}}
+								resizeMode='contain'
+							/>
+						</View>
+						<FredokaText
+							style={{ textAlign: 'center', marginBottom: 10, fontSize: 18 }}
+						>
+							Oula c'est vide ici !
+						</FredokaText>
+						<Text
+							style={{ textAlign: 'center', marginBottom: 10, opacity: 0.6 }}
+						>
+							C'est le moment d'ajouter ta toute premiere dépense !
+						</Text>
+						<Button onPress={() => navigation.navigate(MainScreens.AddExpense)}>
+							C'est parti !
+						</Button>
 					</View>
-					<FredokaText
-						style={{ textAlign: 'center', marginBottom: 10, fontSize: 18 }}
-					>
-						Oula c'est vide ici !
-					</FredokaText>
-					<Text style={{ textAlign: 'center', marginBottom: 10, opacity: 0.6 }}>
-						C'est le moment d'ajouter ta toute premiere dépense !
-					</Text>
-					<Button onPress={() => navigation.navigate(MainScreens.AddExpense)}>
-						C'est parti !
-					</Button>
-				</View>
-			) : (
-				<FlatList
-					data={expenses}
-					keyExtractor={(expense) => expense.id}
-					renderItem={({ item: expense }) => (
-						<ExpenseItem
-							expense={expense}
-							updateExpense={updateExpense}
-							removeExpense={removeExpense}
-						/>
-					)}
-				/>
-			)}
-		</AnimatedHeaderLayout>
+				}
+				keyExtractor={(expense) => expense.id}
+				renderItem={({ item: expense }) => (
+					<ExpenseItem
+						expense={expense}
+						updateExpense={updateExpense}
+						removeExpense={removeExpense}
+					/>
+				)}
+			/>
+			<AnimatedHeaderLayout
+				title='Dernières activités'
+				scrollPositionValue={scrollPositionValue}
+			/>
+		</>
 	)
 }
 
