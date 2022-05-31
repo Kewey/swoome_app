@@ -15,17 +15,23 @@ const groupSlice = createSlice({
 	initialState: initialState,
 	reducers: {
 		setGroup: {
-			reducer: (state, action: PayloadAction<Group | null>) => {
+			reducer: (state, action: PayloadAction<Group>) => {
 				state.group = action.payload
 			},
-			prepare: (group?: Group) => ({ payload: group || null }),
+			prepare: (group: Group) => ({ payload: group }),
+		},
+		removeGroup: {
+			reducer: (state) => {
+				state.group = null
+			},
+			prepare: () => ({ payload: null }),
 		},
 	},
 })
 
 const getCurrentGroup = (state: RootState) => state.group.group
 
-export const { setGroup } = groupSlice.actions
+export const { setGroup, removeGroup } = groupSlice.actions
 export { getCurrentGroup }
 
 export default groupSlice.reducer

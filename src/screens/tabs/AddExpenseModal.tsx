@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { getCurrentGroup, setGroup } from '@redux/group.reducer'
 import { getCurrentUser } from '@redux/user.reducer'
 import FredokaText from '@ui/FredokaText'
-import { Pressable, View } from 'react-native'
+import { Pressable, View, TextInput as NativeTextInput } from 'react-native'
 import { layout } from '@styles/layout'
 import { useDispatch, useSelector } from 'react-redux'
 import Text from '@ui/Text'
@@ -22,6 +22,7 @@ import { sideMargin } from '@constants/Layout'
 import { Asana } from 'iconoir-react-native'
 import { getSelectedGroup } from '@services/userService'
 import { ScrollView } from 'react-native-gesture-handler'
+import { FONTS } from '@types/Fonts'
 
 const AddExpenseModal = ({ route }) => {
 	const navigation = useNavigation()
@@ -55,6 +56,7 @@ const AddExpenseModal = ({ route }) => {
 			? {
 					name: expense.name,
 					price: expense.price,
+					category: expense.category,
 					description: expense.description,
 					expenseAt: expense.expenseAt,
 					madeBy: expense.madeBy['@id'],
@@ -149,24 +151,31 @@ const AddExpenseModal = ({ route }) => {
 			>
 				<View>
 					<ScrollView>
-						<View style={{ marginBottom: 15, paddingHorizontal: sideMargin }}>
-							<FredokaText style={{ marginBottom: 5 }}>
-								Montant de la dépense
-							</FredokaText>
+						<View
+							style={{
+								marginBottom: 15,
+								paddingHorizontal: sideMargin,
+								paddingVertical: 20,
+							}}
+						>
 							<Controller
 								control={control}
 								rules={{
 									required: true,
 								}}
 								render={({ field: { onChange, onBlur, value } }) => (
-									<TextInput
+									<NativeTextInput
 										style={{
 											marginBottom: 5,
+											fontSize: 45,
+											fontFamily: FONTS.FREDOKAONE,
 										}}
+										placeholder='0,00'
 										onBlur={onBlur}
 										onChangeText={onChange}
-										value={value?.toString()}
+										value={value}
 										keyboardType={'decimal-pad'}
+										autoFocus
 									/>
 								)}
 								name='price'
@@ -343,7 +352,11 @@ const AddExpenseModal = ({ route }) => {
 				}}
 			>
 				<Button onPress={handleSubmit(onSubmit)} disabled={isLoading}>
-					{isLoading ? <Asana color={colors.text} /> : 'Ajouter une dépense'}
+					{isLoading ? (
+						<Asana color={colors.text} />
+					) : (
+						`${expense ? 'Modifier' : 'Ajouter'} la dépense`
+					)}
 				</Button>
 			</View>
 		</>

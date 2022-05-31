@@ -2,13 +2,15 @@ import { White } from '@constants/Colors'
 import { sideMargin } from '@constants/Layout'
 import { useNavigation, useTheme } from '@react-navigation/native'
 import { CardStyleInterpolators } from '@react-navigation/stack'
-import AddExpenseModal from '@screens/expenses/AddExpenseModal'
+import AddExpenseModal from '@screens/tabs/AddExpenseModal'
+import AccountScreen from '@screens/profile/AccountScreen'
+import PreferencesScreen from '@screens/profile/PreferencesScreen'
 import ProfileScreen from '@screens/profile/ProfileScreen'
 import CircleButton from '@ui/CircleButton'
 import { NavArrowLeft } from 'iconoir-react-native'
 import React, { ReactElement } from 'react'
 import { View } from 'react-native'
-import { MainStack, MainScreens } from './Routes'
+import { MainStack, MainScreens, ProfileStack, ProfileScreens } from './Routes'
 import TabNavigation from './TabNavigation'
 
 const MainNavigation = (): ReactElement => {
@@ -44,7 +46,8 @@ const MainNavigation = (): ReactElement => {
 				/>
 				<MainStack.Screen
 					name={MainScreens.Profile}
-					component={ProfileScreen}
+					component={ProfileStackScreen}
+					options={{ headerShown: false }}
 				/>
 			</MainStack.Group>
 			<MainStack.Group
@@ -90,3 +93,31 @@ const MainNavigation = (): ReactElement => {
 }
 
 export default MainNavigation
+
+const ProfileStackScreen = (): ReactElement => {
+	return (
+		<ProfileStack.Navigator initialRouteName={ProfileScreens.Profile}>
+			<ProfileStack.Screen
+				name={ProfileScreens.Profile}
+				component={ProfileScreen}
+				options={{
+					title: 'Profil',
+				}}
+			/>
+			<ProfileStack.Screen
+				name={ProfileScreens.Account}
+				component={AccountScreen}
+				options={{
+					title: 'Profil',
+				}}
+			/>
+			<ProfileStack.Screen
+				name={ProfileScreens.Preferences}
+				component={PreferencesScreen}
+				options={{
+					title: 'Profil',
+				}}
+			/>
+		</ProfileStack.Navigator>
+	)
+}

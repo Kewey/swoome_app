@@ -1,18 +1,13 @@
 import { Expense } from '@types/Expense'
 import { API } from './apiService'
 
-export async function getGroupExpenses(
-	groupId: string,
-	itemsPerPage?: number
-): Promise<{
+export async function getGroupExpenses(groupId: string): Promise<{
 	expenses: Expense[]
 	totalItems: number
 }> {
 	const {
 		data: { 'hydra:member': expenses, 'hydra:totalItems': totalItems },
-	} = await API.get(`/groups/${groupId}/expenses`, {
-		params: { itemsPerPage },
-	})
+	} = await API.get(`/groups/${groupId}/expenses`)
 	return { expenses, totalItems }
 }
 
@@ -22,7 +17,7 @@ export async function addExpense(
 	price: string,
 	participants: string[],
 	description?: string,
-	expenseAt?: Date,
+	expenseAt?: string,
 	madeById?: string | null
 ): Promise<Expense> {
 	const { data: expense } = await API.post(`/expenses`, {
@@ -47,7 +42,7 @@ export async function putExpense(
 	price: string,
 	participants: string[],
 	description?: string,
-	expenseAt?: Date,
+	expenseAt?: string,
 	madeById?: string | null
 ) {
 	await API.put(`/expenses/${expenseId}`, {

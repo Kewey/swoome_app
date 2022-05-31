@@ -139,7 +139,7 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 												style={{ marginRight: 10 }}
 												backgroundColor={colors.background}
 											>
-												<Text>🚧{groupType.emoji}</Text>
+												<Text>{groupType.emoji}</Text>
 											</CircleButton>
 											<FredokaText
 												style={{

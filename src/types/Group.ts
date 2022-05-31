@@ -1,5 +1,8 @@
 import { SelectButton } from '@screens/group/CreateGroupScreen'
 import { APIHydraType } from '@services/apiService'
+import { Balance } from './Balance'
+import { Expense } from './Expense'
+import { Refund } from './Refund'
 import { User } from './user'
 
 export interface Group extends APIHydraType {
@@ -7,6 +10,9 @@ export interface Group extends APIHydraType {
 	type: GroupType
 	code: string
 	members: User[]
+	expenses: Expense[]
+	refunds: Refund[]
+	balances: Balance[]
 }
 
 export interface GroupType extends APIHydraType {

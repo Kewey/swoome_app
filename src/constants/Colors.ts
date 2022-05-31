@@ -8,7 +8,8 @@ const White = '#fff'
 const Light = '#f8f8f8'
 const LightGrey = '#f0f0f0'
 const Grey = '#ccc'
-const DarkGrey = '#b5b5b5'
+const MediumGrey = '#b5b5b5'
+const DarkGrey = '#222'
 
 export {
 	Blue,
@@ -21,6 +22,7 @@ export {
 	LightGrey,
 	Light,
 	Grey,
+	MediumGrey,
 	DarkGrey,
 }
 

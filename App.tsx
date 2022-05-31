@@ -42,7 +42,8 @@ import {
 	useTheme,
 } from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
-import { theme } from '@styles/theme'
+import { darkTheme, theme } from '@styles/theme'
+import { useColorScheme } from 'react-native'
 
 SplashScreen.preventAutoHideAsync().catch(() => {})
 
@@ -127,7 +128,7 @@ export function App() {
 	return (
 		<SafeAreaProvider style={{ backgroundColor: colors.background }}>
 			<StatusBar style={isDarkTheme ? 'light' : 'dark'} />
-			<NavigationContainer theme={isDarkTheme ? DarkTheme : theme}>
+			<NavigationContainer theme={isDarkTheme ? darkTheme : theme}>
 				{!currentUser ? (
 					<AuthNavigation />
 				) : !selectedGroup ? (

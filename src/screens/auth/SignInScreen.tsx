@@ -21,6 +21,7 @@ import {
 import { useDispatch } from 'react-redux'
 import { sideMargin } from '@constants/Layout'
 import { Toast } from 'react-native-toast-message/lib/src/Toast'
+import { setGroup } from '@redux/group.reducer'
 
 type SignInScreenProps = {
 	navigation: AuthNavigationProp<AuthScreens.SignIn>
@@ -44,6 +45,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 			await SecureStore.setItemAsync('refresh_token', refresh_token)
 			const user = await getUser()
 			dispatch(setUser(user))
+			dispatch(setGroup(null))
 			dispatch(setToken(token))
 		} catch (error: any) {
 			if (error?.code === 401) {

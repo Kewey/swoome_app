@@ -1,21 +1,39 @@
 import { Animated, View } from 'react-native'
-import React, { useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 import Layout from '@ui/Layout'
-import { White } from '@constants/Colors'
+import { Blue, White } from '@constants/Colors'
 import { Text as SVGText } from 'react-native-svg'
 import AnimatedHeaderLayout from '@ui/AnimatedHeaderLayout'
 import { BarChart } from 'react-native-svg-charts'
-import { useTheme } from '@react-navigation/native'
+import { useFocusEffect, useTheme } from '@react-navigation/native'
+import { getCurrentBalances, getRefunds } from '@services/groupService'
+import { useDispatch, useSelector } from 'react-redux'
+import { getCurrentGroup, setGroup } from '@redux/group.reducer'
 
 const RefundsScreen = () => {
-	const scrollPositionValue = useRef(new Animated.Value(0)).current
 	const { colors } = useTheme()
+	const currentGroup = useSelector(getCurrentGroup)
+	const dispatch = useDispatch()
 
-	const balance = [50, -40, -90, 9, 100]
+	const scrollPositionValue = useRef(new Animated.Value(0)).current
+
+	useFocusEffect(
+		useCallback(() => {
+			updateRefunds()
+		}, [])
+	)
+
+	const updateRefunds = async () => {
+		const { refunds } = await getRefunds(currentGroup?.id || '')
+		const { balances } = await getCurrentBalances(currentGroup?.id || '')
+		dispatch(setGroup({ ...currentGroup, refunds, balances }))
+	}
+
+	const balanceData = currentGroup.balances.map((balance) => balance.value)
 	const maxValue =
-		Math.max(...balance) > -Math.min(...balance)
-			? Math.max(...balance)
-			: -Math.min(...balance)
+		Math.max(...balanceData) > -Math.min(...balanceData)
+			? Math.max(...balanceData)
+			: -Math.min(...balanceData)
 
 	const Labels = ({ x, y, bandwidth, data }: any) =>
 		data.map((value: number, index: number) => (
@@ -29,7 +47,7 @@ const RefundsScreen = () => {
 					}
 					y={y(index) + bandwidth / 2}
 					fontSize={14}
-					fill={White}
+					fill={Blue}
 					alignmentBaseline={'middle'}
 				>
 					{value} €
@@ -53,9 +71,9 @@ const RefundsScreen = () => {
 				)}
 			>
 				<BarChart
-					data={balance}
+					data={balanceData}
 					horizontal
-					style={{ height: 60 * balance.length }}
+					style={{ height: 60 * balanceData.length }}
 					spacingInner={0.2}
 					svg={{ fill: colors.primary }}
 					contentInset={{ left: 50, right: 50 }}

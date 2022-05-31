@@ -1,4 +1,4 @@
-import { Animated } from 'react-native'
+import { Animated, View } from 'react-native'
 import React, { useRef, useState } from 'react'
 import { withAnchorPoint } from 'react-native-anchor-point'
 import { useTheme } from '@react-navigation/native'
@@ -11,36 +11,38 @@ import { getCurrentGroup } from '@redux/group.reducer'
 interface AnimatedHeaderLayoutProps {
 	title: string
 	scrollPositionValue: Animated.Value
+	offset?: number
 }
 
 const AnimatedHeaderLayout = ({
 	title,
 	scrollPositionValue,
+	offset = 0,
 }: AnimatedHeaderLayoutProps) => {
 	const currentGroup = useSelector(getCurrentGroup)
 	const { colors } = useTheme()
 	const { top } = useSafeAreaInsets()
 
 	const animatedTitleSize = scrollPositionValue.interpolate({
-		inputRange: [0, 150],
+		inputRange: [offset + 0, offset + 60],
 		outputRange: [1, 0.6],
 		extrapolate: 'clamp',
 	})
 
-	const animatedTitleXPos = scrollPositionValue.interpolate({
-		inputRange: [0, 150],
-		outputRange: [0, -102],
+	const animatedTitleYPos = scrollPositionValue.interpolate({
+		inputRange: [0, offset + 60],
+		outputRange: [0, -offset - 60],
 		extrapolate: 'clamp',
 	})
 
 	const animatedHeaderHeight = scrollPositionValue.interpolate({
-		inputRange: [0, 150],
+		inputRange: [offset + 0, offset + 90],
 		outputRange: [1, 0.56],
 		extrapolate: 'clamp',
 	})
 
 	const animatedGroupOpacity = scrollPositionValue.interpolate({
-		inputRange: [0, 80],
+		inputRange: [offset + 0, offset + 50],
 		outputRange: [1, 0],
 		extrapolate: 'clamp',
 	})
@@ -61,16 +63,13 @@ const AnimatedHeaderLayout = ({
 
 	const transformTitle = (textDimension: { width: number; height: number }) => {
 		let transform = {
-			transform: [
-				{ scale: animatedTitleSize },
-				{ translateY: animatedTitleXPos },
-			],
+			transform: [{ scale: animatedTitleSize }],
 		}
 
 		return withAnchorPoint(
 			// @ts-ignore
 			transform,
-			{ x: 0.06, y: 0.5 },
+			{ x: 0, y: 0.5 },
 			textDimension
 		)
 	}
@@ -84,36 +83,44 @@ const AnimatedHeaderLayout = ({
 						top: 0,
 						left: 0,
 						right: 0,
-						height: 150,
+						height: offset ? 90 : 150,
 						flexDirection: 'row',
 						alignItems: 'flex-end',
 						paddingHorizontal: sideMargin,
 						backgroundColor: colors.background,
 					},
-					transformHeight(),
+					offset ? null : transformHeight(),
 				]}
 			></Animated.View>
 
-			<Animated.Text
-				onLayout={(event) => {
-					const { width, height } = event.nativeEvent.layout
-					setTextDimension({ width, height })
-				}}
+			<Animated.View
 				style={[
 					{
 						position: 'absolute',
+						top: top + offset + 70,
 						paddingHorizontal: sideMargin,
-						top: top + 70,
-						fontSize: 32,
-						fontFamily: FONTS.FREDOKAONE,
-						color: colors.text,
-						includeFontPadding: false,
+						transform: [{ translateY: animatedTitleYPos }],
 					},
-					transformTitle(textDimension),
 				]}
 			>
-				{title}
-			</Animated.Text>
+				<Animated.Text
+					onLayout={(event) => {
+						const { width, height } = event.nativeEvent.layout
+						setTextDimension({ width, height })
+					}}
+					style={[
+						{
+							fontSize: 32,
+							fontFamily: FONTS.FREDOKAONE,
+							color: colors.text,
+							includeFontPadding: false,
+						},
+						transformTitle(textDimension),
+					]}
+				>
+					{title}
+				</Animated.Text>
+			</Animated.View>
 
 			<Animated.Text
 				style={[

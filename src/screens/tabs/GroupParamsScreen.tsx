@@ -20,12 +20,16 @@ import * as Clipboard from 'expo-clipboard'
 import { Toast } from 'react-native-toast-message/lib/src/Toast'
 import AnimatedHeaderLayout from '@ui/AnimatedHeaderLayout'
 import Layout from '@ui/Layout'
+import Input from '@ui/Input'
+import { useForm } from 'react-hook-form'
 
 const GroupParamsScreen = () => {
 	const group = useSelector(getCurrentGroup)
 	const { colors } = useTheme()
 
 	const scrollPositionValue = useRef(new Animated.Value(0)).current
+
+	useForm({ defaultValues: { name: group?.name } })
 
 	return (
 		<>
@@ -41,7 +45,7 @@ const GroupParamsScreen = () => {
 					{ useNativeDriver: true }
 				)}
 			>
-				<View style={{ paddingTop: 25, paddingHorizontal: 20 }}>
+				<View style={{ paddingHorizontal: 20 }}>
 					<View
 						style={{
 							backgroundColor: colors.card,
@@ -89,6 +93,10 @@ const GroupParamsScreen = () => {
 						</View>
 					</View>
 
+					<Input label='Nom du groupe' />
+					<Input label='Nom du groupe' />
+					<Input label='Nom du groupe' />
+					<Input label='Nom du groupe' />
 					<View style={{ marginBottom: 10 }}>
 						<FredokaText style={{ fontSize: 20 }}>Informations</FredokaText>
 					</View>

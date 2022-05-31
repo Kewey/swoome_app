@@ -1,6 +1,7 @@
 import { API } from '@services/apiService'
-import { Expense } from '@types/Expense'
+import { Balance } from '@types/Balance'
 import { Group, GroupType } from '@types/Group'
+import { Refund } from '@types/Refund'
 
 export async function createGroup(
 	name: string,
@@ -28,12 +29,22 @@ export async function getGroupType(): Promise<{
 	return { groupsType, totalItems }
 }
 
-export async function getRefunds(groupId: string): Promise<{
-	groupsType: any[]
+export async function getCurrentBalances(groupId: string): Promise<{
+	balances: Balance[]
 	totalItems: number
 }> {
 	const {
-		data: { 'hydra:member': groupsType, 'hydra:totalItems': totalItems },
+		data: { 'hydra:member': balances, 'hydra:totalItems': totalItems },
+	} = await API.get(`/groups/${groupId}/balances`)
+	return { balances, totalItems }
+}
+
+export async function getRefunds(groupId: string): Promise<{
+	refunds: Refund[]
+	totalItems: number
+}> {
+	const {
+		data: { 'hydra:member': refunds, 'hydra:totalItems': totalItems },
 	} = await API.get(`/groups/${groupId}/refunds`)
-	return { groupsType, totalItems }
+	return { refunds, totalItems }
 }

@@ -12,6 +12,7 @@ import { View } from 'react-native'
 import { AuthStack, AuthScreens } from './Routes'
 
 const AuthNavigation = (): ReactElement => {
+	const { colors } = useTheme()
 	return (
 		<AuthStack.Navigator
 			initialRouteName={AuthScreens.Auth}
@@ -19,10 +20,9 @@ const AuthNavigation = (): ReactElement => {
 				headerTitle: '',
 				headerShadowVisible: false,
 				headerStyle: {
-					backgroundColor: White,
+					backgroundColor: colors.background,
 				},
 				headerLeft: () => {
-					const { colors } = useTheme()
 					return (
 						<View style={{ marginLeft: sideMargin }}>
 							<CircleButton

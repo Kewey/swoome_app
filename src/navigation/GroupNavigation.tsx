@@ -11,6 +11,8 @@ import { View } from 'react-native'
 import { GroupScreens, GroupStack } from './Routes'
 
 const GroupNavigation = (): ReactElement => {
+	const { colors } = useTheme()
+
 	return (
 		<GroupStack.Navigator
 			initialRouteName={GroupScreens.Index}
@@ -18,10 +20,9 @@ const GroupNavigation = (): ReactElement => {
 				headerTitle: '',
 				headerShadowVisible: false,
 				headerStyle: {
-					backgroundColor: White,
+					backgroundColor: colors.background,
 				},
 				headerLeft: () => {
-					const { colors } = useTheme()
 					return (
 						<View style={{ marginLeft: 30 }}>
 							<CircleButton

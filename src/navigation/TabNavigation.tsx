@@ -1,7 +1,8 @@
 import { Blue, White } from '@constants/Colors'
 import { sideMargin } from '@constants/Layout'
+import { BottomTabView } from '@react-navigation/bottom-tabs'
 import { useNavigation, useTheme } from '@react-navigation/native'
-import { getCurrentGroup, setGroup } from '@redux/group.reducer'
+import { setGroup } from '@redux/group.reducer'
 import Expenses from '@screens/expenses'
 import GroupParamsScreen from '@screens/tabs/GroupParamsScreen'
 import HomeScreen from '@screens/tabs/HomeScreen'
@@ -15,39 +16,78 @@ import {
 	Plus,
 	Reports,
 	Settings,
-	User,
 	ViewGrid,
 } from 'iconoir-react-native'
 import React, { ReactElement } from 'react'
 import { Image, View } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import Svg, { Defs, Stop, LinearGradient, Rect } from 'react-native-svg'
+import { useDispatch } from 'react-redux'
 import { TabStack, TabScreens, MainScreens } from './Routes'
 
 const TabNavigation = (): ReactElement => {
 	const { colors } = useTheme()
-	const group = useSelector(getCurrentGroup)
 	const dispatch = useDispatch()
+
+	const { bottom } = useSafeAreaInsets()
 
 	return (
 		<TabStack.Navigator
 			initialRouteName={TabScreens.Home}
+			tabBar={(props) => (
+				<View
+					style={{
+						position: 'absolute',
+						bottom: 0,
+						left: 0,
+						right: 0,
+						paddingHorizontal: sideMargin,
+						paddingBottom: bottom + 20,
+					}}
+				>
+					<Svg
+						style={{
+							position: 'absolute',
+							bottom: -15,
+							left: 0,
+							right: 0,
+						}}
+					>
+						<Defs>
+							<LinearGradient id='grad' x1='0%' y1='0%' x2='0%' y2='100%'>
+								<Stop
+									offset='0'
+									stopColor={colors.background}
+									stopOpacity='0'
+								/>
+								<Stop
+									offset='1'
+									stopColor={colors.background}
+									stopOpacity='1'
+								/>
+							</LinearGradient>
+						</Defs>
+						<Rect x='0' y='0' width='100%' height='100%' fill='url(#grad)' />
+					</Svg>
+					{/* @ts-ignore */}
+					<BottomTabView {...props} />
+				</View>
+			)}
 			screenOptions={{
 				headerShadowVisible: false,
 				headerTransparent: true,
 				tabBarShowLabel: false,
 				tabBarInactiveTintColor: colors.text,
 				tabBarActiveTintColor: colors.primary,
+				tabBarIconStyle: {},
 				tabBarStyle: {
 					backgroundColor: colors.card,
-					height: 60,
-					position: 'absolute',
-					bottom: 10,
-					left: sideMargin,
-					right: sideMargin,
 					borderRadius: borderRadius * 2,
 					borderTopWidth: 0,
 					elevation: 0,
+					height: 60,
 					shadowOpacity: 0,
+					zIndex: 500,
 				},
 				headerTitle: '',
 				headerRight: () => {
@@ -87,8 +127,8 @@ const TabNavigation = (): ReactElement => {
 				name={TabScreens.Home}
 				component={HomeScreen}
 				options={{
-					tabBarIcon: ({ color }) => {
-						return <HomeSimple height={20} width={20} color={color} />
+					tabBarIcon: ({ color, size }) => {
+						return <HomeSimple height={size} width={size} color={color} />
 					},
 				}}
 			/>
@@ -97,8 +137,8 @@ const TabNavigation = (): ReactElement => {
 				name={TabScreens.Report}
 				component={ReportScreen}
 				options={{
-					tabBarIcon: ({ color }) => (
-						<Reports height={20} width={20} color={color} />
+					tabBarIcon: ({ color, size }) => (
+						<Reports height={size} width={size} color={color} />
 					),
 				}}
 			/>
@@ -113,7 +153,7 @@ const TabNavigation = (): ReactElement => {
 					},
 				})}
 				options={{
-					tabBarIcon: ({ color }) => (
+					tabBarIcon: ({ color, size }) => (
 						<View
 							style={{
 								height: 40,
@@ -124,7 +164,7 @@ const TabNavigation = (): ReactElement => {
 								alignItems: 'center',
 							}}
 						>
-							<Plus height={25} width={25} color={White} />
+							<Plus height={size * 1.2} width={size * 1.2} color={White} />
 						</View>
 					),
 				}}
@@ -134,10 +174,10 @@ const TabNavigation = (): ReactElement => {
 				name={TabScreens.Refunds}
 				component={RefundsScreen}
 				options={{
-					tabBarIcon: ({ color }) => (
+					tabBarIcon: ({ color, size }) => (
 						<DataTransferBoth
-							height={20}
-							width={20}
+							height={size}
+							width={size}
 							color={color}
 							rotation={90}
 						/>
@@ -150,8 +190,8 @@ const TabNavigation = (): ReactElement => {
 				component={GroupParamsScreen}
 				options={{
 					tabBarAccessibilityLabel: 'Profile',
-					tabBarIcon: ({ color }) => (
-						<Settings height={20} width={20} color={color} />
+					tabBarIcon: ({ color, size }) => (
+						<Settings height={size} width={size} color={color} />
 					),
 				}}
 			/>

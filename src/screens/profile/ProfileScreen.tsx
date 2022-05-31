@@ -2,6 +2,7 @@ import { TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
+	disconectUser,
 	getCurrentUser,
 	getTheme,
 	setTheme,
@@ -10,16 +11,23 @@ import {
 } from '@redux/user.reducer'
 import CardWithIcon from '@ui/CardWithIcon'
 import FredokaText from '@ui/FredokaText'
-import { setGroup } from '@redux/group.reducer'
+import { removeGroup, setGroup } from '@redux/group.reducer'
 import Layout from '@ui/Layout'
+import { useNavigation } from '@react-navigation/native'
+import { ProfileScreens } from '@navigation/Routes'
 
 const ProfileScreen = () => {
 	const user = useSelector(getCurrentUser)
 	const isDarkTheme = useSelector(getTheme)
 	const dispatch = useDispatch()
+	const navigation = useNavigation()
+
 	return (
 		<Layout>
-			<TouchableOpacity style={{ marginBottom: 10, marginHorizontal: 20 }}>
+			<TouchableOpacity
+				style={{ marginBottom: 10, marginHorizontal: 20 }}
+				onPress={() => navigation.navigate(ProfileScreens.Account)}
+			>
 				<CardWithIcon
 					icon='🙄'
 					sublabel='Surnom'
@@ -53,9 +61,8 @@ const ProfileScreen = () => {
 			<TouchableOpacity
 				style={{ marginTop: 20, marginHorizontal: 20 }}
 				onPress={() => {
-					dispatch(setUser(null))
-					dispatch(setGroup(null))
-					dispatch(setToken(''))
+					dispatch(disconectUser())
+					dispatch(removeGroup())
 				}}
 			>
 				<CardWithIcon icon='🚪' label='Déconnexion' />

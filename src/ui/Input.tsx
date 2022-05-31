@@ -5,7 +5,7 @@ import { FieldError } from 'react-hook-form'
 
 interface InputProps {
 	label: string
-	errors: any
+	errors?: any
 }
 
 const Input = ({ label, errors, ...props }: InputProps) => {
@@ -13,7 +13,7 @@ const Input = ({ label, errors, ...props }: InputProps) => {
 		<View>
 			<Text>{label}</Text>
 			<TextInput {...props} />
-			{errors.map(({ message }: FieldError) => (
+			{errors?.map(({ message }: FieldError) => (
 				<Text>{message}</Text>
 			))}
 		</View>
