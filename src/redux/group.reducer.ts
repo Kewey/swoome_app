@@ -1,13 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { ExpenseType } from '@types/ExpenseType'
 import { Group } from '@types/Group'
 import { RootState } from '../../App'
 
 interface GroupSlice {
 	group: Group | null
+	expenseType: ExpenseType[]
 }
 
 const initialState: GroupSlice = {
 	group: null,
+	expenseType: [],
 }
 
 const groupSlice = createSlice({
@@ -26,12 +29,19 @@ const groupSlice = createSlice({
 			},
 			prepare: () => ({ payload: null }),
 		},
+		setExpenseType: {
+			reducer: (state, action: PayloadAction<ExpenseType[]>) => {
+				state.expenseType = action.payload
+			},
+			prepare: (expenseTypes: ExpenseType[]) => ({ payload: expenseTypes }),
+		},
 	},
 })
 
 const getCurrentGroup = (state: RootState) => state.group.group
+const getExpenseType = (state: RootState) => state.group.group
 
-export const { setGroup, removeGroup } = groupSlice.actions
-export { getCurrentGroup }
+export const { setGroup, removeGroup, setExpenseType } = groupSlice.actions
+export { getCurrentGroup, getExpenseType }
 
 export default groupSlice.reducer

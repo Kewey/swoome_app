@@ -5,7 +5,7 @@ export interface User extends APIHydraType {
 	id: string
 	username: string
 	email: string
-	groups: string[]
+	groups: Group[]
 	createdAt?: string
 	updatedAt?: string
 }

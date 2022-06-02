@@ -1,4 +1,5 @@
 import { Expense } from '@types/Expense'
+import { ExpenseType } from '@types/ExpenseType'
 import { API } from './apiService'
 
 export async function getGroupExpenses(groupId: string): Promise<{
@@ -53,4 +54,14 @@ export async function putExpense(
 		expenseAt,
 		participants,
 	})
+}
+
+export async function getExpenseType(): Promise<{
+	expenseType: ExpenseType[]
+	totalItems: number
+}> {
+	const {
+		data: { 'hydra:member': expenseType, 'hydra:totalItems': totalItems },
+	} = await API.get(`/expense_types`)
+	return { expenseType, totalItems }
 }

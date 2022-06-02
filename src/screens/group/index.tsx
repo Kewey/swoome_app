@@ -15,10 +15,12 @@ import { Group } from '@types/Group'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FredokaText from '@ui/FredokaText'
 import Button from '@ui/Button'
-import { setGroup } from '@redux/group.reducer'
+import { setExpenseType, setGroup } from '@redux/group.reducer'
 import { getUserGroups } from '@services/userService'
 import GroupItem from './components/GroupItem'
 import { sideMargin } from '@constants/Layout'
+import { getExpenseType } from '@services/expenseService'
+import { getGroup } from '@services/groupService'
 
 type GroupIndexProps = {
 	navigation: GroupNavigationProp<GroupScreens.Index>
@@ -26,7 +28,6 @@ type GroupIndexProps = {
 
 export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 	const currentUser = useSelector(getCurrentUser)
-	const [groups, setGroups] = useState<Group[]>([])
 	const dispatch = useDispatch()
 
 	navigation.setOptions({
@@ -45,12 +46,15 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 	})
 
 	useEffect(() => {
-		if (!currentUser) return
-
-		getUserGroups(currentUser.id).then(({ groups }) => {
-			setGroups(groups)
+		getExpenseType().then(({ expenseType }) => {
+			dispatch(setExpenseType(expenseType))
 		})
 	}, [])
+
+	const setCurrentGroup = async (id: string) => {
+		const group = await getGroup(id)
+		dispatch(setGroup(group))
+	}
 
 	return (
 		<SafeAreaView
@@ -87,11 +91,11 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 							label={group.name}
 							icon={group.type.emoji}
 							groupName={group.type.name}
-							onPress={() => dispatch(setGroup(group))}
+							onPress={() => setCurrentGroup(group.id)}
 						/>
 					)
 				}}
-				data={groups}
+				data={currentUser?.groups}
 			/>
 			<View
 				style={{

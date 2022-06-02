@@ -14,6 +14,13 @@ export async function createGroup(
 	return group
 }
 
+export async function joinGroup(code: string): Promise<Group> {
+	const { data: group } = await API.post(`/join_group`, {
+		code,
+	})
+	return group
+}
+
 export async function getGroup(groupId: string): Promise<Group> {
 	const { data } = await API.get(`/groups/${groupId}`)
 	return data
