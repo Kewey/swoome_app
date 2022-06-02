@@ -34,45 +34,6 @@ const TabNavigation = (): ReactElement => {
 	return (
 		<TabStack.Navigator
 			initialRouteName={TabScreens.Home}
-			tabBar={(props) => (
-				<View
-					style={{
-						position: 'absolute',
-						bottom: 0,
-						left: 0,
-						right: 0,
-						paddingHorizontal: sideMargin,
-						paddingBottom: bottom + 20,
-					}}
-				>
-					<Svg
-						style={{
-							position: 'absolute',
-							bottom: -15,
-							left: 0,
-							right: 0,
-						}}
-					>
-						<Defs>
-							<LinearGradient id='grad' x1='0%' y1='0%' x2='0%' y2='100%'>
-								<Stop
-									offset='0'
-									stopColor={colors.background}
-									stopOpacity='0'
-								/>
-								<Stop
-									offset='1'
-									stopColor={colors.background}
-									stopOpacity='1'
-								/>
-							</LinearGradient>
-						</Defs>
-						<Rect x='0' y='0' width='100%' height='100%' fill='url(#grad)' />
-					</Svg>
-					{/* @ts-ignore */}
-					<BottomTabView {...props} />
-				</View>
-			)}
 			screenOptions={{
 				headerShadowVisible: false,
 				headerTransparent: true,
@@ -81,6 +42,11 @@ const TabNavigation = (): ReactElement => {
 				tabBarActiveTintColor: colors.primary,
 				tabBarIconStyle: {},
 				tabBarStyle: {
+					position: 'absolute',
+					bottom: bottom + 20,
+					left: sideMargin,
+					right: sideMargin,
+					paddingHorizontal: sideMargin,
 					backgroundColor: colors.card,
 					borderRadius: borderRadius * 2,
 					borderTopWidth: 0,

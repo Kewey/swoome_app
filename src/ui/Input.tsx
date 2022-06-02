@@ -1,20 +1,20 @@
-import { View, Text } from 'react-native'
+import { View, Text, TextInputProps } from 'react-native'
 import React from 'react'
 import TextInput from './TextInput'
 import { FieldError } from 'react-hook-form'
 
-interface InputProps {
+interface InputProps extends TextInputProps {
 	label: string
-	errors?: any
+	errors?: FieldError[]
 }
 
 const Input = ({ label, errors, ...props }: InputProps) => {
 	return (
 		<View>
-			<Text>{label}</Text>
+			<Text style={{ marginBottom: 7 }}>{label}</Text>
 			<TextInput {...props} />
-			{errors?.map(({ message }: FieldError) => (
-				<Text>{message}</Text>
+			{errors?.map(({ message }, index) => (
+				<Text key={`error-${index}`}>{message}</Text>
 			))}
 		</View>
 	)

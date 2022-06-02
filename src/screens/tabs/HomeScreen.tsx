@@ -18,8 +18,11 @@ import { MainScreens } from '@navigation/Routes'
 import AnimatedHeaderLayout from '@ui/AnimatedHeaderLayout'
 import { getGroup } from '@services/groupService'
 import { getCurrentUser } from '@redux/user.reducer'
-import { borderRadius } from '@styles/layout'
+import { borderRadius, layout } from '@styles/layout'
 import { White } from '@constants/Colors'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import CircleButton from '@ui/CircleButton'
+import dayjs from 'dayjs'
 
 const HomeScreen = () => {
 	const currentGroup = useSelector(getCurrentGroup)
@@ -29,6 +32,7 @@ const HomeScreen = () => {
 	const navigation = useNavigation()
 	const dispatch = useDispatch()
 	const { colors } = useTheme()
+	const { top } = useSafeAreaInsets()
 
 	const updateExpenses = async () => {
 		setIsLoading(true)
@@ -66,6 +70,10 @@ const HomeScreen = () => {
 		} catch (error) {}
 	}
 
+	const currentBalance = currentGroup?.balances.find(
+		(balance) => balance.balanceUser.id === currentUser?.id
+	)
+
 	const ListHeaderComponent = () => (
 		<View
 			style={{
@@ -93,7 +101,7 @@ const HomeScreen = () => {
 					<View style={{ marginBottom: 20 }}>
 						<Text style={{ color: White }}>Dépenses total du groupe</Text>
 						<FredokaText style={{ color: White, fontSize: 45 }}>
-							{totalExpenses || '0,00'} €
+							{currentGroup?.sumExpenses} €
 						</FredokaText>
 					</View>
 					<View style={{ flexDirection: 'row' }}>
@@ -106,7 +114,7 @@ const HomeScreen = () => {
 						<View style={{ flex: 1 }}>
 							<Text style={{ color: White }}>Ma balance</Text>
 							<FredokaText style={{ color: White, fontSize: 20 }}>
-								{totalExpenses || '0,00'} €
+								{currentBalance?.value} €
 							</FredokaText>
 						</View>
 					</View>
@@ -117,9 +125,67 @@ const HomeScreen = () => {
 
 	const ListEmptyComponent = () =>
 		isLoading ? (
-			<View>
-				<Text>TODO LOADING</Text>
-			</View>
+			[0, 0, 0, 0, 0].map((_: any) => (
+				<View
+					style={{
+						paddingHorizontal: sideMargin,
+						flexDirection: 'row',
+						alignItems: 'center',
+						marginVertical: 15,
+					}}
+				>
+					<CircleButton
+						size={40}
+						style={{ marginRight: 10 }}
+						backgroundColor={colors.card}
+					></CircleButton>
+
+					<View
+						style={{
+							flex: 1,
+						}}
+					>
+						<View style={[layout.rowSBCenter, { marginBottom: 2 }]}>
+							<View
+								style={{
+									height: 16,
+									width: 80,
+									backgroundColor: colors.text,
+									borderRadius,
+								}}
+							/>
+							<View
+								style={{
+									height: 16,
+									width: 40,
+									backgroundColor: colors.text,
+									borderRadius,
+								}}
+							/>
+						</View>
+						<View style={layout.rowSBCenter}>
+							<View
+								style={{
+									marginTop: 5,
+									height: 10,
+									width: 130,
+									backgroundColor: colors.border,
+									borderRadius,
+								}}
+							/>
+							<View
+								style={{
+									marginTop: 5,
+									height: 10,
+									width: 60,
+									backgroundColor: colors.border,
+									borderRadius,
+								}}
+							/>
+						</View>
+					</View>
+				</View>
+			))
 		) : (
 			<View
 				style={{
@@ -167,7 +233,7 @@ const HomeScreen = () => {
 				}}
 				contentContainerStyle={{
 					paddingBottom: 90,
-					paddingTop: 100,
+					paddingTop: top + 70,
 				}}
 				onScroll={Animated.event(
 					[
@@ -192,7 +258,7 @@ const HomeScreen = () => {
 			/>
 			<AnimatedHeaderLayout
 				title='Dernières activités'
-				offset={195}
+				offset={205}
 				// title={`Salut ${currentUser?.username} 👋`}
 				scrollPositionValue={scrollPositionValue}
 			/>

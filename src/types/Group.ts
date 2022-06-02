@@ -13,6 +13,7 @@ export interface Group extends APIHydraType {
 	expenses: Expense[]
 	refunds: Refund[]
 	balances: Balance[]
+	sumExpenses: number
 }
 
 export interface GroupType extends APIHydraType {

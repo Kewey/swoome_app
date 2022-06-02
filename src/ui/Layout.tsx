@@ -7,6 +7,7 @@ import {
 import React, { ReactElement, ReactNode } from 'react'
 import { layout } from '@styles/layout'
 import { useTheme } from '@react-navigation/native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const Layout = ({
 	children,
@@ -18,6 +19,7 @@ const Layout = ({
 		| undefined
 }): ReactElement => {
 	const { colors } = useTheme()
+	const { top } = useSafeAreaInsets()
 	return (
 		<Animated.ScrollView
 			onScroll={onScroll ? onScroll : undefined}
@@ -32,7 +34,7 @@ const Layout = ({
 			]}
 			contentContainerStyle={{
 				paddingBottom: 120,
-				paddingTop: !!onScroll ? 150 : 0,
+				paddingTop: !!onScroll ? top + 110 : 0,
 			}}
 		>
 			{children}

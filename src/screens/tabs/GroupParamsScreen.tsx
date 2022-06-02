@@ -2,13 +2,12 @@ import {
 	Animated,
 	Image,
 	Pressable,
-	ScrollView,
 	TouchableOpacity,
 	View,
 } from 'react-native'
-import React, { useRef } from 'react'
-import { useSelector } from 'react-redux'
-import { getCurrentGroup } from '@redux/group.reducer'
+import React, { useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getCurrentGroup, setGroup } from '@redux/group.reducer'
 import { borderRadius, layout } from '@styles/layout'
 import FredokaText from '@ui/FredokaText'
 import Text from '@ui/Text'
@@ -21,15 +20,30 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast'
 import AnimatedHeaderLayout from '@ui/AnimatedHeaderLayout'
 import Layout from '@ui/Layout'
 import Input from '@ui/Input'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
+import CardWithIcon from '@ui/CardWithIcon'
+import BottomSheetModal from '@ui/BottomSheetModal'
+import { editGroup } from '@services/groupService'
 
 const GroupParamsScreen = () => {
-	const group = useSelector(getCurrentGroup)
+	const currentGroup = useSelector(getCurrentGroup)
 	const { colors } = useTheme()
+	const [isOpen, setIsOpen] = useState(false)
+	const [isLoading, setIsLoading] = useState(false)
+	const dispatch = useDispatch()
 
 	const scrollPositionValue = useRef(new Animated.Value(0)).current
 
-	useForm({ defaultValues: { name: group?.name } })
+	const { control, handleSubmit } = useForm<{ name: string }>()
+
+	const onSubmit = async ({ name }: any) => {
+		setIsLoading(true)
+		console.log(name)
+		const editedGroup = await editGroup(currentGroup?.id || '', name)
+		dispatch(setGroup(editedGroup))
+		setIsLoading(false)
+		setIsOpen(false)
+	}
 
 	return (
 		<>
@@ -45,13 +59,13 @@ const GroupParamsScreen = () => {
 					{ useNativeDriver: true }
 				)}
 			>
-				<View style={{ paddingHorizontal: 20 }}>
+				<View style={{ paddingHorizontal: 20, marginBottom: 25 }}>
 					<View
 						style={{
 							backgroundColor: colors.card,
-							borderRadius,
+							borderRadius: borderRadius * 2,
 							paddingTop: 25,
-							paddingBottom: 5,
+							paddingBottom: 25,
 							paddingHorizontal: 20,
 							marginBottom: 25,
 						}}
@@ -59,7 +73,7 @@ const GroupParamsScreen = () => {
 						<Pressable
 							onPress={() => {
 								try {
-									Clipboard.setString(group?.code || '')
+									Clipboard.setString(currentGroup?.code || '')
 									Toast.show({
 										type: 'success',
 										text1: 'Code copié',
@@ -76,10 +90,10 @@ const GroupParamsScreen = () => {
 							<FredokaText
 								style={{ fontSize: 40, letterSpacing: 20, textAlign: 'center' }}
 							>
-								{group?.code}
+								{currentGroup?.code}
 							</FredokaText>
 						</Pressable>
-						<View
+						{/* <View
 							style={{
 								height: 1,
 								width: '100%',
@@ -90,32 +104,62 @@ const GroupParamsScreen = () => {
 						/>
 						<View>
 							<Button variant='transparent'>Partager le code</Button>
-						</View>
+						</View> */}
 					</View>
 
-					<Input label='Nom du groupe' />
-					<Input label='Nom du groupe' />
-					<Input label='Nom du groupe' />
-					<Input label='Nom du groupe' />
 					<View style={{ marginBottom: 10 }}>
 						<FredokaText style={{ fontSize: 20 }}>Informations</FredokaText>
 					</View>
-					<View style={{ marginBottom: 15 }}>
-						<FredokaText style={{ fontSize: 14 }}>Nom du groupe</FredokaText>
-						<Text>{group?.name}</Text>
-					</View>
-					<View>
-						<FredokaText style={{ fontSize: 14 }}>Type du groupe</FredokaText>
-						<Text>{group?.type.name}</Text>
-					</View>
+					<TouchableOpacity
+						style={{ marginBottom: 10 }}
+						onPress={() => setIsOpen(true)}
+					>
+						<CardWithIcon
+							icon='📢'
+							sublabel='Nom du groupe'
+							label={currentGroup?.name || ''}
+						/>
+					</TouchableOpacity>
+					<BottomSheetModal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
+						<Controller
+							control={control}
+							rules={{
+								required: true,
+							}}
+							render={({ field: { onChange, onBlur, value } }) => (
+								<Input
+									style={{ marginBottom: 20 }}
+									onBlur={onBlur}
+									onChangeText={onChange}
+									value={value}
+									label='Nom du groupe'
+									placeholder={currentGroup?.name}
+									autoFocus
+									enablesReturnKeyAutomatically
+								/>
+							)}
+							name='name'
+						/>
+						<Button onPress={handleSubmit(onSubmit)}>
+							{isLoading ? 'Chargement' : 'Enregistrer'}
+						</Button>
+					</BottomSheetModal>
+
+					<TouchableOpacity>
+						<CardWithIcon
+							icon={currentGroup?.type.emoji || ''}
+							sublabel='Type du groupe'
+							label={currentGroup?.type.name || ''}
+						/>
+					</TouchableOpacity>
 				</View>
 
 				<View style={{ paddingHorizontal: 20 }}>
-					<View style={{ marginBottom: 10, marginTop: 30 }}>
+					<View style={{ marginBottom: 10 }}>
 						<FredokaText style={{ fontSize: 20 }}>Membres</FredokaText>
 					</View>
 
-					{group?.members?.map((membre) => (
+					{currentGroup?.members?.map((membre) => (
 						<View
 							key={membre.id}
 							style={{

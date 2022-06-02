@@ -8,6 +8,9 @@ import { FONTS } from '@types/Fonts'
 import { useSelector } from 'react-redux'
 import { getCurrentGroup } from '@redux/group.reducer'
 
+const HEADER_EXTENDED = 120
+const HEADER_COLLAPSED = 60
+
 interface AnimatedHeaderLayoutProps {
 	title: string
 	scrollPositionValue: Animated.Value
@@ -24,20 +27,20 @@ const AnimatedHeaderLayout = ({
 	const { top } = useSafeAreaInsets()
 
 	const animatedTitleSize = scrollPositionValue.interpolate({
-		inputRange: [offset + 0, offset + 60],
+		inputRange: [offset, offset + HEADER_COLLAPSED - 10],
 		outputRange: [1, 0.6],
 		extrapolate: 'clamp',
 	})
 
 	const animatedTitleYPos = scrollPositionValue.interpolate({
-		inputRange: [0, offset + 60],
-		outputRange: [0, -offset - 60],
+		inputRange: [0, offset + HEADER_COLLAPSED - 10],
+		outputRange: [0, -offset - HEADER_COLLAPSED + 10],
 		extrapolate: 'clamp',
 	})
 
 	const animatedHeaderHeight = scrollPositionValue.interpolate({
 		inputRange: [offset + 0, offset + 90],
-		outputRange: [1, 0.56],
+		outputRange: [1, (top + HEADER_COLLAPSED) / (top + HEADER_EXTENDED)],
 		extrapolate: 'clamp',
 	})
 
@@ -54,8 +57,8 @@ const AnimatedHeaderLayout = ({
 		return withAnchorPoint(
 			// @ts-ignore
 			transform,
-			{ x: -0.05, y: 0 },
-			{ height: 150, width: 325 }
+			{ x: 0.5, y: 0 },
+			{ height: HEADER_EXTENDED + top, width: 325 }
 		)
 	}
 
@@ -83,11 +86,11 @@ const AnimatedHeaderLayout = ({
 						top: 0,
 						left: 0,
 						right: 0,
-						height: offset ? 90 : 150,
+						height: offset ? HEADER_COLLAPSED + top : HEADER_EXTENDED + top,
 						flexDirection: 'row',
 						alignItems: 'flex-end',
 						paddingHorizontal: sideMargin,
-						backgroundColor: colors.background,
+						backgroundColor: colors.card,
 					},
 					offset ? null : transformHeight(),
 				]}
@@ -97,7 +100,7 @@ const AnimatedHeaderLayout = ({
 				style={[
 					{
 						position: 'absolute',
-						top: top + offset + 70,
+						top: top + offset + HEADER_COLLAPSED,
 						paddingHorizontal: sideMargin,
 						transform: [{ translateY: animatedTitleYPos }],
 					},

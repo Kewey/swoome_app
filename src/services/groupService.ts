@@ -19,6 +19,16 @@ export async function getGroup(groupId: string): Promise<Group> {
 	return data
 }
 
+export async function editGroup(
+	groupId: string,
+	name?: string
+): Promise<Group> {
+	const { data } = await API.put(`/groups/${groupId}`, {
+		name,
+	})
+	return data
+}
+
 export async function getGroupType(): Promise<{
 	groupsType: GroupType[]
 	totalItems: number

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Text from '@ui/Text'
 import CircleButton from '@ui/CircleButton'
 import FredokaText from '@ui/FredokaText'
-import { layout } from '@styles/layout'
+import { borderRadius, layout } from '@styles/layout'
 import { useTheme } from '@react-navigation/native'
 import { Expense } from '@types/Expense'
 import ExpenseModal from './ExpenseModal'
@@ -13,8 +13,8 @@ import dayjs from 'dayjs'
 
 interface ExpenseItemProps {
 	expense: Expense
-	updateExpense: (expense: Expense) => {}
-	removeExpense: (id: string) => {}
+	updateExpense?: (expense: Expense) => {}
+	removeExpense?: (id: string) => {}
 }
 
 const ExpenseItem = ({
@@ -22,8 +22,8 @@ const ExpenseItem = ({
 	updateExpense,
 	removeExpense,
 }: ExpenseItemProps) => {
-	const [showModal, setShowModal] = useState(false)
 	const { colors } = useTheme()
+	const [showModal, setShowModal] = useState(false)
 
 	const onLongPress = () => {
 		setShowModal(true)
