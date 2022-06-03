@@ -39,7 +39,7 @@ const groupSlice = createSlice({
 })
 
 const getCurrentGroup = (state: RootState) => state.group.group
-const getExpenseType = (state: RootState) => state.group.group
+const getExpenseType = (state: RootState) => state.group.expenseType
 
 export const { setGroup, removeGroup, setExpenseType } = groupSlice.actions
 export { getCurrentGroup, getExpenseType }

@@ -123,69 +123,72 @@ const HomeScreen = () => {
 		</View>
 	)
 
-	const ListEmptyComponent = () =>
+	const ListEmptyComponent = ({}) =>
 		isLoading ? (
-			[0, 0, 0, 0, 0].map((_: any) => (
-				<View
-					style={{
-						paddingHorizontal: sideMargin,
-						flexDirection: 'row',
-						alignItems: 'center',
-						marginVertical: 15,
-					}}
-				>
-					<CircleButton
-						size={40}
-						style={{ marginRight: 10 }}
-						backgroundColor={colors.card}
-					></CircleButton>
-
+			<>
+				{[0, 0, 0, 0, 0].map((item, index) => (
 					<View
+						key={index + 'skeleton'}
 						style={{
-							flex: 1,
+							paddingHorizontal: sideMargin,
+							flexDirection: 'row',
+							alignItems: 'center',
+							marginVertical: 15,
 						}}
 					>
-						<View style={[layout.rowSBCenter, { marginBottom: 2 }]}>
-							<View
-								style={{
-									height: 16,
-									width: 80,
-									backgroundColor: colors.text,
-									borderRadius,
-								}}
-							/>
-							<View
-								style={{
-									height: 16,
-									width: 40,
-									backgroundColor: colors.text,
-									borderRadius,
-								}}
-							/>
-						</View>
-						<View style={layout.rowSBCenter}>
-							<View
-								style={{
-									marginTop: 5,
-									height: 10,
-									width: 130,
-									backgroundColor: colors.border,
-									borderRadius,
-								}}
-							/>
-							<View
-								style={{
-									marginTop: 5,
-									height: 10,
-									width: 60,
-									backgroundColor: colors.border,
-									borderRadius,
-								}}
-							/>
+						<CircleButton
+							size={40}
+							style={{ marginRight: 10 }}
+							backgroundColor={colors.card}
+						></CircleButton>
+
+						<View
+							style={{
+								flex: 1,
+							}}
+						>
+							<View style={[layout.rowSBCenter, { marginBottom: 2 }]}>
+								<View
+									style={{
+										height: 16,
+										width: 80,
+										backgroundColor: colors.text,
+										borderRadius,
+									}}
+								/>
+								<View
+									style={{
+										height: 16,
+										width: 40,
+										backgroundColor: colors.text,
+										borderRadius,
+									}}
+								/>
+							</View>
+							<View style={layout.rowSBCenter}>
+								<View
+									style={{
+										marginTop: 5,
+										height: 10,
+										width: 130,
+										backgroundColor: colors.border,
+										borderRadius,
+									}}
+								/>
+								<View
+									style={{
+										marginTop: 5,
+										height: 10,
+										width: 60,
+										backgroundColor: colors.border,
+										borderRadius,
+									}}
+								/>
+							</View>
 						</View>
 					</View>
-				</View>
-			))
+				))}
+			</>
 		) : (
 			<View
 				style={{

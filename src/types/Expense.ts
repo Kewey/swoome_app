@@ -15,6 +15,8 @@ export interface ExpenseForm {
 	price: string
 	category: string
 	participants: string[]
+	type: string
+	date: Date
 	description?: string
 	expenseAt?: string
 	madeBy?: string | null
