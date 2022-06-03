@@ -1,13 +1,12 @@
-import { Pressable, StyleSheet, View } from 'react-native'
+import { TouchableHighlight, StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
 import Text from '@ui/Text'
 import CircleButton from '@ui/CircleButton'
 import FredokaText from '@ui/FredokaText'
-import { borderRadius, layout } from '@styles/layout'
+import { layout } from '@styles/layout'
 import { useTheme } from '@react-navigation/native'
 import { Expense } from '@types/Expense'
 import ExpenseModal from './ExpenseModal'
-import { TouchableHighlight } from 'react-native-gesture-handler'
 import { sideMargin } from '@constants/Layout'
 import dayjs from 'dayjs'
 
@@ -18,7 +17,16 @@ interface ExpenseItemProps {
 }
 
 const ExpenseItem = ({
-	expense: { id, name, price, madeBy, expenseAt, description, ...expense },
+	expense: {
+		id,
+		name,
+		price,
+		madeBy,
+		expenseAt,
+		description,
+		type,
+		...expense
+	},
 	updateExpense,
 	removeExpense,
 }: ExpenseItemProps) => {
@@ -47,7 +55,7 @@ const ExpenseItem = ({
 						style={{ marginRight: 10 }}
 						backgroundColor={colors.card}
 					>
-						<Text>🏠</Text>
+						<Text>{type?.emoji}</Text>
 					</CircleButton>
 
 					<View
@@ -81,6 +89,7 @@ const ExpenseItem = ({
 					madeBy,
 					expenseAt,
 					description,
+					type,
 					...expense,
 				}}
 				updateExpense={updateExpense}

@@ -88,11 +88,19 @@ API.interceptors.response.use(
 			}
 		}
 
-		Toast.show({
-			type: 'error',
-			text1: response.data['hydra:title'],
-			text2: response.data['hydra:description'],
-		})
+		if (response.data) {
+			Toast.show({
+				type: 'error',
+				text1: response.data['hydra:title'],
+				text2: response.data['hydra:description'],
+			})
+		} else {
+			Toast.show({
+				type: 'error',
+				text1: response.detail,
+				text2: response.title,
+			})
+		}
 
 		return Promise.reject<HydraError>(response.data)
 	}

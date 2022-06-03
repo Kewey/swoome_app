@@ -2,7 +2,7 @@ import { DarkGrey } from '@constants/Colors'
 import { AuthScreens } from '@navigation/Routes'
 import { setToken, setUser } from '@redux/user.reducer'
 import { API } from '@services/apiService'
-import { getUser, login } from '@services/userService'
+import { getUser, login, resendMail } from '@services/userService'
 import { AuthNavigationProp } from '@types/routes'
 import { UserLogin } from '@types/user'
 import Button from '@ui/Button'
@@ -55,8 +55,18 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 					text2: 'On a rien trouvé avec les informations données 😕',
 				})
 			}
+
+			if (error?.code === 435) {
+				Toast.show({
+					type: 'error',
+					text1: 'Check tes mails',
+					text2: "Tu n'as pas encore validé ton compte. Pas de mail clique ici",
+					onPress: () => {
+						resendMail(email)
+					},
+				})
+			}
 		}
-		setIsLoading(false)
 	}
 
 	return (
@@ -66,6 +76,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 			}}
 		>
 			<ScrollView
+				keyboardShouldPersistTaps='handled'
 				style={{ flex: 1, padding: sideMargin }}
 				contentContainerStyle={{ justifyContent: 'center', flexGrow: 1 }}
 			>

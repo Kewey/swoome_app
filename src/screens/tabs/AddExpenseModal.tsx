@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { getCurrentGroup, getExpenseType, setGroup } from '@redux/group.reducer'
+import { getCurrentGroup, setGroup } from '@redux/group.reducer'
 import { getCurrentUser } from '@redux/user.reducer'
 import FredokaText from '@ui/FredokaText'
 import {
@@ -20,7 +20,6 @@ import { Expense, ExpenseForm } from '@types/Expense'
 import { addExpense, putExpense } from '@services/expenseService'
 import { User } from '@types/user'
 import { sideMargin } from '@constants/Layout'
-import { Asana } from 'iconoir-react-native'
 import { getSelectedGroup } from '@services/userService'
 import {
 	ScrollView,
@@ -30,13 +29,12 @@ import {
 import { FONTS } from '@types/Fonts'
 import CircleButton from '@ui/CircleButton'
 import dayjs from 'dayjs'
-// import DateTimePicker from '@react-native-community/datetimepicker'
+import DateTimePicker from '@react-native-community/datetimepicker'
 
 const AddExpenseModal = ({ route, navigation }) => {
 	const expense: Expense = route?.params?.expense
 	const currentUser = useSelector(getCurrentUser)
 	const currentGroup = useSelector(getCurrentGroup)
-	const expenseTypes = useSelector(getExpenseType)
 	const members: User[] = currentGroup?.members || []
 	const dispatch = useDispatch()
 	const [isLoading, setIsLoading] = useState(false)
@@ -65,10 +63,10 @@ const AddExpenseModal = ({ route, navigation }) => {
 			? {
 					name: expense.name,
 					price: expense.price,
+					type: expense.type,
 					description: expense.description,
 					expenseAt: expense.expenseAt,
 					madeBy: expense.madeBy['@id'],
-					date: new Date(),
 					participants: expense.participants?.map(
 						(participant) => participant['@id']
 					),
@@ -98,6 +96,7 @@ const AddExpenseModal = ({ route, navigation }) => {
 						expense.id,
 						name,
 						price,
+						type['@id'],
 						participants,
 						description,
 						expenseAt,
@@ -107,6 +106,7 @@ const AddExpenseModal = ({ route, navigation }) => {
 						currentGroup['@id'],
 						name,
 						price,
+						type['@id'],
 						participants,
 						description,
 						expenseAt,
@@ -128,6 +128,8 @@ const AddExpenseModal = ({ route, navigation }) => {
 		)
 
 		if (alreadySelectedUser) {
+			if (selectedParticipants.length === 1) return
+
 			const remainingMember = selectedParticipants.filter(
 				(selectedParticipant) => selectedParticipant !== memberIri
 			)
@@ -187,7 +189,7 @@ const AddExpenseModal = ({ route, navigation }) => {
 											placeholder='0,00'
 											onBlur={onBlur}
 											onChangeText={onChange}
-											value={value}
+											value={value?.toString()}
 											keyboardType={'decimal-pad'}
 											autoFocus
 										/>
@@ -203,6 +205,11 @@ const AddExpenseModal = ({ route, navigation }) => {
 								paddingVertical: 20,
 							}}
 						>
+							<FredokaText
+								style={{ marginBottom: 5, marginHorizontal: sideMargin }}
+							>
+								On la range dans quoi ?
+							</FredokaText>
 							<Controller
 								control={control}
 								rules={{
@@ -225,17 +232,17 @@ const AddExpenseModal = ({ route, navigation }) => {
 												<View style={{ width: 20 }} />
 											)}
 											showsHorizontalScrollIndicator={false}
-											data={expenseTypes}
+											data={currentGroup?.expenseTypes}
 											keyExtractor={(expenseType) => expenseType.id}
 											renderItem={({ item: expenseType }) => (
 												<View>
 													<TouchableWithoutFeedback
 														key={expenseType.id + 'type'}
-														onPress={() => onChange(expenseType['@id'])}
+														onPress={() => onChange(expenseType)}
 													>
 														<CircleButton
 															backgroundColor={
-																value === expenseType['@id']
+																value?.['@id'] === expenseType['@id']
 																	? colors.primary
 																	: colors.card
 															}
@@ -248,6 +255,11 @@ const AddExpenseModal = ({ route, navigation }) => {
 											)}
 										/>
 										{error && <Text>{error.message}</Text>}
+										<Text
+											style={{ paddingHorizontal: sideMargin, marginTop: 8 }}
+										>
+											{value?.name}
+										</Text>
 									</View>
 								)}
 								name='type'
@@ -287,29 +299,37 @@ const AddExpenseModal = ({ route, navigation }) => {
 									const [isOpen, setIsOpen] = useState(false)
 									return (
 										<>
-											<TouchableOpacity
+											<TouchableWithoutFeedback
 												onPressIn={() => {
 													setIsOpen(true)
 												}}
 											>
 												<TextInput
 													editable={false}
-													value={dayjs(value).format('DD/MM/YYYY')}
+													value={`${dayjs(value)
+														.format('dddd D MMMM YYYY')
+														.charAt(0)
+														.toUpperCase()}${dayjs(value)
+														.format('dddd D MMMM YYYY')
+														.substring(1)}`}
 												/>
-											</TouchableOpacity>
+											</TouchableWithoutFeedback>
 											{isOpen && (
-												// <DateTimePicker
-												// 	value={new Date(value)}
-												// 	mode='date'
-												// 	onChange={(e: any, selectedDate: any) =>
-												// 		onChange(selectedDate)
-												// 	}
-												// />
+												<DateTimePicker
+													locale='fr-FR'
+													value={dayjs(value).toDate()}
+													onChange={(e: any, selectedDate: any) => {
+														onChange(selectedDate)
+														setIsOpen(false)
+													}}
+													maximumDate={new Date()}
+													onTouchCancel={() => setIsOpen(false)}
+												/>
 											)}
 										</>
 									)
 								}}
-								name='date'
+								name='expenseAt'
 							/>
 							{errors.description && <Text>This is required.</Text>}
 						</View>
@@ -463,11 +483,9 @@ const AddExpenseModal = ({ route, navigation }) => {
 								}}
 							>
 								<Button onPress={handleSubmit(onSubmit)} disabled={isLoading}>
-									{isLoading ? (
-										<Asana color={colors.text} />
-									) : (
-										`${expense ? 'Modifier' : 'Ajouter'} la dépense`
-									)}
+									{isLoading
+										? 'Chargement'
+										: `${expense ? 'Modifier' : 'Ajouter'} la dépense`}
 								</Button>
 							</View>
 						</View>

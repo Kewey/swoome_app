@@ -43,7 +43,9 @@ import {
 } from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
 import { darkTheme, theme } from '@styles/theme'
-import { useColorScheme } from 'react-native'
+import dayjs from 'dayjs'
+require('dayjs/locale/fr')
+dayjs.locale('fr')
 
 SplashScreen.preventAutoHideAsync().catch(() => {})
 
@@ -149,7 +151,7 @@ export default function AppWrapper(): ReactElement {
 					<App />
 				</PersistGate>
 			</Provider>
-			<Toast />
+			<Toast autoHide />
 		</>
 	)
 }

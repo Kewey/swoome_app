@@ -1,11 +1,11 @@
-import { Pressable, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import React from 'react'
 import Text from '@ui/Text'
 import CircleButton from '@ui/CircleButton'
 import FredokaText from '@ui/FredokaText'
-import { borderRadius, layout } from '@styles/layout'
+import { borderRadius } from '@styles/layout'
 import { useTheme } from '@react-navigation/native'
-import { Light, White } from '@constants/Colors'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 interface GroupItemProps {
 	label: string
@@ -17,8 +17,8 @@ interface GroupItemProps {
 const GroupItem = ({ label, icon, groupName, onPress }: GroupItemProps) => {
 	const { colors } = useTheme()
 	return (
-		<Pressable
-			onPress={() => onPress()}
+		<TouchableWithoutFeedback
+			onPress={onPress}
 			style={{
 				flexDirection: 'row',
 				alignItems: 'center',
@@ -45,7 +45,7 @@ const GroupItem = ({ label, icon, groupName, onPress }: GroupItemProps) => {
 					<Text style={{ fontSize: 10 }}>{groupName}</Text>
 				</View>
 			</View>
-		</Pressable>
+		</TouchableWithoutFeedback>
 	)
 }
 

@@ -66,4 +66,10 @@ export async function getSelectedGroup(groupeId: string): Promise<Group> {
 	return data
 }
 
+export async function resendMail(email: string) {
+	return await API.post('/auth/resend_mail', {
+		email,
+	})
+}
+
 export async function logout() {}

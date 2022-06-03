@@ -1,4 +1,5 @@
 import { APIHydraType } from '@services/apiService'
+import { ExpenseType } from './ExpenseType'
 import { User } from './user'
 
 export interface Expense extends APIHydraType {
@@ -8,6 +9,7 @@ export interface Expense extends APIHydraType {
 	madeBy: User
 	participants: User[]
 	expenseAt?: string
+	type: ExpenseType
 }
 
 export interface ExpenseForm {
@@ -15,7 +17,7 @@ export interface ExpenseForm {
 	price: string
 	category: string
 	participants: string[]
-	type: string
+	type: ExpenseType
 	date: Date
 	description?: string
 	expenseAt?: string

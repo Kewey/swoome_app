@@ -38,7 +38,6 @@ const GroupParamsScreen = () => {
 
 	const onSubmit = async ({ name }: any) => {
 		setIsLoading(true)
-		console.log(name)
 		const editedGroup = await editGroup(currentGroup?.id || '', name)
 		dispatch(setGroup(editedGroup))
 		setIsLoading(false)

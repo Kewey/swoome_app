@@ -11,9 +11,15 @@ import TextInput from '@ui/TextInput'
 import { NavArrowLeft } from 'iconoir-react-native'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { TouchableOpacity, View } from 'react-native'
+import {
+	KeyboardAvoidingView,
+	Platform,
+	ScrollView,
+	TouchableOpacity,
+	View,
+} from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import * as ImagePicker from 'expo-image-picker'
 import { sideMargin } from '@constants/Layout'
 import Toast from 'react-native-toast-message'
@@ -27,6 +33,7 @@ type SignUpScreenProps = {
 const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 	const [isLoading, setLoading] = useState(false)
 	const { colors } = useTheme()
+	const { bottom } = useSafeAreaInsets()
 
 	const [mediaStatus, mediaRequestPermission] =
 		ImagePicker.useMediaLibraryPermissions()
@@ -144,12 +151,17 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 	// }
 
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
-			<KeyboardAwareScrollView
+		<KeyboardAvoidingView
+			style={{ flex: 1 }}
+			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+			keyboardVerticalOffset={50}
+		>
+			<ScrollView
+				keyboardShouldPersistTaps='handled'
 				contentContainerStyle={{
 					flex: 1,
 					paddingHorizontal: sideMargin,
-					paddingBottom: 15,
+					paddingTop: 40,
 				}}
 			>
 				<View style={{ marginBottom: 40, alignItems: 'center' }}>
@@ -192,7 +204,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 								</Text>
 							</View>
 							<View>
-								<View style={{ marginBottom: 15 }}>
+								<View style={{ marginBottom: bottom + 20 }}>
 									<Controller
 										control={control}
 										rules={{
@@ -263,7 +275,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 								</Text>
 							</View>
 							<View>
-								<View style={{ marginBottom: 15 }}>
+								<View style={{ marginBottom: bottom + 20 }}>
 									<Controller
 										control={control}
 										rules={{
@@ -334,7 +346,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 								</Text>
 							</View>
 							<View>
-								<View style={{ marginBottom: 15 }}>
+								<View style={{ marginBottom: bottom + 20 }}>
 									<Controller
 										control={control}
 										rules={{
@@ -472,8 +484,8 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 						</View>
 					</>
 				)} */}
-			</KeyboardAwareScrollView>
-		</SafeAreaView>
+			</ScrollView>
+		</KeyboardAvoidingView>
 	)
 }
 

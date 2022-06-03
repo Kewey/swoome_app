@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback } from 'react'
 import {
 	FlatList,
 	ListRenderItem,
@@ -12,15 +12,15 @@ import Text from '@ui/Text'
 import { getCurrentUser, setToken, setUser } from '@redux/user.reducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { Group } from '@types/Group'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import FredokaText from '@ui/FredokaText'
 import Button from '@ui/Button'
-import { setExpenseType, setGroup } from '@redux/group.reducer'
-import { getUserGroups } from '@services/userService'
+import { setGroup } from '@redux/group.reducer'
 import GroupItem from './components/GroupItem'
 import { sideMargin } from '@constants/Layout'
-import { getExpenseType } from '@services/expenseService'
 import { getGroup } from '@services/groupService'
+import { getUser } from '@services/userService'
+import { useFocusEffect } from '@react-navigation/native'
 
 type GroupIndexProps = {
 	navigation: GroupNavigationProp<GroupScreens.Index>
@@ -29,6 +29,7 @@ type GroupIndexProps = {
 export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 	const currentUser = useSelector(getCurrentUser)
 	const dispatch = useDispatch()
+	const { bottom } = useSafeAreaInsets()
 
 	navigation.setOptions({
 		headerRight: () => (
@@ -45,11 +46,19 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 		),
 	})
 
-	useEffect(() => {
-		getExpenseType().then(({ expenseType }) => {
-			dispatch(setExpenseType(expenseType))
-		})
-	}, [])
+	useFocusEffect(
+		useCallback(() => {
+			console.log('user')
+
+			async function setCurrentUser() {
+				const currentUser = await getUser()
+				if (!currentUser) return
+				dispatch(setUser(currentUser))
+			}
+
+			setCurrentUser()
+		}, [])
+	)
 
 	const setCurrentGroup = async (id: string) => {
 		const group = await getGroup(id)
@@ -84,6 +93,7 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 			</View>
 			<FlatList
 				style={{ flex: 1 }}
+				bounces={false}
 				ItemSeparatorComponent={() => <View style={{ height: 15 }} />}
 				renderItem={({ item: group }: ListRenderItemInfo<Group>) => {
 					return (
@@ -100,7 +110,7 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 			<View
 				style={{
 					position: 'absolute',
-					bottom: 20,
+					bottom: bottom + 20,
 					left: 20,
 					right: 20,
 				}}

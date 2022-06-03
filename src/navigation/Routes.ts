@@ -29,12 +29,6 @@ export enum MainScreens {
 	AddExpense = 'AddExpenseScreen',
 }
 
-export enum ProfileScreens {
-	Profile = 'ProfileScreen',
-	Account = 'AccountScreen',
-	Preferences = 'PreferencesScreen',
-}
-
 export type AuthStackParamList = {
 	[AuthScreens.Auth]: undefined
 	[AuthScreens.SignUp]: undefined
@@ -62,14 +56,7 @@ export type MainStackParamList = {
 	[MainScreens.Profile]: { userId: string }
 }
 
-export type ProfileStackParamList = {
-	[ProfileScreens.Profile]: { userId: string }
-	[ProfileScreens.Account]: undefined
-	[ProfileScreens.Preferences]: undefined
-}
-
 export const AuthStack = createStackNavigator<AuthStackParamList>()
 export const GroupStack = createStackNavigator<GroupStackParamList>()
 export const TabStack = createBottomTabNavigator<TabStackParamList>()
 export const MainStack = createStackNavigator<MainStackParamList>()
-export const ProfileStack = createStackNavigator<ProfileStackParamList>()

@@ -230,6 +230,7 @@ const HomeScreen = () => {
 		<>
 			<Animated.FlatList
 				data={expenses}
+				bounces={false}
 				showsVerticalScrollIndicator={false}
 				ListHeaderComponentStyle={{
 					marginBottom: 60,

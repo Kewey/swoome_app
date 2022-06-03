@@ -21,7 +21,7 @@ import TextInput from '@ui/TextInput'
 import Button from '@ui/Button'
 import { Blue, Cyan, Light, LightGrey, White } from '@constants/Colors'
 import { borderRadius } from '@styles/layout'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { setGroup } from '@redux/group.reducer'
 import { createGroup, getGroupType } from '@services/groupService'
 import { sideMargin } from '@constants/Layout'
@@ -43,6 +43,7 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 	const [groupsType, setGroupsType] = useState<GroupType[]>([])
 	const { colors } = useTheme()
 	const dispatch = useDispatch()
+	const { bottom } = useSafeAreaInsets()
 
 	navigation.setOptions({
 		headerLeft: () => (
@@ -79,6 +80,7 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 
 	return (
 		<SafeAreaView
+			keyboardShouldPersistTaps='handled'
 			style={{
 				flex: 1,
 			}}
@@ -162,7 +164,7 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 					<View
 						style={{
 							position: 'absolute',
-							bottom: 30,
+							bottom: bottom + 20,
 							left: sideMargin,
 							right: sideMargin,
 						}}
@@ -185,7 +187,7 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 						paddingHorizontal: sideMargin,
 					}}
 				>
-					<View style={{ flex: 1, marginBottom: 50 }}>
+					<View style={{ flex: 1, marginBottom: bottom }}>
 						<FredokaText
 							style={{ fontSize: 30, textAlign: 'center', marginBottom: 20 }}
 						>
@@ -197,7 +199,7 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 						</Text>
 					</View>
 					<View>
-						<View style={{ marginBottom: 30 }}>
+						<View style={{ marginBottom: 20 }}>
 							<Controller
 								control={control}
 								rules={{
@@ -218,6 +220,7 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 										<TextInput
 											style={{
 												marginBottom: 10,
+												height: 56,
 											}}
 											placeholder='Ex. Maison du bonheur'
 											onBlur={onBlur}

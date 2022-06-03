@@ -1,7 +1,7 @@
 import { Animated, View } from 'react-native'
 import React, { useCallback, useRef } from 'react'
 import Layout from '@ui/Layout'
-import { Blue, White } from '@constants/Colors'
+import { Blue, Cyan, White } from '@constants/Colors'
 import { Text as SVGText } from 'react-native-svg'
 import AnimatedHeaderLayout from '@ui/AnimatedHeaderLayout'
 import { BarChart } from 'react-native-svg-charts'
@@ -47,7 +47,7 @@ const RefundsScreen = () => {
 					}
 					y={y(index) + bandwidth / 2}
 					fontSize={14}
-					fill={Blue}
+					fill={Cyan}
 					alignmentBaseline={'middle'}
 				>
 					{value} €

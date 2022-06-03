@@ -16,6 +16,7 @@ export async function addExpense(
 	groupId: string,
 	name: string,
 	price: string,
+	typeIri: string,
 	participants: string[],
 	description?: string,
 	expenseAt?: string,
@@ -25,6 +26,7 @@ export async function addExpense(
 		name,
 		description,
 		price: parseFloat(price),
+		type: typeIri,
 		madeBy: madeById,
 		expenseGroup: groupId,
 		expenseAt,
@@ -41,6 +43,7 @@ export async function putExpense(
 	expenseId: string,
 	name: string,
 	price: string,
+	typeIri: string,
 	participants: string[],
 	description?: string,
 	expenseAt?: string,
@@ -50,18 +53,9 @@ export async function putExpense(
 		name,
 		description,
 		price: parseFloat(price),
+		type: typeIri,
 		madeBy: madeById,
 		expenseAt,
 		participants,
 	})
-}
-
-export async function getExpenseType(): Promise<{
-	expenseType: ExpenseType[]
-	totalItems: number
-}> {
-	const {
-		data: { 'hydra:member': expenseType, 'hydra:totalItems': totalItems },
-	} = await API.get(`/expense_types`)
-	return { expenseType, totalItems }
 }
