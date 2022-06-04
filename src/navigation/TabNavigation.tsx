@@ -52,6 +52,7 @@ const TabNavigation = (): ReactElement => {
 					borderRadius: borderRadius * 2,
 					borderTopWidth: 0,
 					elevation: 0,
+					height: 65,
 					shadowOpacity: 0,
 					zIndex: 500,
 				},

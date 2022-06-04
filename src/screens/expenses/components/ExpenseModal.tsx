@@ -7,6 +7,7 @@ import Button from '@ui/Button'
 import { Expense } from '@types/Expense'
 import { useTheme } from '@react-navigation/native'
 import BottomSheetModal from '@ui/BottomSheetModal'
+import { displayPrice } from '@services/expenseService'
 
 interface ExpenseModalProps {
 	expense: Expense
@@ -51,7 +52,7 @@ const ExpenseModal = ({
 	return (
 		<BottomSheetModal isOpen={isOpen} closeModal={closeModal}>
 			<FredokaText style={{ fontSize: 25 }}>{name}</FredokaText>
-			<Text weight='bold'>{price} €</Text>
+			<Text weight='bold'>{displayPrice(price)} €</Text>
 			{!!description && <Text>{description}</Text>}
 			<View style={layout.rowSBCenter}>
 				<Text style={{ color: colors.border }}>Par {madeBy?.username}</Text>

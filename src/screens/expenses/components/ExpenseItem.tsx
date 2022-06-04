@@ -9,6 +9,7 @@ import { Expense } from '@types/Expense'
 import ExpenseModal from './ExpenseModal'
 import { sideMargin } from '@constants/Layout'
 import dayjs from 'dayjs'
+import { displayPrice } from '@services/expenseService'
 
 interface ExpenseItemProps {
 	expense: Expense
@@ -66,7 +67,7 @@ const ExpenseItem = ({
 						<View style={[layout.rowSBCenter, { marginBottom: 2 }]}>
 							<FredokaText style={{ fontSize: 16 }}>{name}</FredokaText>
 							<Text weight='bold' style={{ fontSize: 16 }}>
-								{price} €
+								{displayPrice(price)} €
 							</Text>
 						</View>
 						<View style={layout.rowSBCenter}>

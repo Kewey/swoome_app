@@ -17,7 +17,12 @@ import TextInput from '@ui/TextInput'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Controller, useForm } from 'react-hook-form'
 import { Expense, ExpenseForm } from '@types/Expense'
-import { addExpense, putExpense } from '@services/expenseService'
+import {
+	addExpense,
+	displayPrice,
+	formatPrice,
+	putExpense,
+} from '@services/expenseService'
 import { User } from '@types/user'
 import { sideMargin } from '@constants/Layout'
 import { getSelectedGroup } from '@services/userService'
@@ -62,7 +67,7 @@ const AddExpenseModal = ({ route, navigation }) => {
 		defaultValues: expense
 			? {
 					name: expense.name,
-					price: expense.price,
+					price: displayPrice(expense.price),
 					type: expense.type,
 					description: expense.description,
 					expenseAt: expense.expenseAt,
@@ -95,7 +100,7 @@ const AddExpenseModal = ({ route, navigation }) => {
 				? await putExpense(
 						expense.id,
 						name,
-						price,
+						formatPrice(parseInt(price)),
 						type['@id'],
 						participants,
 						description,
@@ -105,7 +110,7 @@ const AddExpenseModal = ({ route, navigation }) => {
 				: await addExpense(
 						currentGroup['@id'],
 						name,
-						price,
+						formatPrice(parseInt(price)),
 						type['@id'],
 						participants,
 						description,

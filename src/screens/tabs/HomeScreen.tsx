@@ -9,7 +9,11 @@ import {
 	useNavigation,
 	useTheme,
 } from '@react-navigation/native'
-import { deleteExpense, getGroupExpenses } from '@services/expenseService'
+import {
+	deleteExpense,
+	displayPrice,
+	getGroupExpenses,
+} from '@services/expenseService'
 import { Expense } from '@types/Expense'
 import { sideMargin } from '@constants/Layout'
 import Text from '@ui/Text'
@@ -22,9 +26,10 @@ import { borderRadius, layout } from '@styles/layout'
 import { White } from '@constants/Colors'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import CircleButton from '@ui/CircleButton'
-import dayjs from 'dayjs'
 
 const HomeScreen = () => {
+	// const groupId = route.params?.groupId
+
 	const currentGroup = useSelector(getCurrentGroup)
 	const currentUser = useSelector(getCurrentUser)
 	const [expenses, setExpenses] = useState<Expense[]>([])
@@ -36,8 +41,8 @@ const HomeScreen = () => {
 
 	const updateExpenses = async () => {
 		setIsLoading(true)
-		const { expenses } = await getGroupExpenses(currentGroup.id)
-		const group = await getGroup(currentGroup.id)
+		const { expenses } = await getGroupExpenses(currentGroup!.id)
+		const group = await getGroup(currentGroup!.id)
 		dispatch(setGroup(group))
 		setExpenses(expenses)
 		setIsLoading(false)
@@ -45,7 +50,7 @@ const HomeScreen = () => {
 
 	const scrollPositionValue = useRef(new Animated.Value(0)).current
 
-	const totalExpenses = currentGroup.expenses.reduce(
+	const totalExpenses = currentGroup!.expenses.reduce(
 		(previousValue, expense) => {
 			return previousValue + expense.price
 		},
@@ -70,58 +75,59 @@ const HomeScreen = () => {
 		} catch (error) {}
 	}
 
-	const currentBalance = currentGroup?.balances.find(
+	const currentBalance = currentGroup!.balances.find(
 		(balance) => balance.balanceUser.id === currentUser?.id
 	)
 
-	const ListHeaderComponent = () => (
-		<View
-			style={{
-				paddingHorizontal: sideMargin,
-				justifyContent: 'center',
-			}}
-		>
+	const ListHeaderComponent = () =>
+		currentGroup && (
 			<View
 				style={{
-					backgroundColor: colors.primary,
-					borderRadius: borderRadius * 2,
-					overflow: 'hidden',
+					paddingHorizontal: sideMargin,
+					justifyContent: 'center',
 				}}
 			>
-				<ImageBackground
-					source={require('@assets/motif.png')}
+				<View
 					style={{
-						flex: 1,
-						justifyContent: 'center',
-						padding: 20,
+						backgroundColor: colors.primary,
+						borderRadius: borderRadius * 2,
+						overflow: 'hidden',
 					}}
-					resizeMode='repeat'
-					imageStyle={{ opacity: 0.05 }}
 				>
-					<View style={{ marginBottom: 20 }}>
-						<Text style={{ color: White }}>Dépenses total du groupe</Text>
-						<FredokaText style={{ color: White, fontSize: 45 }}>
-							{currentGroup?.sumExpenses} €
-						</FredokaText>
-					</View>
-					<View style={{ flexDirection: 'row' }}>
-						<View style={{ flex: 1 }}>
-							<Text style={{ color: White }}>Mes dépenses</Text>
-							<FredokaText style={{ color: White, fontSize: 20 }}>
-								{totalExpenses || '0,00'} €
+					<ImageBackground
+						source={require('@assets/motif.png')}
+						style={{
+							flex: 1,
+							justifyContent: 'center',
+							padding: 20,
+						}}
+						resizeMode='repeat'
+						imageStyle={{ opacity: 0.05 }}
+					>
+						<View style={{ marginBottom: 20 }}>
+							<Text style={{ color: White }}>Dépenses total du groupe</Text>
+							<FredokaText style={{ color: White, fontSize: 45 }}>
+								{displayPrice(currentGroup.sumExpenses)} €
 							</FredokaText>
 						</View>
-						<View style={{ flex: 1 }}>
-							<Text style={{ color: White }}>Ma balance</Text>
-							<FredokaText style={{ color: White, fontSize: 20 }}>
-								{currentBalance?.value} €
-							</FredokaText>
+						<View style={{ flexDirection: 'row' }}>
+							<View style={{ flex: 1 }}>
+								<Text style={{ color: White }}>Mes dépenses</Text>
+								<FredokaText style={{ color: White, fontSize: 20 }}>
+									{displayPrice(totalExpenses)} €
+								</FredokaText>
+							</View>
+							<View style={{ flex: 1 }}>
+								<Text style={{ color: White }}>Ma balance</Text>
+								<FredokaText style={{ color: White, fontSize: 20 }}>
+									{displayPrice(currentBalance?.value)} €
+								</FredokaText>
+							</View>
 						</View>
-					</View>
-				</ImageBackground>
+					</ImageBackground>
+				</View>
 			</View>
-		</View>
-	)
+		)
 
 	const ListEmptyComponent = ({}) =>
 		isLoading ? (

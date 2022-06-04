@@ -59,3 +59,17 @@ export async function putExpense(
 		participants,
 	})
 }
+
+export function formatPrice(price: number | undefined): string {
+	if (!price) return '0,00'
+	return (price * 100).toFixed(0)
+}
+
+export function displayPrice(price: number | undefined): string {
+	if (!price) return '0,00'
+
+	return (price / 100).toLocaleString(undefined, {
+		maximumFractionDigits: 2,
+		minimumFractionDigits: 2,
+	})
+}

@@ -25,7 +25,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import persistReducer from 'redux-persist/es/persistReducer'
 import { combineReducers } from 'redux'
-import groupReducer, { getCurrentGroup } from '@redux/group.reducer'
+import groupReducer, { getCurrentGroup, setGroup } from '@redux/group.reducer'
 import { getUser } from '@services/userService'
 import { API, injectStore } from '@services/apiService'
 import MainNavigation from '@navigation/MainNavigation'
@@ -100,6 +100,7 @@ export function App() {
 
 				if (!token) {
 					dispatch(setUser(null))
+					dispatch(setGroup(null))
 					return
 				}
 
