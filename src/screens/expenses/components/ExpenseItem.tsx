@@ -10,6 +10,8 @@ import ExpenseModal from './ExpenseModal'
 import { sideMargin } from '@constants/Layout'
 import dayjs from 'dayjs'
 import { displayPrice } from '@services/expenseService'
+import { ArrowLeft, ArrowRight } from 'iconoir-react-native'
+import Avatar from '@ui/Avatar'
 
 interface ExpenseItemProps {
 	expense: Expense
@@ -26,6 +28,7 @@ const ExpenseItem = ({
 		expenseAt,
 		description,
 		type,
+		participants,
 		...expense
 	},
 	updateExpense,
@@ -71,9 +74,31 @@ const ExpenseItem = ({
 							</Text>
 						</View>
 						<View style={layout.rowSBCenter}>
-							<Text style={{ color: colors.border }}>
-								Par {madeBy?.username}
-							</Text>
+							<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+								<Text style={{ color: colors.border, marginRight: 5 }}>
+									Par
+								</Text>
+								<Avatar
+									source={madeBy.avatar}
+									username={madeBy.username}
+									size={20}
+								/>
+								<ArrowRight
+									height={15}
+									width={15}
+									color={colors.text}
+									style={{ marginHorizontal: 5 }}
+								/>
+								{participants.map((participant) => (
+									<View key={participant['@id']} style={{ marginRight: -8 }}>
+										<Avatar
+											source={participant.avatar}
+											username={participant.username}
+											size={20}
+										/>
+									</View>
+								))}
+							</View>
 							<Text style={{ color: colors.border }}>
 								le {dayjs(expenseAt).format('DD/MM/YYYY')}
 							</Text>

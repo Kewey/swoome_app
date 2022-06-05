@@ -1,5 +1,5 @@
-import { Animated, View } from 'react-native'
-import React, { useRef, useState } from 'react'
+import { Animated } from 'react-native'
+import React, { useState } from 'react'
 import { withAnchorPoint } from 'react-native-anchor-point'
 import { useTheme } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -7,6 +7,9 @@ import { sideMargin } from '@constants/Layout'
 import { FONTS } from '@types/Fonts'
 import { useSelector } from 'react-redux'
 import { getCurrentGroup } from '@redux/group.reducer'
+import Text from '@ui/Text'
+import CircleButton from './CircleButton'
+import layout from '@constants/Layout'
 
 const HEADER_EXTENDED = 120
 const HEADER_COLLAPSED = 60
@@ -125,21 +128,36 @@ const AnimatedHeaderLayout = ({
 				</Animated.Text>
 			</Animated.View>
 
-			<Animated.Text
-				style={[
-					{
-						position: 'absolute',
-						paddingHorizontal: sideMargin,
-						top: top + 18,
-						fontSize: 18,
-						fontFamily: FONTS.MONTSERRAT_BOLD,
-						color: colors.text,
-						opacity: animatedGroupOpacity,
-					},
-				]}
+			<Animated.View
+				style={{
+					flexDirection: 'row',
+					alignItems: 'center',
+					position: 'absolute',
+					paddingHorizontal: sideMargin,
+					top: top + 10,
+					opacity: animatedGroupOpacity,
+				}}
 			>
-				{currentGroup?.name}
-			</Animated.Text>
+				<CircleButton
+					backgroundColor={colors.background}
+					style={{ marginRight: 10 }}
+				>
+					<Text style={{ fontSize: 12 }}>{currentGroup?.type.emoji}</Text>
+				</CircleButton>
+				<Text
+					numberOfLines={1}
+					style={[
+						{
+							width: layout.window.width - sideMargin * 2 - 140,
+							fontSize: 18,
+							fontFamily: FONTS.MONTSERRAT_BOLD,
+							color: colors.text,
+						},
+					]}
+				>
+					{currentGroup?.name}
+				</Text>
+			</Animated.View>
 		</>
 	)
 }

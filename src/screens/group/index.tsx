@@ -21,6 +21,8 @@ import { sideMargin } from '@constants/Layout'
 import { getGroup } from '@services/groupService'
 import { getUser } from '@services/userService'
 import { useFocusEffect } from '@react-navigation/native'
+import CardWithIcon from '@ui/CardWithIcon'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 type GroupIndexProps = {
 	navigation: GroupNavigationProp<GroupScreens.Index>
@@ -97,12 +99,13 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 				ItemSeparatorComponent={() => <View style={{ height: 15 }} />}
 				renderItem={({ item: group }: ListRenderItemInfo<Group>) => {
 					return (
-						<GroupItem
-							label={group.name}
-							icon={group.type.emoji}
-							groupName={group.type.name}
-							onPress={() => setCurrentGroup(group.id)}
-						/>
+						<TouchableWithoutFeedback onPress={() => setCurrentGroup(group.id)}>
+							<CardWithIcon
+								label={group.name}
+								icon={group.type.emoji}
+								sublabel={group.type.name}
+							/>
+						</TouchableWithoutFeedback>
 					)
 				}}
 				data={currentUser?.groups}

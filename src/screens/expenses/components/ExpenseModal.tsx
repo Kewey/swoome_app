@@ -35,10 +35,9 @@ const ExpenseModal = ({
 	const { colors } = useTheme()
 
 	const onPressDelete = async () => {
-		console.log(id)
 		try {
-			removeExpense(id)
 			closeModal()
+			removeExpense(id)
 		} catch (error) {
 			console.log(error)
 		}
@@ -67,7 +66,7 @@ const ExpenseModal = ({
 				}}
 			/>
 			<Button
-				variant='neutral'
+				variant='transparent'
 				onPress={onPressEdit}
 				style={{ marginBottom: 10 }}
 			>

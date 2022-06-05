@@ -1,5 +1,6 @@
 import {
 	FlatList,
+	Keyboard,
 	KeyboardAvoidingView,
 	Pressable,
 	TouchableWithoutFeedback,
@@ -71,6 +72,7 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 
 	const onSubmit = async ({ name, typeIri }: GroupCreate) => {
 		setLoading(true)
+		Keyboard.dismiss()
 		try {
 			const newGroup = await createGroup(name, typeIri)
 			dispatch(setGroup(newGroup))

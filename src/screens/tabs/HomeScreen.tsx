@@ -50,12 +50,12 @@ const HomeScreen = () => {
 
 	const scrollPositionValue = useRef(new Animated.Value(0)).current
 
-	const totalExpenses = currentGroup!.expenses.reduce(
-		(previousValue, expense) => {
-			return previousValue + expense.price
-		},
-		0
+	const filterMyExpenses = currentGroup!.expenses.filter(
+		(expense) => expense.madeBy?.id === currentUser?.id
 	)
+	const totalExpenses = filterMyExpenses.reduce((previousValue, expense) => {
+		return previousValue + expense.price
+	}, 0)
 
 	useFocusEffect(
 		useCallback(() => {
@@ -69,9 +69,12 @@ const HomeScreen = () => {
 		} catch (error) {}
 	}
 
-	const removeExpense = async (expenseId: string) => {
+	const removeExpense = async (expenseId: string, positionIdx: number) => {
 		try {
 			await deleteExpense(expenseId)
+			const currentExpenses = [...expenses]
+			const newExpenses = currentExpenses.splice(positionIdx, 1)
+			setExpenses(currentExpenses)
 		} catch (error) {}
 	}
 
@@ -258,11 +261,11 @@ const HomeScreen = () => {
 				ListHeaderComponent={ListHeaderComponent}
 				ListEmptyComponent={ListEmptyComponent}
 				keyExtractor={(expense) => expense.id}
-				renderItem={({ item: expense }) => (
+				renderItem={({ item: expense, index }) => (
 					<ExpenseItem
 						expense={expense}
 						updateExpense={updateExpense}
-						removeExpense={removeExpense}
+						removeExpense={() => removeExpense(expense.id, index)}
 					/>
 				)}
 			/>

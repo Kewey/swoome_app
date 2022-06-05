@@ -5,6 +5,7 @@ import { Light, White } from '@constants/Colors'
 import Text from './Text'
 import { layout } from '@styles/layout'
 import { useTheme } from '@react-navigation/native'
+import Layout, { sideMargin } from '@constants/Layout'
 
 interface CardWithIconProps {
 	icon: string
@@ -36,7 +37,13 @@ const CardWithIcon = ({ icon, label, sublabel }: CardWithIconProps) => {
 				</CircleButton>
 				<View>
 					{sublabel && <Text style={{ fontSize: 12 }}>{sublabel}</Text>}
-					<Text weight='bold'>{label}</Text>
+					<Text
+						weight='bold'
+						numberOfLines={1}
+						style={{ width: Layout.window.width - sideMargin * 2 - 90 }}
+					>
+						{label}
+					</Text>
 				</View>
 			</View>
 		</View>

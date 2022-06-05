@@ -25,6 +25,8 @@ export const darkTheme = {
 	...DarkTheme,
 	colors: {
 		...DarkTheme.colors,
+		primary: Blue,
+		secondary: Cyan,
 		border: MediumGrey,
 		card: DarkGrey,
 	},

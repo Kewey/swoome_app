@@ -12,6 +12,7 @@ const TextInput = ({ ...props }: TextInputProp) => {
 	return (
 		<NativeTextInput
 			{...props}
+			placeholderTextColor={colors.border}
 			style={[
 				{
 					borderWidth: 1,

@@ -72,4 +72,14 @@ export async function resendMail(email: string) {
 	})
 }
 
+export async function editUser(
+	userId: string,
+	username?: string
+): Promise<User> {
+	const { data } = await API.put(`/users/${userId}`, {
+		username,
+	})
+	return data
+}
+
 export async function logout() {}

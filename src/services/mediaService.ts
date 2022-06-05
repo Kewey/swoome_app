@@ -7,35 +7,6 @@ interface FormDataValue {
 	type: string
 }
 
-interface FormData {
-	append(
-		name: string,
-		value: string | Blob | FormDataValue,
-		fileName?: string
-	): void
-	delete(name: string): void
-	get(name: string): FormDataEntryValue | null
-	getAll(name: string): FormDataEntryValue[]
-	has(name: string): boolean
-	set(
-		name: string,
-		value: string | Blob | FormDataValue,
-		fileName?: string
-	): void
-}
-
-declare let FormData: {
-	prototype: FormData
-	new (form?: HTMLFormElement): FormData
-}
-
-interface FormData {
-	entries(): IterableIterator<[string, string | File]>
-	keys(): IterableIterator<string>
-	values(): IterableIterator<string | File>
-	[Symbol.iterator](): IterableIterator<string | File>
-}
-
 export async function addMedia(
 	name: string,
 	file: { uri: string; type: string; name: string }
@@ -43,21 +14,21 @@ export async function addMedia(
 	const formData = new FormData()
 
 	formData.append('file', file.uri)
-
-	// const { data: expense } = await API.post(`/media_objects`, formData, {
-	// 	transformRequest: (__, _) => formData,
-	// 	headers: {
-	// 		Accept: 'application/json',
-	// 		'Content-Type': 'multipart/form-data',
-	// 	},
-	// })
+	formData.append('name', 'file')
 
 	try {
-		const res = await fetch(API.defaults.baseURL + '/media_objects', {
+		// const res = API.post('/media_upload', formData, {
+		// 	transformRequest: (__, _) => formData,
+		// 	headers: null,
+		// })
+		const res = await fetch(API.defaults.baseURL + '/media_upload', {
 			// @ts-ignore
 			body: formData,
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
+			headers: {
+				Accept: 'multipart/form-data',
+				'Content-Type': 'multipart/form-data',
+			},
 		})
 		console.log('res', await res.json())
 	} catch (error) {

@@ -41,7 +41,7 @@ import {
 	NavigationContainer,
 	useTheme,
 } from '@react-navigation/native'
-import Toast from 'react-native-toast-message'
+import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message'
 import { darkTheme, theme } from '@styles/theme'
 import dayjs from 'dayjs'
 require('dayjs/locale/fr')
@@ -129,7 +129,7 @@ export function App() {
 	}
 
 	return (
-		<SafeAreaProvider style={{ backgroundColor: colors.background }}>
+		<SafeAreaProvider>
 			<StatusBar style={isDarkTheme ? 'light' : 'dark'} />
 			<NavigationContainer theme={isDarkTheme ? darkTheme : theme}>
 				{!currentUser ? (
@@ -139,6 +139,7 @@ export function App() {
 				) : (
 					<MainNavigation />
 				)}
+				<Toast autoHide />
 			</NavigationContainer>
 		</SafeAreaProvider>
 	)
@@ -146,13 +147,10 @@ export function App() {
 
 export default function AppWrapper(): ReactElement {
 	return (
-		<>
-			<Provider store={store}>
-				<PersistGate loading={null} persistor={persistor}>
-					<App />
-				</PersistGate>
-			</Provider>
-			<Toast autoHide />
-		</>
+		<Provider store={store}>
+			<PersistGate loading={null} persistor={persistor}>
+				<App />
+			</PersistGate>
+		</Provider>
 	)
 }

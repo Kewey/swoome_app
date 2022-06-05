@@ -28,13 +28,13 @@ import { sideMargin } from '@constants/Layout'
 import { getSelectedGroup } from '@services/userService'
 import {
 	ScrollView,
-	TouchableOpacity,
 	TouchableWithoutFeedback,
 } from 'react-native-gesture-handler'
 import { FONTS } from '@types/Fonts'
 import CircleButton from '@ui/CircleButton'
 import dayjs from 'dayjs'
 import DateTimePicker from '@react-native-community/datetimepicker'
+import Input from '@ui/Input'
 
 const AddExpenseModal = ({ route, navigation }) => {
 	const expense: Expense = route?.params?.expense
@@ -61,7 +61,7 @@ const AddExpenseModal = ({ route, navigation }) => {
 		setValue,
 		getValues,
 		handleSubmit,
-		formState: { errors },
+		formState: { errors, isValid },
 	} = useForm<ExpenseForm>({
 		// @ts-ignore
 		defaultValues: expense
@@ -93,6 +93,7 @@ const AddExpenseModal = ({ route, navigation }) => {
 		type,
 	}: ExpenseForm) => {
 		setIsLoading(true)
+		console.log(isLoading)
 
 		try {
 			if (!currentGroup?.id) return
@@ -167,7 +168,6 @@ const AddExpenseModal = ({ route, navigation }) => {
 					<ScrollView>
 						<View
 							style={{
-								marginBottom: 15,
 								paddingHorizontal: sideMargin,
 								paddingVertical: 20,
 							}}
@@ -175,8 +175,14 @@ const AddExpenseModal = ({ route, navigation }) => {
 							<Controller
 								control={control}
 								rules={{
-									required: true,
-									pattern: /^\d+(,\d{1,2})?$/,
+									required: {
+										value: true,
+										message: 'Il nous faut un prix pour calculer 👉👈',
+									},
+									pattern: {
+										value: /^\d+(,\d{1,2})?$/,
+										message: "Ceci n'est pas une somme valide",
+									},
 								}}
 								render={({
 									field: { onChange, onBlur, value },
@@ -190,7 +196,9 @@ const AddExpenseModal = ({ route, navigation }) => {
 												fontSize: 45,
 												fontFamily: FONTS.FREDOKAONE,
 												textAlign: 'center',
+												color: colors.text,
 											}}
+											placeholderTextColor={colors.card}
 											placeholder='0,00'
 											onBlur={onBlur}
 											onChangeText={onChange}
@@ -198,7 +206,11 @@ const AddExpenseModal = ({ route, navigation }) => {
 											keyboardType={'decimal-pad'}
 											autoFocus
 										/>
-										{error && <Text>{error.message}</Text>}
+										{error && (
+											<Text style={{ color: colors.notification }}>
+												{error.message}
+											</Text>
+										)}
 									</View>
 								)}
 								name='price'
@@ -207,18 +219,18 @@ const AddExpenseModal = ({ route, navigation }) => {
 						<View
 							style={{
 								marginBottom: 15,
-								paddingVertical: 20,
+								paddingVertical: sideMargin,
 							}}
 						>
 							<FredokaText
-								style={{ marginBottom: 5, marginHorizontal: sideMargin }}
+								style={{ marginBottom: 10, marginHorizontal: sideMargin }}
 							>
 								On la range dans quoi ?
 							</FredokaText>
 							<Controller
 								control={control}
 								rules={{
-									required: true,
+									required: { value: true, message: 'Il faut faire le tri' },
 								}}
 								render={({
 									field: { value, onChange },
@@ -259,28 +271,37 @@ const AddExpenseModal = ({ route, navigation }) => {
 												</View>
 											)}
 										/>
-										{error && <Text>{error.message}</Text>}
-										<Text
+										<View
 											style={{ paddingHorizontal: sideMargin, marginTop: 8 }}
 										>
-											{value?.name}
-										</Text>
+											{error && (
+												<Text style={{ color: colors.notification }}>
+													{error.message}
+												</Text>
+											)}
+											{value && <Text>{value.name}</Text>}
+										</View>
 									</View>
 								)}
 								name='type'
 							/>
 						</View>
 						<View style={{ marginBottom: 15, paddingHorizontal: sideMargin }}>
-							<FredokaText style={{ marginBottom: 5 }}>
-								T'as acheté quoi ?
-							</FredokaText>
 							<Controller
 								control={control}
 								rules={{
-									required: true,
+									required: {
+										value: true,
+										message: 'Il nous faut un nom 👉👈',
+									},
 								}}
-								render={({ field: { onChange, onBlur, value } }) => (
-									<TextInput
+								render={({
+									field: { onChange, onBlur, value },
+									fieldState: { error },
+								}) => (
+									<Input
+										error={error}
+										label="T'as acheté quoi ?"
 										style={{
 											marginBottom: 5,
 										}}
@@ -291,16 +312,15 @@ const AddExpenseModal = ({ route, navigation }) => {
 								)}
 								name='name'
 							/>
-							{errors.name && <Text>This is required.</Text>}
 						</View>
 
 						<View style={{ marginBottom: 15, paddingHorizontal: sideMargin }}>
-							<FredokaText style={{ marginBottom: 5 }}>
-								C'était quand ?
-							</FredokaText>
 							<Controller
 								control={control}
-								render={({ field: { onChange, value } }) => {
+								render={({
+									field: { onChange, value },
+									fieldState: { error },
+								}) => {
 									const [isOpen, setIsOpen] = useState(false)
 									return (
 										<>
@@ -309,7 +329,10 @@ const AddExpenseModal = ({ route, navigation }) => {
 													setIsOpen(true)
 												}}
 											>
-												<TextInput
+												<Input
+													error={error}
+													label="C'était quand ?"
+													pointerEvents='none'
 													editable={false}
 													value={`${dayjs(value)
 														.format('dddd D MMMM YYYY')
@@ -336,25 +359,19 @@ const AddExpenseModal = ({ route, navigation }) => {
 								}}
 								name='expenseAt'
 							/>
-							{errors.description && <Text>This is required.</Text>}
 						</View>
 
 						<View style={{ marginBottom: 15, paddingHorizontal: sideMargin }}>
-							<View
-								style={{
-									flexDirection: 'row',
-									justifyContent: 'space-between',
-								}}
-							>
-								<FredokaText style={{ marginBottom: 5 }}>
-									Une explication ?
-								</FredokaText>
-								<Text style={{ marginBottom: 5 }}>(optionnel)</Text>
-							</View>
 							<Controller
 								control={control}
-								render={({ field: { onChange, onBlur, value } }) => (
-									<TextInput
+								render={({
+									field: { onChange, onBlur, value },
+									fieldState: { error },
+								}) => (
+									<Input
+										error={error}
+										label='Une explication ?'
+										optionnal
 										style={{
 											marginBottom: 5,
 										}}
@@ -365,7 +382,6 @@ const AddExpenseModal = ({ route, navigation }) => {
 								)}
 								name='description'
 							/>
-							{errors.description && <Text>This is required.</Text>}
 						</View>
 						<View style={{ marginBottom: 15 }}>
 							<FredokaText

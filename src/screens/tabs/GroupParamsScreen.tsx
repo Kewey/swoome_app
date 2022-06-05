@@ -34,7 +34,7 @@ const GroupParamsScreen = () => {
 
 	const scrollPositionValue = useRef(new Animated.Value(0)).current
 
-	const { control, handleSubmit } = useForm<{ name: string }>()
+	const { control, handleSubmit, reset } = useForm<{ name: string }>()
 
 	const onSubmit = async ({ name }: any) => {
 		setIsLoading(true)
@@ -42,6 +42,7 @@ const GroupParamsScreen = () => {
 		dispatch(setGroup(editedGroup))
 		setIsLoading(false)
 		setIsOpen(false)
+		reset()
 	}
 
 	return (
@@ -153,13 +154,11 @@ const GroupParamsScreen = () => {
 						</Button>
 					</BottomSheetModal>
 
-					<TouchableOpacity>
-						<CardWithIcon
-							icon={currentGroup?.type.emoji || ''}
-							sublabel='Type du groupe'
-							label={currentGroup?.type.name || ''}
-						/>
-					</TouchableOpacity>
+					<CardWithIcon
+						icon={currentGroup?.type.emoji || ''}
+						sublabel='Type du groupe'
+						label={currentGroup?.type.name || ''}
+					/>
 				</View>
 
 				<View style={{ paddingHorizontal: 20 }}>
@@ -193,16 +192,7 @@ const GroupParamsScreen = () => {
 								<FredokaText style={{ fontSize: 16 }}>
 									{membre?.username}
 								</FredokaText>
-								<Text style={{ fontSize: 14 }}>Administrateur</Text>
 							</View>
-							<CircleButton backgroundColor={colors.card}>
-								<MoreHoriz
-									height={20}
-									width={20}
-									color={colors.text}
-									fill={colors.text}
-								/>
-							</CircleButton>
 						</View>
 					))}
 				</View>
