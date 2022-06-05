@@ -6,7 +6,9 @@ import {
 	Circle,
 	ClipPath,
 	Defs,
+	G,
 	Image as SVGImage,
+	Rect,
 	Text as SVGText,
 } from 'react-native-svg'
 import AnimatedHeaderLayout from '@ui/AnimatedHeaderLayout'
@@ -23,6 +25,7 @@ import { ArrowRight } from 'iconoir-react-native'
 import Button from '@ui/Button'
 import { Refund } from '@types/Refund'
 import dayjs from 'dayjs'
+import { FONTS } from '@types/Fonts'
 
 const RefundsScreen = () => {
 	const { colors } = useTheme()
@@ -82,8 +85,8 @@ const RefundsScreen = () => {
 			? Math.max(...balanceData)
 			: -Math.min(...balanceData)
 
-	const Labels = ({ x, y, bandwidth, data }: any) =>
-		data.map((value: number, index: number) => (
+	const Labels = ({ x, y, bandwidth, data, height, contentInset }: any) =>
+		data.map((value: any, index: number) => (
 			<>
 				{!!value && (
 					<SVGText
@@ -140,13 +143,13 @@ const RefundsScreen = () => {
 					horizontal
 					style={{
 						height: 60 * balanceData.length,
-						width: width - sideMargin * 2,
+						width: width,
 					}}
 					spacingInner={0.2}
 					svg={{ fill: Cyan }}
 					contentInset={{ left: sideMargin, right: sideMargin }}
-					yMax={maxValue || 1}
-					yMin={-maxValue || 1}
+					yMax={maxValue || 10}
+					yMin={-maxValue || -10}
 				>
 					{/* @ts-ignore */}
 					<Labels />

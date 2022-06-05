@@ -1,7 +1,9 @@
 import {
 	Animated,
+	KeyboardAvoidingView,
 	NativeScrollEvent,
 	NativeSyntheticEvent,
+	Platform,
 	ScrollView,
 } from 'react-native'
 import React, { ReactElement, ReactNode } from 'react'
@@ -25,6 +27,7 @@ const Layout = ({
 			onScroll={onScroll ? onScroll : undefined}
 			showsVerticalScrollIndicator={false}
 			scrollEventThrottle={16}
+			keyboardShouldPersistTaps='handled'
 			style={[
 				layout.container,
 				{

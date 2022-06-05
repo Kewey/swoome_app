@@ -6,27 +6,22 @@ import {
 	getCurrentUser,
 	getTheme,
 	setTheme,
-	setToken,
-	setUser,
 } from '@redux/user.reducer'
 import CardWithIcon from '@ui/CardWithIcon'
 import FredokaText from '@ui/FredokaText'
-import { removeGroup, setGroup } from '@redux/group.reducer'
+import { removeGroup } from '@redux/group.reducer'
 import Layout from '@ui/Layout'
-import { useNavigation } from '@react-navigation/native'
-import { ProfileScreens } from '@navigation/Routes'
 
 const ProfileScreen = () => {
 	const user = useSelector(getCurrentUser)
 	const isDarkTheme = useSelector(getTheme)
 	const dispatch = useDispatch()
-	const navigation = useNavigation()
 
 	return (
 		<Layout>
 			<TouchableOpacity
 				style={{ marginBottom: 10, marginHorizontal: 20 }}
-				onPress={() => navigation.navigate(ProfileScreens.Account)}
+				onPress={() => {}}
 			>
 				<CardWithIcon
 					icon='🙄'

@@ -59,6 +59,13 @@ const GroupParamsScreen = () => {
 				)}
 			>
 				<View style={{ paddingHorizontal: 20, marginBottom: 25 }}>
+					<FredokaText style={{ fontSize: 20, marginBottom: 5 }}>
+						Code du groupe
+					</FredokaText>
+					<Text style={{ marginBottom: 10, opacity: 0.6 }}>
+						Ce code permet aux autres utilisateurs de l'application de rejoindre
+						ton groupe.
+					</Text>
 					<View
 						style={{
 							backgroundColor: colors.card,
@@ -107,7 +114,9 @@ const GroupParamsScreen = () => {
 					</View>
 
 					<View style={{ marginBottom: 10 }}>
-						<FredokaText style={{ fontSize: 20 }}>Informations</FredokaText>
+						<FredokaText style={{ fontSize: 20, marginBottom: 5 }}>
+							Modification du groupe
+						</FredokaText>
 					</View>
 					<TouchableOpacity
 						style={{ marginBottom: 10 }}
@@ -155,7 +164,9 @@ const GroupParamsScreen = () => {
 
 				<View style={{ paddingHorizontal: 20 }}>
 					<View style={{ marginBottom: 10 }}>
-						<FredokaText style={{ fontSize: 20 }}>Membres</FredokaText>
+						<FredokaText style={{ fontSize: 20, marginBottom: 5 }}>
+							Membres
+						</FredokaText>
 					</View>
 
 					{currentGroup?.members?.map((membre) => (
@@ -196,7 +207,7 @@ const GroupParamsScreen = () => {
 					))}
 				</View>
 
-				<View style={{ paddingTop: 15, paddingHorizontal: 20 }}>
+				{/* <View style={{ paddingTop: 15, paddingHorizontal: 20 }}>
 					<FredokaText style={{ fontSize: 20 }}>Zone de danger</FredokaText>
 					<TouchableOpacity style={[layout.rowSBCenter, { marginTop: 10 }]}>
 						<Text weight='bold' style={{ color: 'red' }}>
@@ -206,7 +217,7 @@ const GroupParamsScreen = () => {
 							<Trash height={15} width={15} color={'red'} />
 						</CircleButton>
 					</TouchableOpacity>
-				</View>
+				</View> */}
 			</Layout>
 			<AnimatedHeaderLayout
 				title='Mon groupe'
