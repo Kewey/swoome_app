@@ -39,7 +39,10 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 	const onSubmit = async ({ email, password }: UserLogin) => {
 		setIsLoading(true)
 		try {
-			const { token, refresh_token } = await login(email, password)
+			const { token, refresh_token } = await login(
+				email.toLowerCase(),
+				password
+			)
 			// @ts-ignore
 			API.defaults.headers['Authorization'] = `Bearer ${token}`
 			await SecureStore.setItemAsync('refresh_token', refresh_token)
@@ -66,6 +69,8 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 					},
 				})
 			}
+		} finally {
+			setIsLoading(false)
 		}
 	}
 

@@ -13,6 +13,7 @@ const TextInput = ({ ...props }: TextInputProp) => {
 		<NativeTextInput
 			{...props}
 			placeholderTextColor={colors.border}
+			underlineColorAndroid={'transparent'}
 			style={[
 				{
 					borderWidth: 1,

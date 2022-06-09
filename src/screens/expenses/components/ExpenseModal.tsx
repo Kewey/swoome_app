@@ -8,6 +8,8 @@ import { Expense } from '@types/Expense'
 import { useTheme } from '@react-navigation/native'
 import BottomSheetModal from '@ui/BottomSheetModal'
 import { displayPrice } from '@services/expenseService'
+import Avatar from '@ui/Avatar'
+import dayjs from 'dayjs'
 
 interface ExpenseModalProps {
 	expense: Expense
@@ -23,7 +25,8 @@ const ExpenseModal = ({
 		name,
 		price,
 		madeBy,
-		// date,
+		participants,
+		expenseAt,
 		description,
 		...expense
 	},
@@ -44,19 +47,45 @@ const ExpenseModal = ({
 	}
 
 	const onPressEdit = async () => {
-		await updateExpense({ ...expense, id, name, price, madeBy, description })
+		await updateExpense({
+			...expense,
+			id,
+			name,
+			price,
+			madeBy,
+			description,
+			participants,
+		})
 		closeModal()
 	}
 
 	return (
 		<BottomSheetModal isOpen={isOpen} closeModal={closeModal}>
-			<FredokaText style={{ fontSize: 25 }}>{name}</FredokaText>
-			<Text weight='bold'>{displayPrice(price)} €</Text>
-			{!!description && <Text>{description}</Text>}
-			<View style={layout.rowSBCenter}>
-				<Text style={{ color: colors.border }}>Par {madeBy?.username}</Text>
-				{/* <Text style={{ color: colors.border }}>{date}</Text> */}
+			<View style={{ marginBottom: 15 }}>
+				<FredokaText style={{ fontSize: 25 }}>{name}</FredokaText>
+				<Text weight='bold'>{displayPrice(price)} €</Text>
+				{!!description && <Text>{description}</Text>}
 			</View>
+			<View style={[layout.rowSBCenter, { marginBottom: 10 }]}>
+				<View style={{ flexDirection: 'row', flex: 1 }}>
+					<Text style={{ color: colors.border, marginRight: 5 }}>Par</Text>
+					<Avatar source={madeBy.avatar} username={madeBy.username} />
+				</View>
+				<View style={{ flexDirection: 'row' }}>
+					<Text style={{ color: colors.border, marginRight: 10 }}>Pour</Text>
+					{participants.map((participant) => (
+						<View style={{ marginLeft: -5 }}>
+							<Avatar
+								source={participant.avatar}
+								username={participant.username}
+							/>
+						</View>
+					))}
+				</View>
+			</View>
+			<Text style={{ color: colors.border }}>
+				Ajouté le {dayjs(expenseAt).format('dddd D MMMM YYYY')}
+			</Text>
 			<View
 				style={{
 					height: 1,

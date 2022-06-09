@@ -23,6 +23,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import * as ImagePicker from 'expo-image-picker'
 import { sideMargin } from '@constants/Layout'
 import Toast from 'react-native-toast-message'
+import { Header } from '@react-navigation/stack'
 
 const NB_STEPS = 3
 
@@ -97,7 +98,12 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 	}: UserSignUp) => {
 		try {
 			setLoading(true)
-			const user = await createUser(username, email, password, avatar)
+			const user = await createUser(
+				username,
+				email.toLowerCase(),
+				password,
+				avatar
+			)
 			navigation.navigate(AuthScreens.Auth)
 			Toast.show({
 				text1: `Bienvenue ${username}`,
@@ -154,7 +160,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 		<KeyboardAvoidingView
 			style={{ flex: 1 }}
 			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-			keyboardVerticalOffset={50}
+			keyboardVerticalOffset={Header.HEIGHT + 50}
 		>
 			<ScrollView
 				keyboardShouldPersistTaps='handled'

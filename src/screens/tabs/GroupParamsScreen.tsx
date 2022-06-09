@@ -95,7 +95,7 @@ const GroupParamsScreen = () => {
 							}}
 						>
 							<FredokaText
-								style={{ fontSize: 40, letterSpacing: 20, textAlign: 'center' }}
+								style={{ fontSize: 35, letterSpacing: 20, textAlign: 'center' }}
 							>
 								{currentGroup?.code}
 							</FredokaText>

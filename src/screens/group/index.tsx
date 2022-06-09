@@ -75,7 +75,7 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 				paddingBottom: 30,
 			}}
 		>
-			<View style={{ flex: 1, justifyContent: 'center' }}>
+			<View style={{ justifyContent: 'center' }}>
 				<FredokaText
 					style={{ fontSize: 30, textAlign: 'center', marginBottom: 15 }}
 				>
@@ -110,14 +110,7 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 				}}
 				data={currentUser?.groups}
 			/>
-			<View
-				style={{
-					position: 'absolute',
-					bottom: bottom + 20,
-					left: 20,
-					right: 20,
-				}}
-			>
+			<View style={{ paddingTop: 0 }}>
 				<Button
 					block
 					size='large'

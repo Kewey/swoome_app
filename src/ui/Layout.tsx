@@ -23,25 +23,31 @@ const Layout = ({
 	const { colors } = useTheme()
 	const { top } = useSafeAreaInsets()
 	return (
-		<Animated.ScrollView
-			onScroll={onScroll ? onScroll : undefined}
-			showsVerticalScrollIndicator={false}
-			scrollEventThrottle={16}
-			keyboardShouldPersistTaps='handled'
-			style={[
-				layout.container,
-				{
-					paddingVertical: 25,
-					backgroundColor: colors.background,
-				},
-			]}
-			contentContainerStyle={{
-				paddingBottom: 120,
-				paddingTop: !!onScroll ? top + 110 : 0,
-			}}
+		<KeyboardAvoidingView
+			style={{ flex: 1 }}
+			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+			keyboardVerticalOffset={50}
 		>
-			{children}
-		</Animated.ScrollView>
+			<Animated.ScrollView
+				onScroll={onScroll ? onScroll : undefined}
+				showsVerticalScrollIndicator={false}
+				scrollEventThrottle={16}
+				keyboardShouldPersistTaps='handled'
+				style={[
+					layout.container,
+					{
+						paddingVertical: 25,
+						backgroundColor: colors.background,
+					},
+				]}
+				contentContainerStyle={{
+					paddingBottom: 120,
+					paddingTop: !!onScroll ? top + 110 : 0,
+				}}
+			>
+				{children}
+			</Animated.ScrollView>
+		</KeyboardAvoidingView>
 	)
 }
 

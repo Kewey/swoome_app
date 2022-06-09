@@ -37,7 +37,7 @@ const HomeScreen = () => {
 	const navigation = useNavigation()
 	const dispatch = useDispatch()
 	const { colors } = useTheme()
-	const { top } = useSafeAreaInsets()
+	const { top, bottom } = useSafeAreaInsets()
 
 	const updateExpenses = async () => {
 		setIsLoading(true)
@@ -245,7 +245,7 @@ const HomeScreen = () => {
 					marginBottom: 60,
 				}}
 				contentContainerStyle={{
-					paddingBottom: 90,
+					paddingBottom: bottom + 90,
 					paddingTop: top + 70,
 				}}
 				onScroll={Animated.event(

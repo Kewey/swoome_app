@@ -26,7 +26,8 @@
 				"foregroundImage": "./src/assets/images/adaptive-icon.png",
 				"backgroundColor": "#090954"
 			},
-			"package": "com.kewey.swoome"
+			"package": "com.kewey.swoome",
+			"googleServicesFile": "./google-services.json"
 		},
 		"web": {
 			"favicon": "./src/assets/images/favicon.png"
@@ -36,6 +37,14 @@
 				"expo-image-picker",
 				{
 					"photosPermission": "Permettre à $(PRODUCT_NAME) d'accéder à vos photos."
+				}
+			],
+			[
+				"expo-notifications",
+				{
+					"icon": "./src/assets/images/favicon.png",
+					"color": "#ffffff",
+					"sounds": []
 				}
 			]
 		]

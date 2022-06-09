@@ -7,14 +7,8 @@ interface FormDataValue {
 	type: string
 }
 
-export async function addMedia(
-	name: string,
-	file: { uri: string; type: string; name: string }
-): Promise<Media> {
-	const formData = new FormData()
-
-	formData.append('file', file.uri)
-	formData.append('name', 'file')
+export async function addMedia(name: string, file: any): Promise<Media> {
+	console.log(file)
 
 	try {
 		// const res = API.post('/media_upload', formData, {
@@ -23,12 +17,8 @@ export async function addMedia(
 		// })
 		const res = await fetch(API.defaults.baseURL + '/media_upload', {
 			// @ts-ignore
-			body: formData,
+			body: file,
 			method: 'POST',
-			headers: {
-				Accept: 'multipart/form-data',
-				'Content-Type': 'multipart/form-data',
-			},
 		})
 		console.log('res', await res.json())
 	} catch (error) {

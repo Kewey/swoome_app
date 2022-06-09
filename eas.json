@@ -12,12 +12,12 @@
 				"buildType": "apk"
 			},
 			"env": {
-				"API_URL": "https://swoome-api.herokuapp.com/api"
+				"API_URL": "https://api.swoome.fr/api"
 			}
 		},
 		"production": {
 			"env": {
-				"API_URL": "https://swoome-api.herokuapp.com/api"
+				"API_URL": "https://api.swoome.fr/api"
 			}
 		}
 	},

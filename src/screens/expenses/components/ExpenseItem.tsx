@@ -115,6 +115,7 @@ const ExpenseItem = ({
 					madeBy,
 					expenseAt,
 					description,
+					participants,
 					type,
 					...expense,
 				}}

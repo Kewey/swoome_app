@@ -38,7 +38,7 @@ const BottomSheetModal = ({
 				margin: sideMargin,
 				marginBottom: bottom + sideMargin,
 			}}
-			backdropOpacity={0.2}
+			backdropOpacity={0.6}
 			deviceWidth={deviceWidth}
 			deviceHeight={deviceHeight}
 		>

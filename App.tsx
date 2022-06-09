@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useRef } from 'react'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { StatusBar } from 'expo-status-bar'
 import AuthNavigation from '@navigation/AuthNavigation'
@@ -9,6 +9,7 @@ import userReducer, {
 	getCurrentUser,
 	setUser,
 } from '@redux/user.reducer'
+import * as Notifications from 'expo-notifications'
 import { configureStore } from '@reduxjs/toolkit'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useFonts } from 'expo-font'
@@ -36,16 +37,21 @@ import {
 	Montserrat_400Regular,
 	Montserrat_700Bold,
 } from '@expo-google-fonts/montserrat'
-import {
-	DarkTheme,
-	NavigationContainer,
-	useTheme,
-} from '@react-navigation/native'
-import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message'
+import { NavigationContainer } from '@react-navigation/native'
+import Toast from 'react-native-toast-message'
 import { darkTheme, theme } from '@styles/theme'
 import dayjs from 'dayjs'
+import { registerForPushNotificationsAsync } from '@services/notificationService'
 require('dayjs/locale/fr')
 dayjs.locale('fr')
+
+Notifications.setNotificationHandler({
+	handleNotification: async () => ({
+		shouldShowAlert: true,
+		shouldPlaySound: false,
+		shouldSetBadge: false,
+	}),
+})
 
 SplashScreen.preventAutoHideAsync().catch(() => {})
 
@@ -83,7 +89,8 @@ export function App() {
 	const token = useSelector(getToken)
 	const isDarkTheme = useSelector(getTheme)
 	const currentUser = useSelector(getCurrentUser)
-	const { colors } = useTheme()
+	const notificationListener = useRef<any>()
+	const responseListener = useRef<any>()
 
 	const [fontLoaded] = useFonts({
 		FredokaOne_400Regular,
@@ -95,6 +102,9 @@ export function App() {
 	useEffect(() => {
 		async function prepare() {
 			try {
+				const expoToken = await registerForPushNotificationsAsync()
+				console.log(expoToken)
+
 				// Keep the splash screen visible while we fetch resources
 				// Pre-load fonts, make any API calls you need to do here
 
@@ -119,7 +129,24 @@ export function App() {
 			}
 		}
 
+		// This listener is fired whenever a notification is received while the app is foregrounded
+		notificationListener.current =
+			Notifications.addNotificationReceivedListener((notification) => {
+				// setNotification(notification)
+			})
+
+		// This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+		responseListener.current =
+			Notifications.addNotificationResponseReceivedListener((response) => {
+				console.log(response)
+			})
+
 		prepare()
+
+		return () => {
+			Notifications.removeNotificationSubscription(notificationListener.current)
+			Notifications.removeNotificationSubscription(responseListener.current)
+		}
 	}, [])
 
 	const selectedGroup = useSelector(getCurrentGroup)

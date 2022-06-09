@@ -61,7 +61,7 @@ const AddExpenseModal = ({ route, navigation }) => {
 		setValue,
 		getValues,
 		handleSubmit,
-		formState: { errors, isValid },
+		formState: { errors },
 	} = useForm<ExpenseForm>({
 		// @ts-ignore
 		defaultValues: expense
@@ -93,7 +93,6 @@ const AddExpenseModal = ({ route, navigation }) => {
 		type,
 	}: ExpenseForm) => {
 		setIsLoading(true)
-		console.log(isLoading)
 
 		try {
 			if (!currentGroup?.id) return
@@ -118,10 +117,8 @@ const AddExpenseModal = ({ route, navigation }) => {
 						expenseAt,
 						madeBy
 				  )
-
-			setIsLoading(false)
 			navigation.goBack()
-		} catch (error) {
+		} finally {
 			setIsLoading(false)
 		}
 	}
@@ -387,7 +384,7 @@ const AddExpenseModal = ({ route, navigation }) => {
 							<FredokaText
 								style={{ marginBottom: 5, paddingHorizontal: sideMargin }}
 							>
-								Le sauveur.se
+								Payé par ?
 							</FredokaText>
 							<Controller
 								control={control}
