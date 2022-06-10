@@ -41,7 +41,7 @@ export async function createUser(
 	username: string,
 	email: string,
 	password: string,
-	avatar: string,
+	avatar: string | null = null,
 	pushToken: string
 ): Promise<User> {
 	const { data: user } = await API.post(`/auth/register`, {

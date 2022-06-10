@@ -86,7 +86,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 			username: '',
 			email: '',
 			password: '',
-			avatar: '',
+			avatar: null,
 		},
 	})
 
@@ -109,7 +109,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 			navigation.navigate(AuthScreens.Auth)
 			Toast.show({
 				text1: `Bienvenue ${username}`,
-				text2: `Connectes toi pour commencer à utiliser Swooome`,
+				text2: `Valide ton compte par mail puis connecte toi.`,
 			})
 		} catch (error) {}
 		setLoading(false)

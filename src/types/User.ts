@@ -24,7 +24,7 @@ export type UserSignUp = {
 	username: string
 	email: string
 	password: string
-	avatar: string
+	avatar: string | null
 }
 
 export type DispatchType = (args: UserAction) => UserAction

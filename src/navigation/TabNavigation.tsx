@@ -22,6 +22,7 @@ import React, { ReactElement } from 'react'
 import { Image, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Svg, { Defs, Stop, LinearGradient, Rect } from 'react-native-svg'
+import Toast from 'react-native-toast-message'
 import { useDispatch } from 'react-redux'
 import { TabStack, TabScreens, MainScreens } from './Routes'
 
@@ -103,9 +104,19 @@ const TabNavigation = (): ReactElement => {
 			<TabStack.Screen
 				name={TabScreens.Report}
 				component={ReportScreen}
+				listeners={{
+					tabPress: (e) => {
+						e.preventDefault()
+						Toast.show({
+							type: 'info',
+							text1: 'Ça arrive foooort 💪',
+							text2: 'On a encore des suprises pour toi très bientôt',
+						})
+					},
+				}}
 				options={{
 					tabBarIcon: ({ color, size }) => (
-						<Reports height={size} width={size} color={color} />
+						<Reports height={size} width={size} color={colors.border} />
 					),
 				}}
 			/>
