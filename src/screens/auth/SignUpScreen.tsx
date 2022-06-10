@@ -18,8 +18,8 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
+import * as Notifications from 'expo-notifications'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import * as ImagePicker from 'expo-image-picker'
 import { sideMargin } from '@constants/Layout'
 import Toast from 'react-native-toast-message'
@@ -98,11 +98,13 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 	}: UserSignUp) => {
 		try {
 			setLoading(true)
+			const expoToken = await Notifications.getExpoPushTokenAsync()
 			const user = await createUser(
 				username,
 				email.toLowerCase(),
 				password,
-				avatar
+				avatar,
+				expoToken.data
 			)
 			navigation.navigate(AuthScreens.Auth)
 			Toast.show({
@@ -276,8 +278,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 								<Text
 									style={{ textAlign: 'center', opacity: 0.55, fontSize: 13 }}
 								>
-									Connaitre ton prénom va nous permettre de personnaliser ton
-									expérience.
+									Elle nous servira pour valider ton compte.
 								</Text>
 							</View>
 							<View>
