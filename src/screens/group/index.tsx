@@ -33,21 +33,6 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 	const dispatch = useDispatch()
 	const { bottom } = useSafeAreaInsets()
 
-	navigation.setOptions({
-		headerRight: () => (
-			<View style={{ marginRight: 30 }}>
-				<TouchableOpacity
-					onPress={() => {
-						dispatch(setUser(null))
-						dispatch(setToken(''))
-					}}
-				>
-					<Text weight='bold'>Mauvais compte ?</Text>
-				</TouchableOpacity>
-			</View>
-		),
-	})
-
 	useFocusEffect(
 		useCallback(() => {
 			console.log('user')
@@ -110,7 +95,7 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
 				}}
 				data={currentUser?.groups}
 			/>
-			<View style={{ paddingTop: 0 }}>
+			<View style={{ paddingTop: 0, paddingBottom: bottom }}>
 				<Button
 					block
 					size='large'

@@ -108,6 +108,7 @@ const ExpenseItem = ({
 			</TouchableHighlight>
 
 			<ExpenseModal
+				key={id}
 				expense={{
 					id,
 					name,

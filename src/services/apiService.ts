@@ -3,7 +3,7 @@ import { API_URL } from '@env'
 import * as SecureStore from 'expo-secure-store'
 import { EnhancedStore } from '@reduxjs/toolkit'
 import { RootState } from '../../App'
-import { setToken, setUser } from '@redux/user.reducer'
+import { disconectUser, setToken, setUser } from '@redux/user.reducer'
 import { HydraError } from '@types/Utils'
 import { Toast } from 'react-native-toast-message/lib/src/Toast'
 
@@ -14,7 +14,7 @@ export type APIHydraType = {
 	createdAt: Date
 }
 
-let store: EnhancedStore<RootState>
+export let store: EnhancedStore<RootState>
 export const injectStore = (_store: EnhancedStore) => {
 	store = _store
 }
@@ -25,19 +25,6 @@ export const API = axios.create({
 		'Content-Type': 'application/json',
 	},
 })
-
-// API.interceptors.request.use(
-// 	async (config) => {
-// 		const token = await SecureStore.getItemAsync('token')
-// 		if (token && config.headers) {
-// 			config.headers['Authorization'] = `Bearer ${token}`
-// 		}
-// 		return config
-// 	},
-// 	(error) => {
-// 		return Promise.reject(error)
-// 	}
-// )
 
 API.interceptors.response.use(
 	(res) => res,
@@ -51,7 +38,7 @@ API.interceptors.response.use(
 			API.defaults.headers['Authorization'] = null
 
 			store.dispatch(setToken(''))
-			store.dispatch(setUser(null))
+			store.dispatch(disconectUser())
 			return
 		}
 
@@ -62,7 +49,7 @@ API.interceptors.response.use(
 				const refresh_token = await SecureStore.getItemAsync('refresh_token')
 				try {
 					const {
-						data: { token, ...othersData },
+						data: { token },
 					} = await API.post('/auth/refresh', { refresh_token })
 
 					store.dispatch(setToken(token))
@@ -82,7 +69,7 @@ API.interceptors.response.use(
 					API.defaults.headers['Authorization'] = null
 
 					store.dispatch(setToken(''))
-					store.dispatch(setUser(null))
+					store.dispatch(disconectUser())
 					return Promise.reject(_error)
 				}
 			}

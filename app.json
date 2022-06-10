@@ -3,7 +3,7 @@
 		"name": "Swoome",
 		"slug": "swoome",
 		"owner": "kewey65",
-		"version": "0.1.0",
+		"version": "0.4.1",
 		"orientation": "portrait",
 		"icon": "./src/assets/images/icon.png",
 		"scheme": "myapp",
@@ -26,6 +26,7 @@
 				"foregroundImage": "./src/assets/images/adaptive-icon.png",
 				"backgroundColor": "#090954"
 			},
+			"versionCode": "3",
 			"package": "com.kewey.swoome",
 			"googleServicesFile": "./google-services.json"
 		},

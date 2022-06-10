@@ -8,6 +8,7 @@ import userReducer, {
 	getToken,
 	getCurrentUser,
 	setUser,
+	disconectUser,
 } from '@redux/user.reducer'
 import * as Notifications from 'expo-notifications'
 import { configureStore } from '@reduxjs/toolkit'
@@ -26,7 +27,11 @@ import { PersistGate } from 'redux-persist/integration/react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import persistReducer from 'redux-persist/es/persistReducer'
 import { combineReducers } from 'redux'
-import groupReducer, { getCurrentGroup, setGroup } from '@redux/group.reducer'
+import groupReducer, {
+	getCurrentGroup,
+	removeGroup,
+	setGroup,
+} from '@redux/group.reducer'
 import { getUser } from '@services/userService'
 import { API, injectStore } from '@services/apiService'
 import MainNavigation from '@navigation/MainNavigation'
@@ -88,7 +93,6 @@ export function App() {
 	const dispatch = useDispatch()
 	const token = useSelector(getToken)
 	const isDarkTheme = useSelector(getTheme)
-	const currentUser = useSelector(getCurrentUser)
 	const notificationListener = useRef<any>()
 	const responseListener = useRef<any>()
 
@@ -101,16 +105,14 @@ export function App() {
 
 	useEffect(() => {
 		async function prepare() {
+			await registerForPushNotificationsAsync()
 			try {
-				const expoToken = await registerForPushNotificationsAsync()
-				console.log(expoToken)
-
 				// Keep the splash screen visible while we fetch resources
 				// Pre-load fonts, make any API calls you need to do here
 
 				if (!token) {
-					dispatch(setUser(null))
-					dispatch(setGroup(null))
+					dispatch(disconectUser())
+					dispatch(removeGroup())
 					return
 				}
 
@@ -131,15 +133,11 @@ export function App() {
 
 		// This listener is fired whenever a notification is received while the app is foregrounded
 		notificationListener.current =
-			Notifications.addNotificationReceivedListener((notification) => {
-				// setNotification(notification)
-			})
+			Notifications.addNotificationReceivedListener((notification) => {})
 
 		// This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
 		responseListener.current =
-			Notifications.addNotificationResponseReceivedListener((response) => {
-				console.log(response)
-			})
+			Notifications.addNotificationResponseReceivedListener((response) => {})
 
 		prepare()
 
@@ -159,7 +157,7 @@ export function App() {
 		<SafeAreaProvider>
 			<StatusBar style={isDarkTheme ? 'light' : 'dark'} />
 			<NavigationContainer theme={isDarkTheme ? darkTheme : theme}>
-				{!currentUser ? (
+				{!token ? (
 					<AuthNavigation />
 				) : !selectedGroup ? (
 					<GroupNavigation />

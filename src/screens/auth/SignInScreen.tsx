@@ -174,7 +174,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 								marginTop: 15,
 							}}
 						>
-							<Text>Pas encore de compte ?</Text>
+							<Text style={{ marginRight: 10 }}>Pas encore de compte ?</Text>
 							<TouchableOpacity
 								onPress={() => navigation.navigate(AuthScreens.SignUp)}
 							>

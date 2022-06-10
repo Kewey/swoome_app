@@ -7,6 +7,7 @@ export interface User extends APIHydraType {
 	email: string
 	groups: Group[]
 	avatar?: string
+	pushToken: string
 }
 
 export type UserLogin = {

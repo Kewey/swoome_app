@@ -5,6 +5,8 @@ import {
 	disconectUser,
 	getCurrentUser,
 	getTheme,
+	getIsNotificationActive,
+	setNotification,
 	setTheme,
 	setUser,
 } from '@redux/user.reducer'
@@ -16,15 +18,18 @@ import { Controller, useForm } from 'react-hook-form'
 import BottomSheetModal from '@ui/BottomSheetModal'
 import Input from '@ui/Input'
 import Button from '@ui/Button'
-import { editUser } from '@services/userService'
+import { editUser, setExpoToken } from '@services/userService'
 import * as ImagePicker from 'expo-image-picker'
 import { addMedia } from '@services/mediaService'
 import { Toast } from 'react-native-toast-message/lib/src/Toast'
+import { registerForPushNotificationsAsync } from '@services/notificationService'
 
 const ProfileScreen = () => {
 	const user = useSelector(getCurrentUser)
 	const isDarkTheme = useSelector(getTheme)
+	const isNotificationActive = useSelector(getIsNotificationActive)
 	const dispatch = useDispatch()
+
 	const [isPictureOpen, setIsPictureOpen] = useState(false)
 	const [isOpen, setIsOpen] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
@@ -52,14 +57,8 @@ const ProfileScreen = () => {
 			return
 		}
 
-		console.log('avatar', selectedAvatar)
-
 		try {
-			await addMedia('avatar', {
-				uri: selectedAvatar.base64 || selectedAvatar.uri,
-				type: selectedAvatar.type || 'image',
-				name: 'avatar',
-			})
+			await addMedia(selectedAvatar)
 		} catch (error: any) {
 			Toast.show({
 				type: 'error',
@@ -76,11 +75,20 @@ const ProfileScreen = () => {
 			aspect: [1, 1],
 			quality: 1,
 		})
-		console.log(result)
 
-		// const image = result as File
+		if (result.cancelled) {
+			return
+		}
 
-		addMedia('avatar', result)
+		try {
+			addMedia(result)
+		} catch (error: any) {
+			Toast.show({
+				type: 'error',
+				text1: "Oups une erreur s'est produite",
+				text2: error?.['hydra:description'],
+			})
+		}
 	}
 
 	return (
@@ -160,8 +168,21 @@ const ProfileScreen = () => {
 			<TouchableOpacity style={{ marginBottom: 10, marginHorizontal: 20 }}>
 				<CardWithIcon icon='🏁' sublabel='Langue' label='Français' />
 			</TouchableOpacity>
-			<TouchableOpacity style={{ marginBottom: 10, marginHorizontal: 20 }}>
-				<CardWithIcon icon='🔔' sublabel='Notifications' label='Activé' />
+			<TouchableOpacity
+				style={{ marginBottom: 10, marginHorizontal: 20 }}
+				onPress={async () => {
+					console.log(isNotificationActive)
+
+					isNotificationActive
+						? dispatch(setNotification(''))
+						: await registerForPushNotificationsAsync()
+				}}
+			>
+				<CardWithIcon
+					icon='🔔'
+					sublabel='Notifications'
+					label={isNotificationActive ? 'Activé' : 'Désactivé'}
+				/>
 			</TouchableOpacity>
 
 			<TouchableOpacity

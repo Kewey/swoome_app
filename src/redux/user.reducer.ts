@@ -8,6 +8,7 @@ interface UserSlice {
 	token: string | null
 	settings: {
 		isDarkTheme: boolean
+		isNotificationActive: string
 	}
 }
 
@@ -16,6 +17,7 @@ const initialState: UserSlice = {
 	token: '',
 	settings: {
 		isDarkTheme: Appearance.getColorScheme() === 'dark',
+		isNotificationActive: '',
 	},
 }
 
@@ -43,9 +45,17 @@ const userSlice = createSlice({
 		},
 		setTheme: {
 			reducer: (state, action: PayloadAction<boolean>) => {
-				state.settings = { isDarkTheme: action.payload }
+				state.settings.isDarkTheme = action.payload
 			},
 			prepare: (isDarkTheme: boolean) => ({ payload: isDarkTheme }),
+		},
+		setNotification: {
+			reducer: (state, action: PayloadAction<string>) => {
+				state.settings.isNotificationActive = action.payload
+			},
+			prepare: (isNotificationActive: string) => ({
+				payload: isNotificationActive,
+			}),
 		},
 	},
 })
@@ -54,8 +64,17 @@ const getCurrentUser = (state: RootState) => state.user.user
 const getUserGroups = (state: RootState) => state.user.user?.groups
 const getToken = (state: RootState) => state.user.token
 const getTheme = (state: RootState) => state.user.settings?.isDarkTheme
+const getIsNotificationActive = (state: RootState) =>
+	state.user.settings.isNotificationActive
 
-export const { setUser, setToken, setTheme, disconectUser } = userSlice.actions
-export { getCurrentUser, getToken, getUserGroups, getTheme }
+export const { setUser, setToken, setTheme, disconectUser, setNotification } =
+	userSlice.actions
+export {
+	getCurrentUser,
+	getToken,
+	getUserGroups,
+	getTheme,
+	getIsNotificationActive,
+}
 
 export default userSlice.reducer

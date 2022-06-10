@@ -1,26 +1,30 @@
 import { Media } from '@types/Media'
+import { ImagePickerResult } from 'expo-image-picker'
 import { API } from './apiService'
 
-interface FormDataValue {
-	uri: string
-	name: string
-	type: string
-}
+export async function addMedia(result: any): Promise<Media> {
+	let localUri = result.uri
+	let filename = localUri.split('/').pop()
 
-export async function addMedia(name: string, file: any): Promise<Media> {
-	console.log(file)
+	console.log(filename)
 
+	let match = /\.(\w+)$/.exec(filename)
+	let type = match ? `image/${match[1]}` : `image`
+
+	let formData = new FormData()
+	formData.append('photo', { uri: result.uri, name: filename, type })
 	try {
-		// const res = API.post('/media_upload', formData, {
-		// 	transformRequest: (__, _) => formData,
-		// 	headers: null,
-		// })
-		const res = await fetch(API.defaults.baseURL + '/media_upload', {
-			// @ts-ignore
-			body: file,
-			method: 'POST',
+		const res = await API.post('/media_upload', formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
 		})
-		console.log('res', await res.json())
+		// const res = await fetch(API.defaults.baseURL + '/media_upload', {
+		// 	// @ts-ignore
+		// 	body: formData,
+		// 	method: 'POST',
+		// })
+		console.log('res', res)
 	} catch (error) {
 		console.log(error)
 	}

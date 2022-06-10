@@ -155,7 +155,7 @@ const RefundsScreen = () => {
 							<Text
 								style={{ textAlign: 'center', marginBottom: 10, opacity: 0.6 }}
 							>
-								Vous avez équilibrez toutes vos dépenses !
+								Vous avez équilibré toutes vos dépenses !
 							</Text>
 						</View>
 					)}

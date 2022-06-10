@@ -41,13 +41,15 @@ export async function createUser(
 	username: string,
 	email: string,
 	password: string,
-	avatar: string
+	avatar: string,
+	pushToken: string
 ): Promise<User> {
 	const { data: user } = await API.post(`/auth/register`, {
 		username,
 		email,
 		password,
 		avatar,
+		pushToken,
 	})
 	return user
 }
@@ -80,6 +82,16 @@ export async function editUser(
 		username,
 	})
 	return data
+}
+
+export async function setExpoToken(
+	userId: string,
+	pushToken: string
+): Promise<User> {
+	const { data: user } = await API.put(`/users/${userId}`, {
+		pushToken,
+	})
+	return user
 }
 
 export async function logout() {}
