@@ -8,6 +8,7 @@
 		"icon": "./src/assets/images/icon.png",
 		"scheme": "myapp",
 		"userInterfaceStyle": "automatic",
+		"jsEngine": "hermes",
 		"splash": {
 			"image": "./src/assets/images/splash.png",
 			"resizeMode": "cover",
@@ -47,7 +48,11 @@
 					"color": "#ffffff",
 					"sounds": []
 				}
-			]
+			],
+			["expo-community-flipper"]
 		]
+	},
+	"extra": {
+		"filpperHack": "React Native packager is running"
 	}
 }

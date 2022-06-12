@@ -50,6 +50,14 @@ import { registerForPushNotificationsAsync } from '@services/notificationService
 require('dayjs/locale/fr')
 dayjs.locale('fr')
 
+import { connectToDevTools } from 'react-devtools-core'
+if (__DEV__) {
+	connectToDevTools({
+		host: 'localhost',
+		port: 8097,
+	})
+}
+
 Notifications.setNotificationHandler({
 	handleNotification: async () => ({
 		shouldShowAlert: true,
