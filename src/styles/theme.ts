@@ -18,6 +18,7 @@ export const theme = {
 		primary: Blue,
 		card: Light,
 		text: DarkerBlue,
+		muted: '#8b949e',
 	},
 }
 
@@ -29,5 +30,6 @@ export const darkTheme = {
 		secondary: Cyan,
 		border: MediumGrey,
 		card: DarkGrey,
+		muted: '#8b949e',
 	},
 }

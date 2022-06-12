@@ -12,14 +12,13 @@ import {
 import AnimatedHeaderLayout from '@ui/AnimatedHeaderLayout'
 import { BarChart } from 'react-native-svg-charts'
 import { useFocusEffect, useTheme } from '@react-navigation/native'
-import { getCurrentBalances, getRefunds } from '@services/groupService'
+import { getGroup, getRefunds } from '@services/groupService'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCurrentGroup, setBalances, setRefunds } from '@redux/group.reducer'
 import { displayPrice } from '@services/expenseService'
 import { sideMargin } from '@constants/Layout'
 import layout from '@constants/Layout'
 import FredokaText from '@ui/FredokaText'
-import Button from '@ui/Button'
 import RefundButton from '@screens/refunds/components/refundButton'
 import Text from '@ui/Text'
 
@@ -41,7 +40,7 @@ const RefundsScreen = () => {
 
 	const updateRefunds = async () => {
 		const { refunds } = await getRefunds(currentGroup?.id || '')
-		const { balances } = await getCurrentBalances(currentGroup?.id || '')
+		const { balances } = await getGroup(currentGroup?.id || '')
 		dispatch(setRefunds(refunds))
 		dispatch(setBalances(balances))
 	}

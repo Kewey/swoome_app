@@ -9,6 +9,7 @@ import { getCurrentGroup, setGroup, setRefunds } from '@redux/group.reducer'
 import { addExpense, displayPrice } from '@services/expenseService'
 import dayjs from 'dayjs'
 import { getGroup } from '@services/groupService'
+import Avatar from '@ui/Avatar'
 
 const RefundButton = ({ refund }: { refund: Refund }) => {
 	const [isLoading, setIsLoading] = useState(false)
@@ -53,18 +54,16 @@ const RefundButton = ({ refund }: { refund: Refund }) => {
 			}}
 		>
 			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-				<Image
-					source={{ uri: 'https://i.pravatar.cc/50' }}
-					height={40}
-					width={40}
-					style={{ height: 40, width: 40, borderRadius: 20 }}
+				<Avatar
+					username={refund.refunder.username}
+					source={refund.refunder.avatar}
+					size={40}
 				/>
 				<ArrowRight color={colors.text} height={25} width={50} />
-				<Image
-					source={{ uri: 'https://i.pravatar.cc/50' }}
-					height={40}
-					width={40}
-					style={{ height: 40, width: 40, borderRadius: 20 }}
+				<Avatar
+					username={refund.receiver.username}
+					source={refund.refunder.avatar}
+					size={40}
 				/>
 			</View>
 

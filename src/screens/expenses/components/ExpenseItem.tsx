@@ -15,8 +15,8 @@ import Avatar from '@ui/Avatar'
 
 interface ExpenseItemProps {
 	expense: Expense
-	updateExpense?: (expense: Expense) => {}
-	removeExpense?: (id: string) => {}
+	updateExpense: (expense: Expense) => {}
+	removeExpense: (id: string) => {}
 }
 
 const ExpenseItem = ({
@@ -108,7 +108,7 @@ const ExpenseItem = ({
 			</TouchableHighlight>
 
 			<ExpenseModal
-				key={id}
+				key={id + 'modal'}
 				expense={{
 					id,
 					name,

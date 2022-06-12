@@ -74,7 +74,7 @@ const ExpenseModal = ({
 				<View style={{ flexDirection: 'row' }}>
 					<Text style={{ color: colors.border, marginRight: 10 }}>Pour</Text>
 					{participants.map((participant) => (
-						<View style={{ marginLeft: -5 }}>
+						<View key={participant['@id']} style={{ marginLeft: -5 }}>
 							<Avatar
 								source={participant.avatar}
 								username={participant.username}

@@ -41,7 +41,7 @@ const Avatar = ({ source, username, size = 20 }: AvatarProps) => {
 			}}
 		>
 			<Text weight='bold' style={{ fontSize: size / 2 }}>
-				{username.charAt(0)}
+				{username.charAt(0).toUpperCase()}
 			</Text>
 		</View>
 	)

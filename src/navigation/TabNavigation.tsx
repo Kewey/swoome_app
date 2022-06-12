@@ -115,8 +115,8 @@ const TabNavigation = (): ReactElement => {
 					},
 				}}
 				options={{
-					tabBarIcon: ({ color, size }) => (
-						<Reports height={size} width={size} color={colors.border} />
+					tabBarIcon: ({ size }) => (
+						<Reports height={size} width={size} color={colors.muted} />
 					),
 				}}
 			/>
@@ -131,7 +131,7 @@ const TabNavigation = (): ReactElement => {
 					},
 				})}
 				options={{
-					tabBarIcon: ({ color, size }) => (
+					tabBarIcon: ({ size }) => (
 						<View
 							style={{
 								height: 40,
