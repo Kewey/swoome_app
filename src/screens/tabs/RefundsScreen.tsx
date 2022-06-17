@@ -86,7 +86,7 @@ const RefundsScreen = () => {
 					width={40}
 					height={40}
 					preserveAspectRatio='xMidYMid slice'
-					href={{ uri: 'https://i.pravatar.cc/50' }}
+					href={{ uri: 'https://swoome.s3.eu-central-1.amazonaws.com/avatars/71fd5642-0419-475a-83a2-e05d826027cd_avatar.jpg' }}
 					clipPath={`url(#clip${index})`}
 				/>
 			</View>

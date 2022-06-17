@@ -79,7 +79,7 @@ const ExpenseItem = ({
 									Par
 								</Text>
 								<Avatar
-									source={madeBy.avatar}
+									source={madeBy.avatar?.url}
 									username={madeBy.username}
 									size={20}
 								/>
@@ -92,7 +92,7 @@ const ExpenseItem = ({
 								{participants.map((participant) => (
 									<View key={participant['@id']} style={{ marginRight: -8 }}>
 										<Avatar
-											source={participant.avatar}
+											source={participant.avatar?.url}
 											username={participant.username}
 											size={20}
 										/>

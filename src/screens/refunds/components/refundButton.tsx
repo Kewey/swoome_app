@@ -1,11 +1,11 @@
-import { View, Image } from 'react-native'
+import { View } from 'react-native'
 import React, { useState } from 'react'
 import { ArrowRight } from 'iconoir-react-native'
 import Button from '@ui/Button'
 import { Refund } from '@types/Refund'
 import { useTheme } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCurrentGroup, setGroup, setRefunds } from '@redux/group.reducer'
+import { getCurrentGroup, setGroup } from '@redux/group.reducer'
 import { addExpense, displayPrice } from '@services/expenseService'
 import dayjs from 'dayjs'
 import { getGroup } from '@services/groupService'
@@ -20,8 +20,7 @@ const RefundButton = ({ refund }: { refund: Refund }) => {
 	const refundToExpense = async ({
 		receiver,
 		price,
-		refunder,
-		...other
+		refunder
 	}: Refund) => {
 		if (!currentGroup) return
 		setIsLoading(true)
@@ -56,13 +55,13 @@ const RefundButton = ({ refund }: { refund: Refund }) => {
 			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 				<Avatar
 					username={refund.refunder.username}
-					source={refund.refunder.avatar}
+					source={refund.refunder.avatar?.url}
 					size={40}
 				/>
 				<ArrowRight color={colors.text} height={25} width={50} />
 				<Avatar
 					username={refund.receiver.username}
-					source={refund.refunder.avatar}
+					source={refund.refunder.avatar?.url}
 					size={40}
 				/>
 			</View>

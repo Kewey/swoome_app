@@ -18,9 +18,9 @@ import { Controller, useForm } from 'react-hook-form'
 import BottomSheetModal from '@ui/BottomSheetModal'
 import Input from '@ui/Input'
 import Button from '@ui/Button'
-import { editUser, setExpoToken } from '@services/userService'
+import { editUser } from '@services/userService'
 import * as ImagePicker from 'expo-image-picker'
-import { addMedia } from '@services/mediaService'
+import { addMedia, editAvatar } from '@services/mediaService'
 import { Toast } from 'react-native-toast-message/lib/src/Toast'
 import { registerForPushNotificationsAsync } from '@services/notificationService'
 
@@ -58,7 +58,7 @@ const ProfileScreen = () => {
 		}
 
 		try {
-			await addMedia(selectedAvatar)
+			await editAvatar(selectedAvatar)
 		} catch (error: any) {
 			Toast.show({
 				type: 'error',
@@ -81,8 +81,11 @@ const ProfileScreen = () => {
 		}
 
 		try {
-			addMedia(result)
+			const media = await addMedia(result)
+			console.log('media', media)
 		} catch (error: any) {
+			console.log('error' ,error);
+			
 			Toast.show({
 				type: 'error',
 				text1: "Oups une erreur s'est produite",

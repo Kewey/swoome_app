@@ -76,11 +76,9 @@ export async function resendMail(email: string) {
 
 export async function editUser(
 	userId: string,
-	username?: string
+	userParam?: any
 ): Promise<User> {
-	const { data } = await API.put(`/users/${userId}`, {
-		username,
-	})
+	const { data } = await API.put(`/users/${userId}`, userParam)
 	return data
 }
 

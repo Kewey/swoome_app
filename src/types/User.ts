@@ -1,12 +1,13 @@
 import { APIHydraType } from '@services/apiService'
 import { Group } from './Group'
+import { Media } from './Media'
 
 export interface User extends APIHydraType {
 	id: string
 	username: string
 	email: string
 	groups: Group[]
-	avatar?: string
+	avatar?: Media
 	pushToken: string
 }
 
