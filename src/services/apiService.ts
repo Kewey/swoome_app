@@ -30,8 +30,11 @@ API.interceptors.response.use(
 	(res) => res,
 	async ({ config, response }: any) => {
 		console.log('-------------------------')
-		// console.log(config)
-		console.log('** error request **', response.data ? response.data : response)
+		console.log('** error request **')
+		console.log(`Route : ${config.url}`)
+		console.log(`Status : ${response.status}`)
+		console.log('-------------------------')
+
 
 		if (response.data?.message === 'JWT Refresh Token Not Found') {
 			// @ts-ignore

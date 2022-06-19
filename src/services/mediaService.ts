@@ -17,7 +17,7 @@ export async function addMedia(result:  ImagePicker.ImagePickerResult): Promise<
 		name: `avatar.${ext}`
 })
 
-	const {data : media}  = await API.post('/media', formData, {
+	const {data : media}  = await API.post('/medias', formData, {
 		headers: {
 			'Content-Type': 'multipart/form-data',
 		},
@@ -30,8 +30,5 @@ export const editAvatar = async (result: ImagePicker.ImagePickerResult) => {
 	const media = await addMedia(result)
 
 	const newUser = await editUser(getCurrentUser(store.getState())?.id ||'', {avatar: media['@id']})
-
-	console.log(newUser);
-	
 	setUser(newUser)
 }

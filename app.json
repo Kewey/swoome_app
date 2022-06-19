@@ -1,53 +1,53 @@
 {
-	"expo": {
-		"name": "Swoome",
-		"slug": "swoome",
-		"owner": "kewey65",
-		"version": "0.4.2",
-		"orientation": "portrait",
-		"icon": "./src/assets/images/icon.png",
-		"scheme": "myapp",
-		"userInterfaceStyle": "automatic",
-		"splash": {
-			"image": "./src/assets/images/splash.png",
-			"resizeMode": "cover",
-			"backgroundColor": "#090954"
-		},
-		"updates": {
-			"fallbackToCacheTimeout": 0
-		},
-		"assetBundlePatterns": ["**/*"],
-		"ios": {
-			"supportsTablet": false,
-			"bundleIdentifier": "com.kewey.swoome"
-		},
-		"android": {
-			"adaptiveIcon": {
-				"foregroundImage": "./src/assets/images/adaptive-icon.png",
-				"backgroundColor": "#090954"
-			},
-			"versionCode": 4,
-			"package": "com.kewey.swoome",
-			"googleServicesFile": "./google-services.json"
-		},
-		"web": {
-			"favicon": "./src/assets/images/favicon.png"
-		},
-		"plugins": [
-			[
-				"expo-image-picker",
-				{
-					"photosPermission": "Permettre à $(PRODUCT_NAME) d'accéder à vos photos."
-				}
-			],
-			[
-				"expo-notifications",
-				{
-					"icon": "./src/assets/images/favicon.png",
-					"color": "#ffffff",
-					"sounds": []
-				}
-			]
-		]
-	}
+  "expo": {
+    "name": "Swoome",
+    "slug": "swoome",
+    "owner": "kewey65",
+    "version": "0.4.4",
+    "orientation": "portrait",
+    "icon": "./src/assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./src/assets/images/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#090954"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.kewey.swoome"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/images/adaptive-icon.png",
+        "backgroundColor": "#090954"
+      },
+      "versionCode": 5,
+      "package": "com.kewey.swoome",
+      "googleServicesFile": "./google-services.json"
+    },
+    "web": {
+      "favicon": "./src/assets/images/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Permettre à $(PRODUCT_NAME) d'accéder à vos photos."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./src/assets/images/favicon.png",
+          "color": "#ffffff",
+          "sounds": []
+        }
+      ]
+    ]
+  }
 }
