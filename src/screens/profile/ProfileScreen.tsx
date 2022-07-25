@@ -27,12 +27,13 @@ import { registerForPushNotificationsAsync } from '@services/notificationService
 const ProfileScreen = () => {
   const currentUser = useSelector(getCurrentUser)
   const isDarkTheme = useSelector(getTheme)
-  const isNotificationActive = useSelector(getIsNotificationActive)
+  // const isNotificationActive = useSelector(getIsNotificationActive)
   const dispatch = useDispatch()
 
   const [isPictureOpen, setIsPictureOpen] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [newAvatar, setNewAvatar] = useState(currentUser?.avatar?.url)
 
   const { control, handleSubmit, reset } = useForm<{ username: string }>()
 
@@ -59,6 +60,8 @@ const ProfileScreen = () => {
 
     try {
       await editAvatar(selectedAvatar)
+      setNewAvatar(selectedAvatar.uri)
+      setIsPictureOpen(false)
     } catch (error: any) {
       Toast.show({
         type: 'error',
@@ -82,6 +85,8 @@ const ProfileScreen = () => {
 
     try {
       await editAvatar(result)
+      setNewAvatar(result.uri)
+      setIsPictureOpen(false)
     } catch (error: any) {
       console.log('error', error)
 
@@ -135,7 +140,7 @@ const ProfileScreen = () => {
       >
         <CardWithIcon
           icon="📷"
-          picture={currentUser?.avatar?.url}
+          picture={newAvatar}
           sublabel="Photo de profil"
           label={currentUser?.avatar ? 'Editer la photo' : 'A définir'}
         />
@@ -168,10 +173,10 @@ const ProfileScreen = () => {
           label={isDarkTheme ? 'Sombre' : 'Clair'}
         />
       </TouchableOpacity>
-      <TouchableOpacity style={{ marginBottom: 10, marginHorizontal: 20 }}>
+      {/* <TouchableOpacity style={{ marginBottom: 10, marginHorizontal: 20 }}>
         <CardWithIcon icon="🏁" sublabel="Langue" label="Français" />
-      </TouchableOpacity>
-      <TouchableOpacity
+      </TouchableOpacity> */}
+      {/* <TouchableOpacity
         style={{ marginBottom: 10, marginHorizontal: 20 }}
         onPress={async () => {
           console.log(isNotificationActive)
@@ -186,7 +191,7 @@ const ProfileScreen = () => {
           sublabel="Notifications"
           label={isNotificationActive ? 'Activé' : 'Désactivé'}
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <TouchableOpacity
         style={{ marginTop: 20, marginHorizontal: 20 }}
