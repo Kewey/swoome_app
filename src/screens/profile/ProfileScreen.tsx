@@ -142,7 +142,7 @@ const ProfileScreen = () => {
           icon="📷"
           picture={newAvatar}
           sublabel="Photo de profil"
-          label={currentUser?.avatar ? 'Editer la photo' : 'A définir'}
+          label={currentUser?.avatar ? 'Editer la photo' : 'À définir'}
         />
       </TouchableOpacity>
       <BottomSheetModal
@@ -161,7 +161,7 @@ const ProfileScreen = () => {
       </BottomSheetModal>
 
       <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
-        <FredokaText>Modifier les parametres</FredokaText>
+        <FredokaText>Modifier les paramètres</FredokaText>
       </View>
       <TouchableOpacity
         style={{ marginBottom: 10, marginHorizontal: 20 }}
@@ -169,7 +169,7 @@ const ProfileScreen = () => {
       >
         <CardWithIcon
           icon={isDarkTheme ? '🌙' : '🌞'}
-          sublabel="Theme"
+          sublabel="Thème"
           label={isDarkTheme ? 'Sombre' : 'Clair'}
         />
       </TouchableOpacity>
@@ -189,7 +189,7 @@ const ProfileScreen = () => {
         <CardWithIcon
           icon="🔔"
           sublabel="Notifications"
-          label={isNotificationActive ? 'Activé' : 'Désactivé'}
+          label={isNotificationActive ? 'Activées' : 'Désactivées'}
         />
       </TouchableOpacity> */}
 

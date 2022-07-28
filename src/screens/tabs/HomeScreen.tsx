@@ -108,7 +108,7 @@ const HomeScreen = () => {
 						imageStyle={{ opacity: 0.05 }}
 					>
 						<View style={{ marginBottom: 20 }}>
-							<Text style={{ color: White }}>Dépenses total du groupe</Text>
+							<Text style={{ color: White }}>Dépenses totales du groupe</Text>
 							<FredokaText style={{ color: White, fontSize: 45 }}>
 								{displayPrice(currentGroup.sumExpenses)} €
 							</FredokaText>
@@ -224,7 +224,7 @@ const HomeScreen = () => {
 				<FredokaText
 					style={{ textAlign: 'center', marginBottom: 10, fontSize: 18 }}
 				>
-					Oula c'est vide ici !
+					Ouh là c'est vide ici !
 				</FredokaText>
 				<Text style={{ textAlign: 'center', marginBottom: 10, opacity: 0.6 }}>
 					C'est le moment d'ajouter ta toute premiere dépense !
