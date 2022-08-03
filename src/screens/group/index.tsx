@@ -73,7 +73,7 @@ export default function GroupIndexScreen({ navigation }: GroupIndexProps) {
           }}
         >
           Commence par créer ou rejoindre un groupe pour pouvoir interagir avec
-          les membres de ton foyer.
+          les membres de ton groupe.
         </Text>
       </View>
       <FlatList

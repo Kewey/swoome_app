@@ -104,7 +104,7 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 							}}
 						>
 							Pour commencer à utiliser l’application, tu dois créer ou
-							rejoindre une maison.
+							rejoindre un groupe.
 						</Text>
 					</View>
 
@@ -193,11 +193,10 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 						<FredokaText
 							style={{ fontSize: 30, textAlign: 'center', marginBottom: 20 }}
 						>
-							Donne un nom à ta maison
+							Donne un nom à ton groupe
 						</FredokaText>
 						<Text style={{ textAlign: 'center', opacity: 0.55, fontSize: 13 }}>
-							Pour commencer à utiliser l’application, tu dois créer ou
-							rejoindre une maison.
+							Choisis un petit nom pour ton groupe, quelque chose qui parle à tous les membres du groupe !
 						</Text>
 					</View>
 					<View>
@@ -235,7 +234,7 @@ export default function GroupCreateScreen({ navigation }: GroupCreateProps) {
 											disabled={!isDirty || invalid || isLoading}
 											onPress={handleSubmit(onSubmit)}
 										>
-											{isLoading ? 'Chargement' : 'Créer ma maison'}
+											{isLoading ? 'Chargement' : 'Créer mon groupe'}
 										</Button>
 									</>
 								)}

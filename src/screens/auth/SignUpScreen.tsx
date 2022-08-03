@@ -348,8 +348,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProps) => {
 								<Text
 									style={{ textAlign: 'center', opacity: 0.55, fontSize: 13 }}
 								>
-									Connaitre ton prénom va nous permettre de personnaliser ton
-									expérience.
+									Cela permettra de sécuriser ton compte pour que tout le monde ne voit pas tes dépenses. On évite "azerty", "loulou" ou "123456" 🙅‍♂️.
 								</Text>
 							</View>
 							<View>
