@@ -25,7 +25,7 @@ const Layout = ({
 	return (
 		<KeyboardAvoidingView
 			style={{ flex: 1 }}
-			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+			behavior={'padding'}
 			keyboardVerticalOffset={50}
 		>
 			<Animated.ScrollView

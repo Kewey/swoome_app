@@ -20,6 +20,7 @@ import Input from '@ui/Input'
 import Button from '@ui/Button'
 import { editUser } from '@services/userService'
 import * as ImagePicker from 'expo-image-picker'
+import * as Permissions from 'expo-permissions'
 import { addMedia, editAvatar } from '@services/mediaService'
 import { Toast } from 'react-native-toast-message/lib/src/Toast'
 import { registerForPushNotificationsAsync } from '@services/notificationService'
@@ -34,6 +35,7 @@ const ProfileScreen = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [newAvatar, setNewAvatar] = useState(currentUser?.avatar?.url)
+  const [status, requestPermission] = ImagePicker.useCameraPermissions()
 
   const { control, handleSubmit, reset } = useForm<{ username: string }>()
 
@@ -46,7 +48,28 @@ const ProfileScreen = () => {
     reset()
   }
 
+  const havePermission = async () => {
+    if (status?.status !== ImagePicker.PermissionStatus.GRANTED) {
+      const { status: currentStatus } = await requestPermission()
+
+      if (currentStatus !== ImagePicker.PermissionStatus.GRANTED) {
+        alert('Vous devez accepter la permission pour éditer votre photo')
+        return false
+      }
+    }
+
+    return true
+  }
+
   const onPressOpenMedia = async () => {
+    if (!(await havePermission())) {
+      return
+    }
+
+    if (status?.status !== ImagePicker.PermissionStatus.GRANTED) {
+      const test = await requestPermission()
+    }
+
     let selectedAvatar = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -72,24 +95,26 @@ const ProfileScreen = () => {
   }
 
   const onPressOpenCamera = async () => {
-    let result = await ImagePicker.launchCameraAsync({
+    if (!(await havePermission())) {
+      return
+    }
+
+    let selectedAvatar = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
     })
 
-    if (result.cancelled) {
+    if (selectedAvatar.cancelled) {
       return
     }
 
     try {
-      await editAvatar(result)
-      setNewAvatar(result.uri)
+      await editAvatar(selectedAvatar)
+      setNewAvatar(selectedAvatar.uri)
       setIsPictureOpen(false)
     } catch (error: any) {
-      console.log('error', error)
-
       Toast.show({
         type: 'error',
         text1: "Oups une erreur s'est produite",

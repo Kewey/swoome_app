@@ -1,60 +1,66 @@
-import { Animated, View } from 'react-native';
-import React, { useCallback, useRef } from 'react';
-import Layout from '@ui/Layout';
-import { Cyan } from '@constants/Colors';
+import { Animated, View } from 'react-native'
+import React, { useCallback, useRef } from 'react'
+import Layout from '@ui/Layout'
+import { Cyan } from '@constants/Colors'
 import {
+  Svg,
   Circle,
   ClipPath,
   Defs,
   Image as SVGImage,
   Text as SVGText,
-} from 'react-native-svg';
-import AnimatedHeaderLayout from '@ui/AnimatedHeaderLayout';
-import { BarChart } from 'react-native-svg-charts';
-import { useFocusEffect, useTheme } from '@react-navigation/native';
-import { getGroup, getRefunds } from '@services/groupService';
-import { useDispatch, useSelector } from 'react-redux';
-import { getCurrentGroup, setBalances, setRefunds } from '@redux/group.reducer';
-import { displayPrice } from '@services/expenseService';
-import { sideMargin } from '@constants/Layout';
-import layout from '@constants/Layout';
-import FredokaText from '@ui/FredokaText';
-import RefundButton from '@screens/refunds/components/refundButton';
-import Text from '@ui/Text';
+} from 'react-native-svg'
+import AnimatedHeaderLayout from '@ui/AnimatedHeaderLayout'
+import { BarChart } from 'react-native-svg-charts'
+import { useFocusEffect, useTheme } from '@react-navigation/native'
+import { getGroup, getRefunds } from '@services/groupService'
+import { useDispatch, useSelector } from 'react-redux'
+import { getCurrentGroup, setBalances, setRefunds } from '@redux/group.reducer'
+import { displayPrice } from '@services/expenseService'
+import { sideMargin } from '@constants/Layout'
+import layout from '@constants/Layout'
+import FredokaText from '@ui/FredokaText'
+import RefundButton from '@screens/refunds/components/refundButton'
+import Text from '@ui/Text'
 
 const RefundsScreen = () => {
-  const { colors } = useTheme();
-  const currentGroup = useSelector(getCurrentGroup);
-  const dispatch = useDispatch();
+  const { colors } = useTheme()
+  const currentGroup = useSelector(getCurrentGroup)
+  const dispatch = useDispatch()
   const {
     window: { width },
-  } = layout;
+  } = layout
 
-  const scrollPositionValue = useRef(new Animated.Value(0)).current;
+  const scrollPositionValue = useRef(new Animated.Value(0)).current
 
   useFocusEffect(
     useCallback(() => {
-      updateRefunds();
+      updateRefunds()
     }, [])
-  );
+  )
 
   const updateRefunds = async () => {
-    const { refunds } = await getRefunds(currentGroup?.id || '');
-    const { balances } = await getGroup(currentGroup?.id || '');
-    dispatch(setRefunds(refunds));
-    dispatch(setBalances(balances));
-  };
+    const { refunds } = await getRefunds(currentGroup?.id || '')
+    const { balances } = await getGroup(currentGroup?.id || '')
+    dispatch(setRefunds(refunds))
+    dispatch(setBalances(balances))
+  }
 
-  const balanceData = currentGroup!.balances.map((balance) => balance.value);
+  const balanceData = currentGroup!.balances.map((balance) => balance.value)
 
   const maxValue =
     Math.max(...balanceData) > -Math.min(...balanceData)
       ? Math.max(...balanceData)
-      : -Math.min(...balanceData);
+      : -Math.min(...balanceData)
 
   const Labels = ({ x, y, bandwidth, data }: any) =>
     data.map((value: any, index: number) => (
-      <View key={index + 'bar'}>
+      <Svg key={index + 'bar'}>
+        <Defs>
+          <ClipPath id={`clip${index}`}>
+            <Circle cx={x(0)} cy={y(index) + bandwidth / 2} r={10} />
+          </ClipPath>
+        </Defs>
         {!!value && (
           <SVGText
             x={value < 0 ? sideMargin + 15 : width - sideMargin - 20}
@@ -68,11 +74,6 @@ const RefundsScreen = () => {
             {displayPrice(value)}
           </SVGText>
         )}
-        <Defs>
-          <ClipPath id={`clip${index}`}>
-            <Circle cx={x(0)} cy={y(index) + bandwidth / 2} r={20} />
-          </ClipPath>
-        </Defs>
         <Circle
           cx={x(0)}
           cy={y(index) + bandwidth / 2}
@@ -102,8 +103,8 @@ const RefundsScreen = () => {
             {currentGroup?.members[index].username.charAt(0).toUpperCase()}
           </SVGText>
         )}
-      </View>
-    ));
+      </Svg>
+    ))
 
   return (
     <>
@@ -178,7 +179,7 @@ const RefundsScreen = () => {
         scrollPositionValue={scrollPositionValue}
       />
     </>
-  );
-};
+  )
+}
 
-export default RefundsScreen;
+export default RefundsScreen

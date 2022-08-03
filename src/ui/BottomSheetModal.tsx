@@ -29,6 +29,7 @@ const BottomSheetModal = ({
 
 	return (
 		<Modal
+			avoidKeyboard
 			onBackdropPress={closeModal}
 			isVisible={isOpen}
 			useNativeDriver={true}

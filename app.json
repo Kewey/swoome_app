@@ -37,7 +37,8 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Permettre à $(PRODUCT_NAME) d'accéder à vos photos."
+          "photosPermission": "Permettre à $(PRODUCT_NAME) d'accéder à vos photos.",
+          "cameraPermission": "Permettre à $(PRODUCT_NAME) d'accéder à votre camera."
         }
       ],
       [
