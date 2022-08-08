@@ -18,7 +18,7 @@ import { Controller, useForm } from 'react-hook-form'
 import BottomSheetModal from '@ui/BottomSheetModal'
 import Input from '@ui/Input'
 import Button from '@ui/Button'
-import { editUser } from '@services/userService'
+import { deleteUser, editUser } from '@services/userService'
 import * as ImagePicker from 'expo-image-picker'
 import * as Permissions from 'expo-permissions'
 import { addMedia, editAvatar } from '@services/mediaService'
@@ -185,9 +185,6 @@ const ProfileScreen = () => {
         </Button>
       </BottomSheetModal>
 
-      <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
-        <FredokaText>Modifier les paramètres</FredokaText>
-      </View>
       <TouchableOpacity
         style={{ marginBottom: 10, marginHorizontal: 20 }}
         onPress={() => dispatch(setTheme(!isDarkTheme))}
@@ -218,14 +215,28 @@ const ProfileScreen = () => {
         />
       </TouchableOpacity> */}
 
+      <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
+        <FredokaText>Mon compte</FredokaText>
+      </View>
       <TouchableOpacity
-        style={{ marginTop: 20, marginHorizontal: 20 }}
+        style={{ marginBottom: 10, marginHorizontal: 20 }}
         onPress={() => {
           dispatch(disconectUser())
           dispatch(removeGroup())
         }}
       >
         <CardWithIcon icon="🚪" label="Déconnexion" />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={{ marginHorizontal: 20 }}
+        onPress={async () => {
+          await deleteUser(currentUser?.id || '')
+          dispatch(disconectUser())
+          dispatch(removeGroup())
+        }}
+      >
+        <CardWithIcon icon="💥" label="Supprimer mon compte" />
       </TouchableOpacity>
     </Layout>
   )
