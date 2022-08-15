@@ -3,7 +3,7 @@
     "name": "Swoome",
     "slug": "swoome",
     "owner": "kewey65",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./src/assets/images/icon.png",
     "scheme": "myapp",
@@ -14,14 +14,19 @@
       "backgroundColor": "#090954"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/6d8ad49e-32a2-4e93-8ca3-c041458ea06c"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.kewey.swoome",
       "infoPlist": {
-        "NSCameraUsageDescription": "We use camera to add personalization in user account like avatar."
+        "NSCameraUsageDescription": "$(PRODUCT_NAME) utilise ta caméra pour personnaliser ton avatar.",
+        "NSPhotoLibraryUsageDescription": "$(PRODUCT_NAME) utilise tes fichiers pour personnaliser ton avatar.",
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
       }
     },
     "android": {
@@ -29,9 +34,15 @@
         "foregroundImage": "./src/assets/images/adaptive-icon.png",
         "backgroundColor": "#090954"
       },
-      "versionCode": 8,
+      "versionCode": 20220816,
       "package": "com.kewey.swoome",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./src/assets/images/favicon.png"
@@ -40,8 +51,8 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Permettre à $(PRODUCT_NAME) d'accéder à vos photos.",
-          "cameraPermission": "Permettre à $(PRODUCT_NAME) d'accéder à votre camera."
+          "photosPermission": "$(PRODUCT_NAME) utilise tes fichiers pour personnaliser ton avatar.",
+          "cameraPermission": "$(PRODUCT_NAME) utilise ta caméra pour personnaliser ton avatar."
         }
       ],
       [
@@ -52,6 +63,9 @@
           "sounds": []
         }
       ]
-    ]
+    ],
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    }
   }
 }
