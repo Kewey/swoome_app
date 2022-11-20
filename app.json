@@ -3,7 +3,7 @@
     "name": "Swoome",
     "slug": "swoome",
     "owner": "kewey65",
-    "version": "1.0.3",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./src/assets/images/icon.png",
     "scheme": "myapp",
@@ -14,11 +14,13 @@
       "backgroundColor": "#090954"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/6d8ad49e-32a2-4e93-8ca3-c041458ea06c"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": false,
+      "buildNumber": "9",
       "bundleIdentifier": "com.kewey.swoome",
       "infoPlist": {
         "NSCameraUsageDescription": "We use camera to add personalization in user account like avatar."
@@ -29,9 +31,10 @@
         "foregroundImage": "./src/assets/images/adaptive-icon.png",
         "backgroundColor": "#090954"
       },
-      "versionCode": 8,
+      "versionCode": 9,
       "package": "com.kewey.swoome",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "permissions": ["android.permission.RECORD_AUDIO"]
     },
     "web": {
       "favicon": "./src/assets/images/favicon.png"
@@ -51,7 +54,11 @@
           "color": "#ffffff",
           "sounds": []
         }
-      ]
-    ]
+      ],
+      "sentry-expo"
+    ],
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    }
   }
 }

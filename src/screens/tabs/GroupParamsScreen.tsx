@@ -4,46 +4,46 @@ import {
   Pressable,
   TouchableOpacity,
   View,
-} from 'react-native';
-import React, { useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getCurrentGroup, setGroup } from '@redux/group.reducer';
-import { borderRadius, layout } from '@styles/layout';
-import FredokaText from '@ui/FredokaText';
-import Text from '@ui/Text';
-import CircleButton from '@ui/CircleButton';
-import { MoreHoriz, Trash } from 'iconoir-react-native';
-import { useTheme } from '@react-navigation/native';
-import Button from '@ui/Button';
-import * as Clipboard from 'expo-clipboard';
-import { Toast } from 'react-native-toast-message/lib/src/Toast';
-import AnimatedHeaderLayout from '@ui/AnimatedHeaderLayout';
-import Layout from '@ui/Layout';
-import Input from '@ui/Input';
-import { Controller, useForm } from 'react-hook-form';
-import CardWithIcon from '@ui/CardWithIcon';
-import BottomSheetModal from '@ui/BottomSheetModal';
-import { editGroup } from '@services/groupService';
-
+} from 'react-native'
+import React, { useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getCurrentGroup, setGroup } from '@redux/group.reducer'
+import { borderRadius, layout } from '@styles/layout'
+import FredokaText from '@ui/FredokaText'
+import Text from '@ui/Text'
+import CircleButton from '@ui/CircleButton'
+import { MoreHoriz, Trash } from 'iconoir-react-native'
+import { useTheme } from '@react-navigation/native'
+import Button from '@ui/Button'
+import * as Clipboard from 'expo-clipboard'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
+import AnimatedHeaderLayout from '@ui/AnimatedHeaderLayout'
+import Layout from '@ui/Layout'
+import Input from '@ui/Input'
+import { Controller, useForm } from 'react-hook-form'
+import CardWithIcon from '@ui/CardWithIcon'
+import BottomSheetModal from '@ui/BottomSheetModal'
+import { editGroup } from '@services/groupService'
+import * as Sentry from 'sentry-expo'
 const GroupParamsScreen = () => {
-  const currentGroup = useSelector(getCurrentGroup);
-  const { colors } = useTheme();
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
+  const currentGroup = useSelector(getCurrentGroup)
+  const { colors } = useTheme()
+  const [isOpen, setIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const dispatch = useDispatch()
 
-  const scrollPositionValue = useRef(new Animated.Value(0)).current;
+  const scrollPositionValue = useRef(new Animated.Value(0)).current
 
-  const { control, handleSubmit, reset } = useForm<{ name: string }>();
+  const { control, handleSubmit, reset } = useForm<{ name: string }>()
 
   const onSubmit = async ({ name }: any) => {
-    setIsLoading(true);
-    const editedGroup = await editGroup(currentGroup?.id || '', name);
-    dispatch(setGroup(editedGroup));
-    setIsLoading(false);
-    setIsOpen(false);
-    reset();
-  };
+    setIsLoading(true)
+    const editedGroup = await editGroup(currentGroup?.id || '', name)
+    dispatch(setGroup(editedGroup))
+    setIsLoading(false)
+    setIsOpen(false)
+    reset()
+  }
 
   return (
     <>
@@ -67,6 +67,9 @@ const GroupParamsScreen = () => {
             Ce code permet aux autres utilisateurs de l'application de rejoindre
             ton groupe.
           </Text>
+          <Button onPress={() => Sentry.Native.captureException('Bug clicked')}>
+            J'ai un bug
+          </Button>
           <View
             style={{
               backgroundColor: colors.card,
@@ -80,17 +83,17 @@ const GroupParamsScreen = () => {
             <Pressable
               onPress={() => {
                 try {
-                  Clipboard.setString(currentGroup?.code || '');
+                  Clipboard.setString(currentGroup?.code || '')
                   Toast.show({
                     type: 'success',
                     text1: 'Code copié',
-                  });
+                  })
                 } catch (error) {
                   Toast.show({
                     type: 'error',
                     text1: 'Aie',
                     text2: 'Impossible de copier le code',
-                  });
+                  })
                 }
               }}
             >
@@ -196,7 +199,7 @@ const GroupParamsScreen = () => {
         scrollPositionValue={scrollPositionValue}
       />
     </>
-  );
-};
+  )
+}
 
-export default GroupParamsScreen;
+export default GroupParamsScreen
